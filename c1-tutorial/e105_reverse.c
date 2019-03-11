@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define CELSIUS_LOWER  36.5     // lower limit of tempr table in cels.
+#define CELSIUS_LOWER 36.5      // lower limit of tempr table in cels.
 #define CELSIUS_UPPER 38.5      // upper limit
 #define STEP 0.1
 

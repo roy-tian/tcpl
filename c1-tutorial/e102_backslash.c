@@ -1,11 +1,10 @@
-#define RoyString char *
 
 #include <stdio.h>
 
 struct EscapeSequence {
   int sequenceNumber;
-  RoyString sequenceString;
-  RoyString description;
+  char * sequenceString;
+  char * description;
 } sequences[] = {
   '\'', "\\'",	"single quote",
   '\\', "\\\"",	"double quote",
@@ -27,14 +26,13 @@ void printTable(void) {
   puts("VALUE FORM DESCRIPTION");
   puts("------------------------------------");
   size_t length = sizeof(sequences) / sizeof(struct EscapeSequence) - 1;  
-  for (int i = 0; i < length; i++) {
+  for (int i = 0; i != length; i++) {
     printf("%2d  %4s   %s\n", 
            sequences[i].sequenceNumber,
            sequences[i].sequenceString,
            sequences[i].description);
   }
 }
-
 
 int main(void) {
   printTable();
