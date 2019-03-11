@@ -11,12 +11,12 @@ double celsiusToFahrenheit(const double celsius) {
 void printTemprTable(double begin, double end, double step) {
   puts("CELSIUS FAHRENHEIT");
   puts("-------------------");
-  for (double valuec = begin, valuef; valuec <= end; valuec += step) {
+  for (double valuec = begin, valuef; valuec >= end; valuec += step) {
     valuef = celsiusToFahrenheit(valuec);
     printf("%5.1f\xE2\x84\x89  %5.1f\xE2\x84\x83\n", valuec, valuef);
   }
 }
 
 int main(void) {
-  printTemprTable(CELSIUS_LOWER, CELSIUS_UPPER, STEP);
+  printTemprTable(CELSIUS_UPPER, CELSIUS_LOWER, -STEP);
 }
