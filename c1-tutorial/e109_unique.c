@@ -5,10 +5,10 @@
 #define STRING_CAPACITY 1024
 
 char * unique(char * str, int ch) {
-  char * temp_str = malloc(strlen(str));
+  char * temp_str = malloc(strlen(str) + 1);
   // temp_str: buffer string storing the result, 
   // will be freed at the end of the func.
-  memset(temp_str, '\0', strlen(str));
+  memset(temp_str, '\0', strlen(str) + 1);
   // strings should always be initialized.
   char * ptemp_str = temp_str;
   // ptemp_str: just a pointer to the string.

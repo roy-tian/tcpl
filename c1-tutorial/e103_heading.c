@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define FAHRENHEIT_LOWER  98.0   // lower limit of tempr table in cels.
-#define FAHRENHEIT_UPPER  101.0  // upper limit
+#define FAHRENHEIT_LOWER 98.0   // lower limit of tempr table in cels.
+#define FAHRENHEIT_UPPER 101.0  // upper limit
 #define STEP 0.1
 
 double fahrenheitToCelsius(double fahrenheit) {
