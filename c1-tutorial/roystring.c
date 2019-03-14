@@ -19,6 +19,21 @@ char * roy_string_to_upper(char * str) {
   return real_str;
 }
 
+char * roy_string_trim(char * str) {
+  char * real_str = str;
+  char * temp_str = calloc(strlen(str) + 1, sizeof(char));
+  for (int i = 1; i <= roy_string_count_line(str); i++) {
+    char * cur_line = calloc(roy_string_line_length(str, i) + 1, sizeof(char));
+    roy_string_get_line(cur_line, str, i);
+    char * pcur_line_tail = cur_line + strlen(cur_line) - 1;
+    while (isblank(*pcur_line_tail--))
+    free(cur_line);
+  }
+  strcpy(real_str, temp_str);
+  free(temp_str);
+  return real_str;
+}
+
 char * roy_string_unique_char(char * str, int ch) {
   // a temporary-stored string.
   char * temp_str = calloc(strlen(str), sizeof(char));
@@ -52,7 +67,7 @@ char * roy_string_unique_char(char * str, int ch) {
 char * roy_string_replace_all(char * str,
                               const char * old_sub,
                               const char * new_sub) {
-  // the length should be when all work 
+  // the length should be when all work is done.
   int len_after = strlen(str);
   len_after += roy_string_count_substring(str, old_sub, true) *
                (strlen(new_sub) - strlen(old_sub));
@@ -130,25 +145,31 @@ int roy_string_count_substring(const char * str,
   }
   return count;
 }
-// Counts the number of words in 'str'.
+// Counts all the words in 'str'.
 int roy_string_count_word(const char * str) {
   const char * pstr = str;
   int count = 0;
   bool flag = false;
-  while (*pstr != '\0') {
-
-  }
+  do {
+    if (!flag && isalnum(*pstr)) {
+      flag = true;
+    } else if (flag && !isalnum(*pstr)) {
+      flag = false;
+      count++;
+    }
+    pstr++;
+  } while (*pstr != '\0');
+  return count;
 }
 
-// Counts how many words in 'str' is 'length'-character long.
-// counts total number of words if 'length' is 0.
-int roy_string_count_word_length(const char * str, int length) {
+// Counts words in 'str' which are 'length'-character long.
+// The behavoir is undefined when 'length' is lesser than 1.
+int roy_string_count_word_if(const char * str, int length) {
   const char * pstr = str;
   bool flag = false;
   int length_cur = 0;
   int count_cur = 0;
-  int count_sum = 0;
-  while (*pstr != '\0') {
+  do {
     if (!flag && isalnum(*pstr)) {
       flag = true;
       length_cur ++;
@@ -160,15 +181,50 @@ int roy_string_count_word_length(const char * str, int length) {
         count_cur++;
       }
       length_cur = 0;
-      count_sum++;
     } // (!flag && !isalnum(*pstr)) does nothing
     pstr++;
+  } while (*pstr != '\0');
+  return count_cur;
+}
+
+int roy_string_count_line(const char * str) {
+  int str_length = strlen(str);
+  if (str_length == 0) {
+    return 0;
   }
-  if (length_cur != 0) {
-      if (length_cur == length) {
-        count_cur++;
-      }
-      count_sum++;
+  int count = roy_string_count_char(str, '\n');
+  if (*(str + str_length - 1) != '\n') {
+    count++;
   }
-  return length == 0 ? count_sum : count_cur ;
+  return count;
+}
+
+// Gets the content of line 'line_number'.
+// The behavoir is undefined if 'line_number' exceeds 'str',
+// or the 'line_content' is too small or uninitialized.
+char * roy_string_get_line(char * line_content,
+                           const char * str,
+                           int line_number) {
+  while ((line_number-- > 1) && strchr(str, '\n')) {
+    str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
+  }
+  const char * str_tail = strchr(str, '\n');
+  if (!str_tail) {
+    strcpy(line_content, str);
+  } else {
+    strncpy(line_content, str, str_tail - str);
+  }
+  return line_content;
+}
+
+int roy_string_line_length(const char * str, int line_number) {
+  while ((line_number-- > 1) && strchr(str, '\n')) {
+    str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
+  }
+  const char * str_tail = strchr(str, '\n');
+  if (!str_tail) {
+    return strlen(str);
+  } else {
+    return str_tail - str;
+  }
 }

@@ -8,7 +8,8 @@ int main(void) {
     "it brought me to you.     And I’m thankful for that, Rose. I’m thankful.\n"
     "You must do me this      honor.      You must promise me you’ll survive.\n"
     "That you won’t give up,  no matter what happens, no matter how hopeless.\n"
-    "Promise me now,          Rose,         and never let go of that promise.\m";
+    "Promise me now,          Rose,         and never let go of that promise.\n";
   printf("ORIGINAL STRING:\n%s\n", str);
   printf("RESULT STRING:\n%s\n", roy_string_unique_char(str, ' '));
+  printf("\n\n%s", str);
 }
