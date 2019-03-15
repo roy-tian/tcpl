@@ -18,5 +18,6 @@ int main(void) {
   printf("        SPACE TOTAL: %d\n", roy_string_count_char_if(str, isspace));
   printf("    NUMBER OF 'to's: %d\n", roy_string_count_substring(str, "to", true));
   printf(" NUMBER OF 'To/to's: %d\n", roy_string_count_substring(str, "to", false));
+  
 
 }

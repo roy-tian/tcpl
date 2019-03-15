@@ -20,18 +20,24 @@ char * roy_string_to_upper(char * str) {
 }
 
 char * roy_string_trim(char * str) {
-  char * real_str = str;
   char * temp_str = calloc(strlen(str) + 1, sizeof(char));
   for (int i = 1; i <= roy_string_count_line(str); i++) {
     char * cur_line = calloc(roy_string_line_length(str, i) + 1, sizeof(char));
     roy_string_get_line(cur_line, str, i);
     char * pcur_line_tail = cur_line + strlen(cur_line) - 1;
-    while (isblank(*pcur_line_tail--))
+    while (isblank(*pcur_line_tail--)) {
+      ;
+    }
+    *(pcur_line_tail + 2) = '\0';
+    if (strlen(cur_line) != 0) {
+      strcat(temp_str, cur_line);
+      strcat(temp_str, "\n");
+    }
     free(cur_line);
   }
-  strcpy(real_str, temp_str);
+  strcpy(str, temp_str);
   free(temp_str);
-  return real_str;
+  return str;
 }
 
 char * roy_string_unique_char(char * str, int ch) {
