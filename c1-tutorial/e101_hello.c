@@ -1,6 +1,14 @@
+// include <stdio.h>          // expected '=', ',', ';', 'asm' or '__attribute__'
+                              // before '<' token
+
+// #include stdio.h>          // #include expects "FILENAME" or <FILENAME>
+
+// #include <stdio.h          // missing terminating > character
+
 #include <stdio.h>
 
 //int main(void {             // expected ';', ',' or ')' before '{' token
+
 //int main(void)              // expected declaration specifiers before 'printf'
                               // expected declaration specifiers before '}' token
                               // expected '{' at end of input

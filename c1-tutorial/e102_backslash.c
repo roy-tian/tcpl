@@ -7,7 +7,7 @@ struct EscapeSequence {
   char * description;
 } sequences[] = {
   '\'', "\\'",	"single quote",
-  '\\', "\\\"",	"double quote",
+  '\"', "\\\"",	"double quote",
   '\?', "\\?",	"question mark",
   '\\', "\\\\",	"backslash itself",
   '\a', "\\a",	"audible bell",

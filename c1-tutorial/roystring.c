@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdio.h>
 
 char * roy_string_to_lower(char * str) {
   char * real_str = str;
@@ -19,24 +20,18 @@ char * roy_string_to_upper(char * str) {
   return real_str;
 }
 
-char * roy_string_trim(char * str) {
-  char * temp_str = calloc(strlen(str) + 1, sizeof(char));
-  for (int i = 1; i <= roy_string_count_line(str); i++) {
-    char * cur_line = calloc(roy_string_line_length(str, i) + 1, sizeof(char));
-    roy_string_get_line(cur_line, str, i);
-    char * pcur_line_tail = cur_line + strlen(cur_line) - 1;
-    while (isblank(*pcur_line_tail--)) {
-      ;
-    }
-    *(pcur_line_tail + 2) = '\0';
-    if (strlen(cur_line) != 0) {
-      strcat(temp_str, cur_line);
-      strcat(temp_str, "\n");
-    }
-    free(cur_line);
+char * roy_string_reverse(char * str) {
+  char * real_str = str;
+  char * pstr_head = str;
+  char * pstr_tail = str + strlen(str) - 1;
+  while (pstr_tail > pstr_head) {
+    char temp = *pstr_head;
+    *pstr_head = *pstr_tail;
+    *pstr_tail = temp;
+    pstr_head++;
+    pstr_tail--;
   }
-  strcpy(str, temp_str);
-  free(temp_str);
+  str = real_str;
   return str;
 }
 
@@ -74,7 +69,7 @@ char * roy_string_replace_all(char * str,
                               const char * old_sub,
                               const char * new_sub) {
   // the length should be when all work is done.
-  int len_after = strlen(str);
+  size_t len_after = strlen(str);
   len_after += roy_string_count_substring(str, old_sub, true) *
                (strlen(new_sub) - strlen(old_sub));
   // a temporary-stored string.
@@ -96,8 +91,97 @@ char * roy_string_replace_all(char * str,
   return real_str;
 }
 
-int roy_string_count_char(const char * str, int ch) {
-  int count = 0;
+// Replaces 'old_sub' with 'new_sub',
+// 'old_sub' starts at str[old_sub_pos], and is 'old_sub_len' character long.
+// The behavior is undefined when 'str' and 'new_sub' are cascaded.
+char * roy_string_replace_index(char * str,
+                                size_t old_sub_pos,
+                                size_t old_sub_len,
+                                const char * new_sub) {
+  char * temp_str = calloc(strlen(str) + strlen(new_sub) - old_sub_len + 1,
+                           sizeof(char));
+  strncpy(temp_str, str, old_sub_pos);
+  strcat(temp_str, new_sub);
+  strcat(temp_str, str + old_sub_pos + old_sub_len);
+  strcpy(str, temp_str);
+  free(temp_str);
+  return str;
+}
+
+// Trims the trailling blanks characters from single-lined string 'str'.
+// The behavior is undefined when 'str' is multi-lined or empty.
+char * roy_string_trim_line(char * str) {
+  char * pstr_tail = str + strlen(str) - 1;
+  while (str <= pstr_tail && isblank(*pstr_tail)) {
+    pstr_tail--;
+  }
+  *(pstr_tail + 1) = '\0';
+  return str;
+}
+
+// Trims the trailling blanks characters from string 'str'.
+// This function can avoid the undefined behavior of 'roy_string_trim_line',
+// but runs slower.
+char * roy_string_trim(char * str) {
+  char * temp_str = calloc(strlen(str) + 1, sizeof(char));
+  size_t line_count = roy_string_count_line(str);
+  for (int i = 1; i <= line_count; i++) {
+    char * cur_line = calloc(roy_string_line_length(str, i) + 1, sizeof(char));
+    roy_string_get_line(cur_line, str, i);
+    roy_string_trim_line(cur_line);
+    if (strlen(cur_line) != 0) {
+      strcat(temp_str, cur_line);
+      if (i != line_count) {
+        strcat(temp_str, "\n");
+      }
+    }
+    free(cur_line);
+  }
+  strcpy(str, temp_str);
+  free(temp_str);
+  return str;
+}
+
+// Returns a string in which 'ch' will occur 'count' times.
+// e.g. ch = 'a', count = 5, then 'dest' would be 'aaaaa'.
+char * roy_string_fill_char(char * dest, int ch, size_t count) {
+  char to_fill[2] = {ch, '\0'};
+  for (size_t i = 0; i != count; i++) {
+    strcat(dest, to_fill);
+  }
+  return dest;
+}
+
+// Replaces all tabs with proper number of blanks.
+char * roy_string_detab(char * str, size_t tab_size) {
+  char * pstr = str;
+  size_t tab_marker = 0;
+  while (*pstr != '\0') {
+    if (*pstr == '\t') {
+      char * rpt_str = calloc(tab_size + 1, sizeof(char));
+      size_t rpt_count = tab_size - tab_marker % tab_size;
+      roy_string_fill_char(rpt_str, ' ', rpt_count);
+      roy_string_replace_index(str, pstr - str, 1, rpt_str);
+      tab_marker += rpt_count - 1;
+      pstr += rpt_count - 1;
+      free(rpt_str);
+    } else if (*pstr == '\n') {
+      tab_marker = 0;
+      pstr++;
+    } else {
+      tab_marker++;
+      pstr++;
+    }
+  }
+  return str;
+}
+
+char * roy_string_entab(char * str, size_t tab_size) {
+
+}
+
+size_t roy_string_count_char(const char * str, int ch) {
+  size_t count = 0;
   while (*str != '\0') {
     if (*str++ == ch) {
       count ++;
@@ -106,8 +190,8 @@ int roy_string_count_char(const char * str, int ch) {
   return count;
 }
 
-int roy_string_count_char_if(const char * str, int (*condition)(int)) {
-  int count = 0;
+size_t roy_string_count_char_if(const char * str, int (*condition)(int)) {
+  size_t count = 0;
   while (*str != '\0') {
     if (condition(*str++)) {
       count ++;
@@ -116,10 +200,10 @@ int roy_string_count_char_if(const char * str, int (*condition)(int)) {
   return count;
 }
 
-int roy_string_count_substring(const char * str,
+size_t roy_string_count_substring(const char * str,
                                const char * sub,
                                bool sensibility) {
-  int count = 0;
+  size_t count = 0;
   const char * pstr;
   const char * psub;
   char * lower_str;
@@ -151,10 +235,11 @@ int roy_string_count_substring(const char * str,
   }
   return count;
 }
+
 // Counts all the words in 'str'.
-int roy_string_count_word(const char * str) {
+size_t roy_string_count_word(const char * str) {
   const char * pstr = str;
-  int count = 0;
+  size_t count = 0;
   bool flag = false;
   do {
     if (!flag && isalnum(*pstr)) {
@@ -170,11 +255,11 @@ int roy_string_count_word(const char * str) {
 
 // Counts words in 'str' which are 'length'-character long.
 // The behavoir is undefined when 'length' is lesser than 1.
-int roy_string_count_word_if(const char * str, int length) {
+size_t roy_string_count_word_if(const char * str, size_t length) {
   const char * pstr = str;
   bool flag = false;
-  int length_cur = 0;
-  int count_cur = 0;
+  size_t length_cur = 0;
+  size_t count_cur = 0;
   do {
     if (!flag && isalnum(*pstr)) {
       flag = true;
@@ -193,12 +278,12 @@ int roy_string_count_word_if(const char * str, int length) {
   return count_cur;
 }
 
-int roy_string_count_line(const char * str) {
-  int str_length = strlen(str);
+size_t roy_string_count_line(const char * str) {
+  size_t str_length = strlen(str);
   if (str_length == 0) {
     return 0;
   }
-  int count = roy_string_count_char(str, '\n');
+  size_t count = roy_string_count_char(str, '\n');
   if (*(str + str_length - 1) != '\n') {
     count++;
   }
@@ -210,7 +295,7 @@ int roy_string_count_line(const char * str) {
 // or the 'line_content' is too small or uninitialized.
 char * roy_string_get_line(char * line_content,
                            const char * str,
-                           int line_number) {
+                           size_t line_number) {
   while ((line_number-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
@@ -223,7 +308,7 @@ char * roy_string_get_line(char * line_content,
   return line_content;
 }
 
-int roy_string_line_length(const char * str, int line_number) {
+size_t roy_string_line_length(const char * str, size_t line_number) {
   while ((line_number-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
