@@ -1,27 +1,25 @@
 #include "roystring.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <string.h>
-#include <stdio.h>
 
 char * roy_string_to_lower(char * str) {
-  char * real_str = str;
-  while ((*str++ = tolower(*str)) != '\0') {
-    ;
+  char * pstr = str;
+  while ((*pstr = tolower(*pstr)) != '\0') {
+    pstr++;
   }
-  return real_str;
+  return str;
 }
 
 char * roy_string_to_upper(char * str) {
-  char * real_str = str;
-  while ((*str++ = toupper(*str)) != '\0') {
-    ;
+  char * pstr = str;
+  while ((*pstr = toupper(*pstr)) != '\0') {
+    pstr++;
   }
-  return real_str;
+  return str;
 }
 
 char * roy_string_reverse(char * str) {
-  char * real_str = str;
   char * pstr_head = str;
   char * pstr_tail = str + strlen(str) - 1;
   while (pstr_tail > pstr_head) {
@@ -31,64 +29,60 @@ char * roy_string_reverse(char * str) {
     pstr_head++;
     pstr_tail--;
   }
-  str = real_str;
   return str;
 }
 
 char * roy_string_unique_char(char * str, int ch) {
-  // a temporary-stored string.
-  char * temp_str = calloc(strlen(str), sizeof(char));
+  // temp_str: a temporary-stored string.
+  ROY_STRING(temp_str, strlen(str))
   // a pointer to the real temp_str.
   char * ptemp_str = temp_str;
   // a pointer to the real str.
-  char * real_str = str;
+  char * pstr = str;
   // stand when the first 'ch' is tracked, lay down when repeating 'ch's end.
   bool flag = false;
-  while (*str != '\0') {
-    if (!flag && *str == ch) {
+  while (*pstr != '\0') {
+    if (!flag && *pstr == ch) {
       flag = true;
-      *ptemp_str++ = *str++;
-    } else if (!flag && *str != ch) {
-      *ptemp_str++ = *str++;
-    } else if (flag && *str == ch) {
-      str++;
+      *ptemp_str++ = *pstr++;
+    } else if (!flag && *pstr != ch) {
+      *ptemp_str++ = *pstr++;
+    } else if (flag && *pstr == ch) {
+      pstr++;
     } else { // (flag && *src != ch)
       flag = false;
-      *ptemp_str++ = *str++;
+      *ptemp_str++ = *pstr++;
     }
   }
-  strcpy(real_str, temp_str);
-  free(temp_str);
-  return real_str;
+  strcpy(str, temp_str);
+  return str;
 }
 
 // Replaces all 'old_sub' acurred with 'new_sub'.
-// The behavior is undefined when the length of str grows out of its size,
-// risen when new_sub is larger than old_sub.
+// The behavior is undefined when the length of 'str' grows out of its capacity.
 char * roy_string_replace_all(char * str,
                               const char * old_sub,
                               const char * new_sub) {
   // the length should be when all work is done.
-  size_t len_after = strlen(str);
-  len_after += roy_string_count_substring(str, old_sub, true) *
-               (strlen(new_sub) - strlen(old_sub));
-  // a temporary-stored string.
-  char * temp_str = calloc(len_after, sizeof(char));
+  size_t len_after = strlen(str) +
+                     roy_string_count_substring(str, old_sub, true) *
+                     (strlen(new_sub) - strlen(old_sub));
+  // temp_str: a temporary-stored string.
+  ROY_STRING(temp_str, len_after)
   // a pointer to the real temp_str.
   char * ptemp_str = temp_str;
   // a pointer to the real str.
-  char * real_str = str;
+  char * pstr = str;
   // a pointer to the beginning of a matched substring.
-  char * match_begin;
-  while (match_begin = strstr(str, old_sub)) {
-    strncat(ptemp_str, str, match_begin - str);
+  char * pmatch_begin;
+  while ((pmatch_begin = strstr(pstr, old_sub))) {
+    strncat(ptemp_str, pstr, pmatch_begin - pstr);
     strcat(ptemp_str, new_sub);
-    str = match_begin + strlen(old_sub);
+    pstr = pmatch_begin + strlen(old_sub);
   }
-  strcat(temp_str, str);
-  strcpy(real_str, temp_str);
-  free(temp_str);
-  return real_str;
+  strcat(temp_str, pstr);
+  strcpy(str, temp_str);
+  return str;
 }
 
 // Replaces 'old_sub' with 'new_sub',
@@ -98,13 +92,11 @@ char * roy_string_replace_index(char * str,
                                 size_t old_sub_pos,
                                 size_t old_sub_len,
                                 const char * new_sub) {
-  char * temp_str = calloc(strlen(str) + strlen(new_sub) - old_sub_len + 1,
-                           sizeof(char));
+  ROY_STRING(temp_str, strlen(str) + strlen(new_sub) - old_sub_len)
   strncpy(temp_str, str, old_sub_pos);
   strcat(temp_str, new_sub);
   strcat(temp_str, str + old_sub_pos + old_sub_len);
   strcpy(str, temp_str);
-  free(temp_str);
   return str;
 }
 
@@ -123,10 +115,10 @@ char * roy_string_trim_line(char * str) {
 // This function can avoid the undefined behavior of 'roy_string_trim_line',
 // but runs slower.
 char * roy_string_trim(char * str) {
-  char * temp_str = calloc(strlen(str) + 1, sizeof(char));
+  ROY_STRING(temp_str, strlen(str))
   size_t line_count = roy_string_count_line(str);
   for (int i = 1; i <= line_count; i++) {
-    char * cur_line = calloc(roy_string_line_length(str, i) + 1, sizeof(char));
+    ROY_STRING(cur_line, roy_string_line_length(str, i))
     roy_string_get_line(cur_line, str, i);
     roy_string_trim_line(cur_line);
     if (strlen(cur_line) != 0) {
@@ -135,15 +127,14 @@ char * roy_string_trim(char * str) {
         strcat(temp_str, "\n");
       }
     }
-    free(cur_line);
   }
   strcpy(str, temp_str);
-  free(temp_str);
   return str;
 }
 
 // Returns a string in which 'ch' will occur 'count' times.
 // e.g. ch = 'a', count = 5, then 'dest' would be 'aaaaa'.
+// The behavior is undefined when 'dest' is not long enough.
 char * roy_string_fill_char(char * dest, int ch, size_t count) {
   char to_fill[2] = {ch, '\0'};
   for (size_t i = 0; i != count; i++) {
@@ -158,13 +149,12 @@ char * roy_string_detab(char * str, size_t tab_size) {
   size_t tab_marker = 0;
   while (*pstr != '\0') {
     if (*pstr == '\t') {
-      char * rpt_str = calloc(tab_size + 1, sizeof(char));
+      ROY_STRING(rpt_str, tab_size)
       size_t rpt_count = tab_size - tab_marker % tab_size;
       roy_string_fill_char(rpt_str, ' ', rpt_count);
       roy_string_replace_index(str, pstr - str, 1, rpt_str);
       tab_marker += rpt_count - 1;
       pstr += rpt_count - 1;
-      free(rpt_str);
     } else if (*pstr == '\n') {
       tab_marker = 0;
       pstr++;
@@ -177,7 +167,23 @@ char * roy_string_detab(char * str, size_t tab_size) {
 }
 
 char * roy_string_entab(char * str, size_t tab_size) {
-
+  char * pstr = str;
+  char * pstr_tail = str + strlen(str);
+  printf("haha%s", pstr_tail);
+  while (pstr_tail - pstr > tab_size) {
+    pstr += tab_size;
+    if (*(pstr - 1) == ' ') {
+      char * pblank_head = pstr - 1;
+      while (*pblank_head-- == ' ') {
+        ;
+      }
+      roy_string_replace_index(str,
+                               str - pblank_head + 1,
+                               pstr - pblank_head,
+                               "\t");
+    }
+  }
+  return str;
 }
 
 size_t roy_string_count_char(const char * str, int ch) {
@@ -194,45 +200,39 @@ size_t roy_string_count_char_if(const char * str, int (*condition)(int)) {
   size_t count = 0;
   while (*str != '\0') {
     if (condition(*str++)) {
-      count ++;
+      count++;
     }
   }
   return count;
 }
 
 size_t roy_string_count_substring(const char * str,
-                               const char * sub,
-                               bool sensibility) {
+                                  const char * sub,
+                                  bool sensibility) {
   size_t count = 0;
   const char * pstr;
   const char * psub;
-  char * lower_str;
-  char * lower_sub;
+  ROY_STRING(lower_str, strlen(str))
+  ROY_STRING(lower_sub, strlen(sub))
 
   if (sensibility) {
     pstr = str;
     psub = sub;
   } else {
-    lower_str = calloc(strlen(str) + 1, sizeof(char));
     strcpy(lower_str, str);
     roy_string_to_lower(lower_str);
     pstr = lower_str;
 
-    lower_sub = calloc(strlen(sub) + 1, sizeof(char));
     strcpy(lower_sub, sub);
     roy_string_to_lower(lower_sub);
     psub = lower_sub;
   }
 
-  char * match_begin;
-  while (match_begin = strstr(pstr, psub)) {
+  char * pmatch_begin;
+  while ((pmatch_begin = strstr(pstr, psub))) {
     count++;
-    pstr = match_begin + strlen(psub);
+    pstr = pmatch_begin + strlen(psub);
   } 
-  if (!sensibility) {
-    free(lower_sub);
-    free(lower_str);
-  }
   return count;
 }
 
@@ -256,25 +256,26 @@ size_t roy_string_count_word(const char * str) {
 // Counts words in 'str' which are 'length'-character long.
 // The behavoir is undefined when 'length' is lesser than 1.
 size_t roy_string_count_word_if(const char * str, size_t length) {
-  const char * pstr = str;
   bool flag = false;
   size_t length_cur = 0;
   size_t count_cur = 0;
+
   do {
-    if (!flag && isalnum(*pstr)) {
+    if (!flag && isalnum(*str)) {
       flag = true;
-      length_cur ++;
-    } else if (flag && isalnum(*pstr)) {
-      length_cur ++;
-    } else if (flag && !isalnum(*pstr)) {
+      length_cur++;
+    } else if (flag && isalnum(*str)) {
+      length_cur++;
+    } else if (flag && !isalnum(*str)) {
       flag = false;
       if (length_cur == length) {
         count_cur++;
       }
       length_cur = 0;
     } // (!flag && !isalnum(*pstr)) does nothing
-    pstr++;
-  } while (*pstr != '\0');
+    str++;
+  } while (*str != '\0');
+  
   return count_cur;
 }
 
@@ -308,6 +309,8 @@ char * roy_string_get_line(char * line_content,
   return line_content;
 }
 
+// Returns the length of the given line_number.
+// The behavior is undefined when line_number exceeds.
 size_t roy_string_line_length(const char * str, size_t line_number) {
   while ((line_number-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.

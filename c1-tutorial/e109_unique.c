@@ -11,5 +11,4 @@ int main(void) {
     "Promise me now,          Rose,         and never let go of that promise.\n";
   printf("ORIGINAL STRING:\n%s\n", str);
   printf("RESULT STRING:\n%s\n", roy_string_unique_char(str, ' '));
-  printf("\n\n%s", str);
 }

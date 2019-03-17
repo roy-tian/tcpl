@@ -3,7 +3,6 @@
 
 #define STRING_CAPACITY 1024
 
-
 int main(void) {
   char str[STRING_CAPACITY] = 
     "Let freedom ring from the mighty mountains of New York.\n"

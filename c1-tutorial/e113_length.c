@@ -38,5 +38,5 @@ int main(void) {
       printf("%2d-CHARACTER WORD: %2d\n", i, cur_count);
     }
   }
-  printf("TOTAL WORD: %2d\n", roy_string_count_word(str));
+  printf("TOTAL WORD: %2zu\n", roy_string_count_word(str));
 }

@@ -6,16 +6,18 @@
 
 int main(void) {
   FILE* fp = fopen("e121.txt", "r+");
-  if(!fp) {
-    perror("File opening failed.");
-    return EXIT_FAILURE;
-  }
-  char str[STRING_CAPACITY] = {'\0'};
-  char cur_line[STRING_CAPACITY] = {'\0'};
-  while (fgets(cur_line, STRING_CAPACITY, fp) != NULL) {
-    strcat(str, cur_line);
-  }
-  printf("%s", str);
-  fp = freopen("e121.txt", "a+", fp);
-  fprintf(fp, "\n\nAFTER ENTAB:\n%s", str);
+  char str[STRING_CAPACITY] =
+    "def ask_ok(prompt, retries = 4, reminder = 'Please try again!'):\n"
+    "while True:\n"
+    "    ok = input(prompt)\n"
+    "    if ok in ('y', 'ye', 'yes'):\n"
+    "        return   True\n"
+    "    if ok in ('n', 'no', 'nop', 'nope'):\n"
+    "        return   False\n"
+    "    retries = retries - 1\n"
+    "    if retries < 0:\n"
+    "        raise    ValueError('invalid user response')\n"
+    "    print(reminder)";
+  fprintf(fp, "ORIGINAL CODE:\n%s", str);
+  fprintf(fp, "\n\nAFTER ENTAB:\n%s", roy_string_entab(str, 4));
 }

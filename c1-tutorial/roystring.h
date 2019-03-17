@@ -3,6 +3,11 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <string.h>
+
+#define ROY_STRING(str, size)\
+        char str[size + 1];\
+        memset(str, '\0', size + 1);
 
 char * roy_string_to_lower(char * str);
 

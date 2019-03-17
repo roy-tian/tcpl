@@ -6,7 +6,7 @@
 
 int main(void) {
   
-  FILE* fp = fopen("e118_out.txt", "w+");
+  FILE* fp = fopen("e118.txt", "w+");
   char str[STRING_CAPACITY] =
     "#include <iostream>    \n"
     "\n"
@@ -15,7 +15,7 @@ int main(void) {
     "\t\t  << std::endl;\n"
     "\t\n"
     "}\n"
-    "   \n";
+    "   \n\n\n\n   \n\n\n    ";
   fprintf(fp, "ORIGINAL CODE\n");
   fprintf(fp, "=============\n");
   fprintf(fp, "%s", str);
