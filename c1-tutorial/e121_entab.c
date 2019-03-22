@@ -5,7 +5,7 @@
 #define STRING_CAPACITY 1024
 
 int main(void) {
-  FILE* fp = fopen("e121.txt", "r+");
+  FILE* fp = fopen("e121.txt", "w+");
   char str[STRING_CAPACITY] =
     "def ask_ok(prompt, retries = 4, reminder = 'Please try again!'):\n"
     "while True:\n"

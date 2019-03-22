@@ -10,12 +10,12 @@ int main(void) {
   char str[STRING_CAPACITY] =
     "#include <iostream>    \n"
     "\n"
-    "int main(int argc, char * argv[]) { \t  \n"
-    "\tstd::cout << \"Hello world\"\n"
-    "\t\t  << std::endl;\n"
+    "int main(int argc, char * argv[]) { \t          \n"
+    "\tstd::cout << \"Hello world\"    \t    \n"
+    "\t\t  << std::endl;      \t\n"
     "\t\n"
-    "}\n"
-    "   \n\n\n\n   \n\n\n    ";
+    "}"
+    "   \n\t\n\n\n   \n\n\n    ";
   fprintf(fp, "ORIGINAL CODE\n");
   fprintf(fp, "=============\n");
   fprintf(fp, "%s", str);
