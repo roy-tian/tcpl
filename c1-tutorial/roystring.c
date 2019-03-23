@@ -95,18 +95,19 @@ char * roy_string_replace_index(char * str,
   return str;
 }
 
-char * roy_string_remove_between(char * str,
+char * roy_string_replace_between(char * str,
                                  const char * pattern_head,
-                                 const char * pattern_tail) {
+                                 const char * pattern_tail,
+                                 const char * new_sub) {
   char * phead = str;
   bool flag = false;
   while (phead = strstr(str, pattern_head)) {
     if (flag = true) {
-      char * ptail = strstr(str, pattern_tail);
+      char * ptail = strstr(phead, pattern_tail);
       roy_string_replace_index(str,
                                phead - str,
                                ptail - phead + strlen(pattern_tail),
-                               "");
+                               new_sub);
       flag = false;  
     } else {
       flag = true;

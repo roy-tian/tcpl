@@ -31,10 +31,11 @@ char * roy_string_replace_index(char * str,
                                 size_t old_sub_len,
                                 const char * new_sub);
 
-// Deprected: regex is a possible better choice.
-char * roy_string_remove_between(char * str,
+// Deprecated: regex is a possible better choice.
+char * roy_string_replace_between(char * str,
                                  const char * pattern_head,
-                                 const char * pattern_tail);
+                                 const char * pattern_tail,
+                                 const char * new_sub);
 
 // Gets the content of line 'line_number'.
 // The behavoir is undefined if 'line_number' exceeds 'str',
