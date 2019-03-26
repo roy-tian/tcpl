@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "roystring.h"
 
-#define STRING_CAPACITY_HUGE 16384
-#define STRING_CAPACITY 1024
+#define STRING_CAPACITY_HUGE 16383
+#define STRING_CAPACITY 1023
 
 int main() {
   ROY_STRING(str, STRING_CAPACITY_HUGE)

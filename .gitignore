@@ -1,2 +1,3 @@
-c1-tutorial/a.exe
-c1-tutorial/e*.txt
+**/a.exe
+**/a.out
+**/e*.txt
