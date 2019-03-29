@@ -91,4 +91,6 @@ size_t roy_string_count_line(const char * str);
 // The behavior is undefined when line_number exceeds.
 size_t roy_string_line_length(const char * str, size_t line_number);
 
+int roy_string_htoi(const char * str);
+
 #endif // ROYSTRING_H
