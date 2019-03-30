@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 **/a.exe
 **/e*.txt
 .idea
+=======
+a.exe
+a.out
+e*.txt
+>>>>>>> 7b9350947aa2aa38c7a44e1230c06ada06254730

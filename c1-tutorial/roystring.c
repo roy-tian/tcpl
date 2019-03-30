@@ -101,8 +101,8 @@ char * roy_string_replace_between(char * str,
                                  const char * new_sub) {
   char * phead = str;
   bool flag = false;
-  while (phead = strstr(str, pattern_head)) {
-    if (flag = true) {
+  while ((phead = strstr(str, pattern_head))) {
+    if (flag == true) {
       char * ptail = strstr(phead, pattern_tail);
       roy_string_replace_index(str,
                                phead - str,
