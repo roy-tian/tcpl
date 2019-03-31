@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 
+
 int main(void) {
   printf(" CHAR_BIT:  2 ^ %-2g     = %d\n", log2(CHAR_BIT),      CHAR_BIT);
   printf(" CHAR_MIN: -2 ^ %-2g     = %d\n", log2(-CHAR_MIN),     CHAR_MIN);
@@ -19,4 +20,7 @@ int main(void) {
   printf(" LONG_MIN: -2 ^ %-2Lg     = %ld\n", log2l(-(LONG_MIN+1)),     LONG_MIN);
   printf(" LONG_MAX:  2 ^ %-2Lg - 1 = %ld\n", log2l(LONG_MAX),  LONG_MAX);
   printf("ULONG_MAX:  2 ^ %-2Lg - 1 = %lu\n", log2l(ULONG_MAX),  ULONG_MAX);
+  printf("LLONG_MIN: -2 ^ %-2Lg     = %ld\n", log2l(-(LLONG_MIN+1)),     LLONG_MIN);
+  printf("LLONG_MAX:  2 ^ %-2Lg - 1 = %ld\n", log2l(LLONG_MAX),  LLONG_MAX);
+  printf("ULLONG_MAX:  2 ^ %-2Lg - 1 = %lu\n", log2l(ULLONG_MAX),  ULLONG_MAX);
 }

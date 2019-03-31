@@ -4,7 +4,6 @@
 #include "roystring.h"
 
 #define MAX_LENGTH 45
-#define STRING_CAPACITY 1024
 
 int lengths[MAX_LENGTH] = {0};
 

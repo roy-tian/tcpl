@@ -5,6 +5,9 @@
 #include <stddef.h>
 #include <string.h>
 
+#define STRING_CAPACITY 1023
+#define STRING_CAPACITY_HUGE 65535
+
 #define ROY_STRING(str, size)\
         char str[size + 1];\
         memset(str, '\0', size + 1);
@@ -92,5 +95,11 @@ size_t roy_string_count_line(const char * str);
 size_t roy_string_line_length(const char * str, size_t line_number);
 
 int roy_string_htoi(const char * str);
+
+char * roy_string_read_from_file(char * dest, const char * path);
+
+int roy_string_append_to_file(const char * src, const char * path);
+
+int roy_string_write_to_file(const char * src, const char * path);
 
 #endif // ROYSTRING_H

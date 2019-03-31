@@ -1,10 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "roystring.h"
-#define STRING_CAPACITY 1024
+
+#define TAB_SIZE 8
 
 int main(void) {
-  FILE* fp = fopen("e120.txt", "w+");
   char str[STRING_CAPACITY] = 
     "Fly,\tfly,\tfly\tyour\tkite,\n"
     "High  \t  in   \tthe\t sky;\t\n"
@@ -12,10 +10,10 @@ int main(void) {
     "\tUp and \t\t down,\n"
     "   \tRound and round,\n"
     "Let \tyour\t kite fly high.";
-  fprintf(fp, "ORIGINAL STRING\n");
-  fprintf(fp, "=============\n");
-  fprintf(fp, "%s", str);
-  fprintf(fp, "\n\nDETABED STRING\n");
-  fprintf(fp, "============\n");
-  fprintf(fp, "%s", roy_string_detab(str, 8));
+  const char * file_name = "e120.txt";
+
+  roy_string_write_to_file("ORIGINAL STRING\n=============\n", file_name);
+  roy_string_append_to_file(str, file_name);
+  roy_string_append_to_file("\n\nDETABED STRING\n============\n", file_name);
+  roy_string_append_to_file(roy_string_detab(str, TAB_SIZE), file_name);
 }

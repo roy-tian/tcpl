@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "roystring.h"
-#define STRING_CAPACITY 1024
 
 int main(void) {
   char str[STRING_CAPACITY] = 

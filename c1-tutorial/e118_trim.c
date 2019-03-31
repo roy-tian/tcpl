@@ -1,12 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "roystring.h"
 
-#define STRING_CAPACITY 1024
-
 int main(void) {
-  
-  FILE* fp = fopen("e118.txt", "w+");
   char str[STRING_CAPACITY] =
     "#include <iostream>    \n"
     "\n"
@@ -16,12 +10,10 @@ int main(void) {
     "\t\n"
     "}"
     "   \n\t\n\n\n   \n\n\n    ";
-  fprintf(fp, "ORIGINAL CODE\n");
-  fprintf(fp, "=============\n");
-  fprintf(fp, "%s", str);
-  fprintf(fp, "\nTRIMMED CODE\n");
-  fprintf(fp, "============\n");
-  fprintf(fp, "%s", roy_string_trim(str));
+  const char * file_name = "e118.txt";
 
-  fclose(fp);
+  roy_string_write_to_file("ORIGINAL CODE\n=============\n", file_name);
+  roy_string_append_to_file(str, file_name);
+  roy_string_append_to_file("\nTRIMMED CODE\n============\n", file_name);
+  roy_string_append_to_file(roy_string_trim(str), file_name);
 }

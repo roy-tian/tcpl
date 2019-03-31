@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "roystring.h"
 
-#define STRING_CAPACITY 1024
-
 int main(void) {
   printf("      EMPTY STRING: %zu\n", roy_string_count_word(""));
   printf("        ALL ENTERS: %zu\n", roy_string_count_word("\n\n\n"));

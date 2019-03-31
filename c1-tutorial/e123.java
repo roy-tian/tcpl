@@ -35,7 +35,7 @@ public class FibCalculator extends Fibonacci implements Calculator {
     public static int fibonacci(int fibIndex) {
         if (memoized.containsKey(fibIndex)) {
             return memoized.get(fibIndex);
-        } else {
+        } else /* do not contains any keys */ {
             int answer = fibonacci(fibIndex - 1) + fibonacci(fibIndex - 2);
             memoized.put(fibIndex, answer);
             return answer;

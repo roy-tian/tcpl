@@ -351,5 +351,30 @@ char * roy_string_fold(char * str, size_t line_width) {
   return str;
 }
 
+int roy_string_htoi(const char * str) {}
 
-char * roy_string_decomment(char * str);
+char * roy_string_read_from_file(char * dest, const char * path) {
+  FILE * fp = fopen(path, "r");
+  ROY_STRING(buf, STRING_CAPACITY)
+  fgets(buf, STRING_CAPACITY, fp);
+  strcpy(dest, buf);
+  while (fgets(buf, STRING_CAPACITY, fp)) {
+    strcat(dest, buf);
+  }
+  fclose(fp);
+  return dest;
+}
+
+int roy_string_append_to_file(const char * src, const char * path) {
+  FILE * fp = fopen(path, "a");
+  int ret = fputs(src, fp);
+  fclose(fp);
+  return ret;
+}
+
+int roy_string_write_to_file(const char * src, const char * path) {
+  FILE * fp = fopen(path, "w");
+  int ret = fputs(src, fp);
+  fclose(fp);
+  return ret;
+}

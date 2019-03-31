@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "roystring.h"
-#define STRING_CAPACITY 2048
+
 #define WIDTH 80
 
 int main(void) {
