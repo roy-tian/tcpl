@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#define WORD_CAPACITY 31
 #define STRING_CAPACITY 1023
 #define STRING_CAPACITY_HUGE 65535
 

@@ -23,9 +23,16 @@ int main(void) {
     "Stand up and admit.\n";
   printf("ORIGNAL LYRIC:\n==============\n");
   printf("%s", str);
-  roy_string_replace_all(str, "shit", "****", false);
-  roy_string_replace_all(str, "fuck", "****", false);
-  roy_string_replace_all(str, "sex", "***", false);
+
+  char *dirty_words[10] = {
+    "SHIT", "shit", "fuck", "sex", "Sex",
+  };
+  for (int i = 0; i != 5; i++) {
+    ROY_STRING(clean, WORD_CAPACITY)
+    roy_string_replace_all(str, dirty_words[i],
+      roy_string_fill_char(clean, '*', strlen(dirty_words[i])),
+      true);
+  }
   printf("CLEAN LYRIC:\n==============\n");
   printf("%s", str);
 }

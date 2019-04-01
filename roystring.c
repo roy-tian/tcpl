@@ -62,6 +62,7 @@ char * roy_string_replace_all(char * str,
                               const char * old_sub,
                               const char * new_sub,
                               bool sensibility) {
+// TODO: the function needs to be character sensible.
   // the length should be when all work is done.
   size_t len_after = strlen(str) +
                      roy_string_count_substring(str, old_sub, true) *
@@ -71,19 +72,9 @@ char * roy_string_replace_all(char * str,
   // a pointer to the real temp_str.
   char * ptemp_str = temp_str;
   // a pointer to the real str.
-  ROY_STRING(str_lower, strlen(str))
-  ROY_STRING(old_sub_lower, strlen(old_sub))
   char * pstr;
-  if (sensibility) {
-    pstr = str;
-  } else {
-    strcpy(old_sub_lower, old_sub);
-    roy_string_to_lower(old_sub_lower);
-    strcpy(str_lower, str);
-    roy_string_to_lower(str_lower);
-    pstr = str_lower;
-  }
   // a pointer to the beginning of a matched substring.
+  pstr = str;
   char * pmatch_begin;
   while ((pmatch_begin = strstr(pstr, old_sub))) {
     strncat(ptemp_str, pstr, pmatch_begin - pstr);
