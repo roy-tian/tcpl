@@ -1,6 +1,6 @@
+#include "../roystring.h"
 #include <stdio.h>
 #include <ctype.h>
-#include "roystring.h"
 
 int main(void) {
   char str[STRING_CAPACITY] =

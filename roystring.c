@@ -60,7 +60,8 @@ char * roy_string_unique_char(char * str, int ch) {
 
 char * roy_string_replace_all(char * str,
                               const char * old_sub,
-                              const char * new_sub) {
+                              const char * new_sub,
+                              bool sensibility) {
   // the length should be when all work is done.
   size_t len_after = strlen(str) +
                      roy_string_count_substring(str, old_sub, true) *
@@ -70,7 +71,18 @@ char * roy_string_replace_all(char * str,
   // a pointer to the real temp_str.
   char * ptemp_str = temp_str;
   // a pointer to the real str.
-  char * pstr = str;
+  ROY_STRING(str_lower, strlen(str))
+  ROY_STRING(old_sub_lower, strlen(old_sub))
+  char * pstr;
+  if (sensibility) {
+    pstr = str;
+  } else {
+    strcpy(old_sub_lower, old_sub);
+    roy_string_to_lower(old_sub_lower);
+    strcpy(str_lower, str);
+    roy_string_to_lower(str_lower);
+    pstr = str_lower;
+  }
   // a pointer to the beginning of a matched substring.
   char * pmatch_begin;
   while ((pmatch_begin = strstr(pstr, old_sub))) {
@@ -351,7 +363,22 @@ char * roy_string_fold(char * str, size_t line_width) {
   return str;
 }
 
-int roy_string_htoi(const char * str) {}
+unsigned int roy_string_htoi(const char * str) {
+  unsigned int ret = 0;
+  ROY_STRING(tmp_str, strlen(str))
+  if (strstr(str, "0X") == str || strstr(str, "0x") == str) {
+    strcpy(tmp_str, str + 2);
+  } else {
+    strcpy(tmp_str, str);
+  }
+  roy_string_to_upper(tmp_str);
+  size_t len = strspn(tmp_str, "0123456789ABCDEF");
+  for (int i = 0; i < len; i++) {
+    ret *= 16;
+    ret += isdigit(tmp_str[i]) ? tmp_str[i] - '0' : tmp_str[i] - 'A' + 10;
+  }
+  return ret;
+}
 
 char * roy_string_read_from_file(char * dest, const char * path) {
   FILE * fp = fopen(path, "r");

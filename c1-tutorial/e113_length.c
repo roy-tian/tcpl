@@ -1,7 +1,6 @@
+#include "../roystring.h"
 #include <stdio.h>
-#include <stdbool.h>
 #include <ctype.h>
-#include "roystring.h"
 
 #define MAX_LENGTH 45
 

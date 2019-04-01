@@ -1,5 +1,5 @@
+#include "../roystring.h"
 #include <stdio.h>
-#include "roystring.h"
 
 int main(void) {
   char str[STRING_CAPACITY] = 
@@ -8,10 +8,10 @@ int main(void) {
     "Let freedom ring from the snow-capped Rockies of Colorado.\n"
     "Let freedom ring from the curvaceous slopes of California.\n";
   printf("ORIGINAL STRING:\n%s\n", str);
-  roy_string_replace_all(str, "	", "\\t");
-  roy_string_replace_all(str, "\n", "\\n\n");
+  roy_string_replace_all(str, "	", "\\t", true);
+  roy_string_replace_all(str, "\n", "\\n\n", true);
   printf("RESULT STRING:\n%s\n", str);
-  roy_string_replace_all(str, "\\n\n", "\n");
-  roy_string_replace_all(str, "\\t", " ");
-  printf("REPLACE REVERSELY:\n%s\n", str);
+  roy_string_replace_all(str, "\\n\n", "\n", true);
+  roy_string_replace_all(str, "\\t", " ", true);
+  printf("REPLACE REVERSELY:\n%s\n", str, true);
 }

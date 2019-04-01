@@ -1,5 +1,5 @@
+#include "../roystring.h"
 #include <stdio.h>
-#include "roystring.h"
 
 #define WIDTH 80
 

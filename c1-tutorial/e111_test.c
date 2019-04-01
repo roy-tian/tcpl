@@ -1,5 +1,5 @@
+#include "../roystring.h"
 #include <stdio.h>
-#include "roystring.h"
 
 int main(void) {
   printf("      EMPTY STRING: %zu\n", roy_string_count_word(""));
