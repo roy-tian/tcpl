@@ -366,7 +366,7 @@ char * roy_string_fold(char * str, size_t line_width) {
 char * roy_stirng_squeeze(char * str, const char * set) {
   int i = 0, j = 0;
   while (*(str + i) != '\0') {
-    if (strchr(set, *(str + i))) { /* current character belongs to 'set' */
+    if (strchr(set, *(str + i))) { /* match found: current character in 'set' */
       i++;
     } else {
       *(str + j++) = *(str + i++);
