@@ -86,6 +86,9 @@ char * roy_string_fold_line(char * str, size_t line_width);
 // after the last non-blank character that occurs before 'line_width'.
 char * roy_string_fold(char * str, size_t line_width);
 
+// Deletes every character in 'str' that matches any character in 'set'.
+char * roy_stirng_squeeze(char * str, const char * set);
+
 // Counts the occurence time of 'ch' in 'str'.
 size_t roy_string_count_char(const char * str, int ch);
 
@@ -112,8 +115,11 @@ size_t roy_string_count_line(const char * str);
 // The behavior is undefined if line_number exceeds.
 size_t roy_string_line_length(const char * str, size_t line_number);
 
-// Converts 'str' of hexadecimal digits into its equivalent value.
-unsigned int roy_string_htoi(const char * str);
+// Scans 'str' for any character from 'set', 
+// returns the position index of that character,
+// or strlen(str), which is an invalid output, indicates not found.
+// (similar to std 'strpbrk' except the return value.)
+size_t roy_string_break_index(const char * str, const char * set);
 
 // Reads the content of file at 'path' to 'dest'.
 // (This is a convinient function with performance sacrificed.)

@@ -145,10 +145,11 @@ char * roy_string_trim(char * str) {
 }
 
 char * roy_string_fill_char(char * dest, int ch, size_t count) {
-  char to_fill[2] = {ch, '\0'};
-  for (size_t i = 0; i != count; i++) {
-    strcat(dest, to_fill);
+  size_t i = 0;
+  for (; i != count; i++) {
+    *(dest + i) = ch;
   }
+  *(dest + i) = '\0';
   return dest;
 }
 
@@ -297,6 +298,14 @@ size_t roy_string_count_line(const char * str) {
   return count;
 }
 
+size_t roy_string_break_index(const char * str, const char * set) {
+  size_t pos = 0;
+  while (*(str + pos) != '\0' && !strchr(set, *(str + pos))) {
+    pos++;
+  }
+  return pos;
+}
+
 char * roy_string_line(char * line_content,
                        const char * str,
                        size_t line_number) {
@@ -354,21 +363,17 @@ char * roy_string_fold(char * str, size_t line_width) {
   return str;
 }
 
-unsigned int roy_string_htoi(const char * str) {
-  unsigned int ret = 0;
-  ROY_STRING(tmp_str, strlen(str))
-  if (strstr(str, "0X") == str || strstr(str, "0x") == str) {
-    strcpy(tmp_str, str + 2);
-  } else {
-    strcpy(tmp_str, str);
+char * roy_stirng_squeeze(char * str, const char * set) {
+  int i = 0, j = 0;
+  while (*(str + i) != '\0') {
+    if (strchr(set, *(str + i))) { /* current character belongs to 'set' */
+      i++;
+    } else {
+      *(str + j++) = *(str + i++);
+    }
   }
-  roy_string_to_upper(tmp_str);
-  size_t len = strspn(tmp_str, "0123456789ABCDEF");
-  for (int i = 0; i < len; i++) {
-    ret *= 16;
-    ret += isdigit(tmp_str[i]) ? tmp_str[i] - '0' : tmp_str[i] - 'A' + 10;
-  }
-  return ret;
+  *(str + j) = '\0';
+  return str;
 }
 
 char * roy_string_read_from_file(char * dest, const char * path) {

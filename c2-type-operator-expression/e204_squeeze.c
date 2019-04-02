@@ -24,15 +24,6 @@ int main(void) {
   printf("ORIGNAL LYRIC:\n==============\n");
   printf("%s", str);
 
-  char *dirty_words[10] = {
-    "SHIT", "shit", "fuck", "sex", "Sex", "bitch"
-  };
-  for (int i = 0; i != 6; i++) {
-    ROY_STRING(clean, WORD_CAPACITY)
-    roy_string_replace_all(str, dirty_words[i],
-      roy_string_fill_char(clean, '*', strlen(dirty_words[i])),
-      true);
-  }
-  printf("CLEAN LYRIC:\n==============\n");
-  printf("%s", str);
+  printf("SQUEEZED LYRIC:\n==============\n");
+  printf("%s", roy_stirng_squeeze(str, "\"\'.,?!;"));
 }
