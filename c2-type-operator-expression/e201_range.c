@@ -18,7 +18,7 @@ int main(void) {
   printf(" LONG_MIN: -2 ^ %-2Lg     = %ld\n", log2l(-(LONG_MIN+1)),     LONG_MIN);
   printf(" LONG_MAX:  2 ^ %-2Lg - 1 = %ld\n", log2l(LONG_MAX),  LONG_MAX);
   printf("ULONG_MAX:  2 ^ %-2Lg - 1 = %lu\n", log2l(ULONG_MAX),  ULONG_MAX);
-  printf("LLONG_MIN: -2 ^ %-2Lg     = %ld\n", log2l(-(LLONG_MIN+1)),     LLONG_MIN);
-  printf("LLONG_MAX:  2 ^ %-2Lg - 1 = %ld\n", log2l(LLONG_MAX),  LLONG_MAX);
-  printf("ULLONG_MAX:  2 ^ %-2Lg - 1 = %lu\n", log2l(ULLONG_MAX),  ULLONG_MAX);
+  printf("LLONG_MIN: -2 ^ %-2Lg     = %lld\n", log2l(-(LLONG_MIN+1)),     LLONG_MIN);
+  printf("LLONG_MAX:  2 ^ %-2Lg - 1 = %lld\n", log2l(LLONG_MAX),  LLONG_MAX);
+  printf("ULLONG_MAX:  2 ^ %-2Lg - 1 = %llu\n", log2l(ULLONG_MAX),  ULLONG_MAX);
 }

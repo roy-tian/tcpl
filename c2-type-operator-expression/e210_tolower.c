@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define STRING_CAPACITY
 
 // Deprecated: this version won't be more effective than the std one.
 int tolower_(int ch) {
@@ -8,5 +9,11 @@ int tolower_(int ch) {
 }
 
 int main(void) {
-  
+  char str[STRING_CAPACITY] = "PACK MY BOX WITH FIVE DOZEN LIQUOR JUGS.";
+  puts(str);
+  char * pstr = str + 1;
+  while ((*pstr = tolower_(*pstr)) != '\0') {
+    pstr++;
+  }
+  puts(str);
 }

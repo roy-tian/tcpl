@@ -1,4 +1,4 @@
-#include "../roystring.h"
+#include "roystring.h"
 
 #define TAB_SIZE 4
 

@@ -1,4 +1,4 @@
-#include "../roystring.h"
+#include "roystring.h"
 #include <stdio.h>
 
 int main(void) {

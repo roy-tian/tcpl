@@ -1,4 +1,4 @@
-#include "../roystring.h"
+#include "roystring.h"
 
 int main() {
   ROY_STRING(str, STRING_CAPACITY_HUGE)
