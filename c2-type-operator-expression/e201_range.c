@@ -2,8 +2,6 @@
 #include <math.h>
 #include <stdio.h>
 
-
-
 int main(void) {
   printf(" CHAR_BIT:  2 ^ %-2g     = %d\n", log2(CHAR_BIT),      CHAR_BIT);
   printf(" CHAR_MIN: -2 ^ %-2g     = %d\n", log2(-CHAR_MIN),     CHAR_MIN);

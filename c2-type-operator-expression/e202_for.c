@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../roystring.h"
+#include "roystring.h"
 
 int get_line(char * dest, int max_length) {
   int i = 0, ch;
