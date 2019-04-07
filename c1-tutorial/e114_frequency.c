@@ -1,18 +1,74 @@
-#include "roystring.h"
 #include <stdio.h>
+#include <ctype.h>
 
-int main(void) {
-  char str[] =
-    "Monsieur Miroir marchand dâ€™habits,"
-    "est mort hier soir Ã  Paris."
-    "Il fait nuit,"
-    "Il fait noir,"
-    "Il fait nuit noire Ã  Paris...";
-  for (int i = 'a'; i <= 'z'; i++) {
-    int count_cur = roy_string_count_char(str, i) +
-                    roy_string_count_char(str, i - 32); // 'a' - 'A' == 32
-    if (count_cur != 0) {
-      printf("%c: %d\n", i, count_cur);
+#define STRING_CAPACITY 1023
+#define N_MAX 26
+
+void do_stats(const char * str, size_t * stats_v) {
+  while (*str != '\0') {
+    if (isupper(*str)) {
+      stats_v[*str - 'A']++;
+    } else if (islower(*str)) {
+      stats_v[*str - 'a']++;
+    }
+    str++;
+  }
+}
+
+void histogram(const size_t * stats_v) {
+  const char blocks[8 * 3 + 1] = "¨x¨y¨z¨{¨|¨}¨~¨€";
+  size_t non_zero_length = 0;
+  size_t max_count = 0;
+
+  for (int i = 0; i != N_MAX; i++) {  
+    if (stats_v[i] > 0) {
+      non_zero_length++;
+    }
+    if (stats_v[i] > max_count) {
+      max_count = stats_v[i];
     }
   }
+
+  for (size_t i = max_count / 8 + 1; i > 0; i--) {
+    for (size_t j = 0; j != N_MAX; j++) {
+      size_t cur_count = stats_v[j];
+      if (cur_count > 0) {
+        if (cur_count / 8 + 1 > i ||
+            cur_count / 8 + 1 == i && cur_count % 8 == 0) {
+          printf("%c%c ", blocks[14], blocks[15]);
+        } else if (cur_count / 8 + 1 == i && cur_count % 8 != 0) {
+          printf("%c%c ",
+                 blocks[cur_count % 8 * 2 - 2],
+                 blocks[cur_count % 8 * 2 - 1]);
+        } else {
+          printf("   ");
+        }
+      }
+    }
+    printf("\n");
+  }
+  for (int i = 0; i != non_zero_length * 3; i++) {
+    printf("-");
+  }
+  printf("\n");
+  for (size_t i = 0; i != N_MAX; i++) {
+    size_t cur_count = stats_v[i];
+    if (cur_count != 0) {
+      printf("%-3c", 'A' + i);
+    } 
+  }
+}
+
+int main(void) {
+  char str[STRING_CAPACITY + 1] =
+    "In the year 2633, the evil Red Falcon Organization have set a base on the "
+    "Galuga archipelago near New Zealand in a plot to conquer the world. "
+    "Two commandos, Bill Rizer and Lance Bean of the Contra unit "
+    "(an elite group of soldiers specializing in guerrilla warfare), "
+    "are sent to the island to destroy the enemy forces and "
+    "uncover the true nature of Red Falcon, the alien entity controlling them.";
+  size_t stats_v[N_MAX] = {0};
+
+  do_stats(str, stats_v);
+  histogram(stats_v);
 }

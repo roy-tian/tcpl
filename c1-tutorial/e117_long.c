@@ -1,7 +1,55 @@
-#include "roystring.h"
+#include <string.h>
 #include <stdio.h>
 
+#define STRING_CAPACITY 1023
 #define WIDTH 80
+
+size_t roy_string_count_char(const char * str, int ch) {
+  size_t count = 0;
+  while (*str != '\0') {
+    if (*str++ == ch) {
+      count ++;
+    }
+  }
+  return count;
+}
+
+size_t roy_string_count_line(const char * str) {
+  size_t str_length = strlen(str);
+  size_t count = roy_string_count_char(str, '\n');
+  if (str_length != 0 && *(str + str_length - 1) != '\n') {
+    // last char is not '\n', but that line still needs to be counted.
+    count++;
+  }
+  return count;
+}
+
+size_t roy_string_line_length(const char * str, size_t line_number) {
+  while ((line_number-- > 1) && strchr(str, '\n')) {
+    str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
+  }
+  const char * str_tail = strchr(str, '\n');
+  if (!str_tail) {
+    return strlen(str);
+  } else {
+    return str_tail - str;
+  }
+}
+
+char * roy_string_line(char * line_content,
+                       const char * str,
+                       size_t line_number) {
+  while ((line_number-- > 1) && strchr(str, '\n')) {
+    str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
+  }
+  const char * str_tail = strchr(str, '\n');
+  if (!str_tail) {
+    strcpy(line_content, str);
+  } else {
+    strncpy(line_content, str, str_tail - str);
+  }
+  return line_content;
+}
 
 int main(void) {
   char str[] =
@@ -18,7 +66,7 @@ int main(void) {
     for (int i = 1; i < roy_string_count_line(str); i++) {
       if (roy_string_line_length(str, i) > WIDTH) {
         char cur_line[STRING_CAPACITY] = {'\0'};
-        printf("[%2d]%s\n", i, roy_string_get_line(cur_line, str, i));
+        printf("[%2d]%s\n", i, roy_string_line(cur_line, str, i));
       }
     }
 }

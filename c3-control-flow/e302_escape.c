@@ -3,7 +3,7 @@
 
 // Reveals all characters that 'iscntrl' .
 // this function does the same things of 'roy_string_replace_all()' yet faster.
-// The behavior is undefined if the capacity of 'dest' is insuffient.
+// The behavior is undefined if the capacity of 'dest' is insufficient.
 char * escape(char * dest, const char * src) {
   char * pdest = dest;
   while (*src != '\0') {
@@ -36,6 +36,10 @@ char * escape(char * dest, const char * src) {
   }
   *pdest = '\0';
   return dest;
+}
+
+char * unescape(char * dest, const char * src) {
+
 }
 
 int main(void) {

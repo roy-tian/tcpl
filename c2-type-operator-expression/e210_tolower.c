@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define STRING_CAPACITY
+#define STRING_CAPACITY 1024
 
 // Deprecated: this version won't be more effective than the std one.
 int tolower_(int ch) {
