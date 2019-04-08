@@ -8,6 +8,8 @@
         char str[size + 1];\
         memset(str, '\0', size + 1);
 
+char * roy_string_unique_char(char * str, int ch);
+
 char * roy_string_unique_char(char * str, int ch) {
   // temp_str: a temporary-stored string.
   ROY_STRING(temp_str, strlen(str))

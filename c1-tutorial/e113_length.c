@@ -5,7 +5,11 @@
 #define STRING_CAPACITY 1023
 #define WORD_LENGTH_MAX 45
 
-void do_stats(const char * str,  size_t * stats_v) {
+void roy_string_word_length_stats(const char * str,  size_t * stats_v);
+void histogram_horizontal(const size_t * stats_v);
+void histogram_vertical(const size_t * stats_v);
+
+void roy_string_word_length_stats(const char * str,  size_t * stats_v) {
   bool flag = false;
   size_t cur_length = 0;
   do {
@@ -83,8 +87,7 @@ int main(void) {
   size_t non_zero_length = 0;
   size_t max_count = 0;
 
-  do_stats(str, stats_v);
-
+  roy_string_word_length_stats(str, stats_v);
   histogram_horizontal(stats_v);
   histogram_vertical(stats_v);
 }

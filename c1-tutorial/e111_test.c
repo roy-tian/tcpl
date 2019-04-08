@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+size_t roy_string_count_word(const char * str);
+
 size_t roy_string_count_word(const char * str) {
   const char * pstr = str;
   size_t count = 0;

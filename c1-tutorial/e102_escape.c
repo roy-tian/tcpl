@@ -1,6 +1,9 @@
 #include <stdio.h>
 
-struct EscapeSequence {
+const struct EscapeSequence;
+void printTable(void);
+
+const struct EscapeSequence {
   int sequenceNumber;
   char * sequenceString;
   char * description;

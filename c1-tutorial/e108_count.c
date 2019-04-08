@@ -9,6 +9,13 @@
         char str[size + 1];\
         memset(str, '\0', size + 1);
 
+char * roy_string_to_lower(char * str);
+size_t roy_string_count_char(const char * str, int ch);
+size_t roy_string_count_char_if(const char * str, int (*condition)(int));
+size_t roy_string_count_substring(const char * str,
+                                  const char * sub,
+                                  bool sensibility);
+
 char * roy_string_to_lower(char * str) {
   char * pstr = str;
   while ((*pstr = tolower(*pstr)) != '\0') {

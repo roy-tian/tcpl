@@ -1,10 +1,20 @@
+/**
+ * This file should be saved with encoding 'gbk'
+ * and run on cmd of Windows,
+ * in order to print histogram correctly.
+ */
+
 #include <stdio.h>
 #include <ctype.h>
 
 #define STRING_CAPACITY 1023
-#define N_MAX 26
+// numbers of characters
+#define N_MAX 26 
 
-void do_stats(const char * str, size_t * stats_v) {
+void roy_string_char_stats(const char * str, size_t * stats_v);
+void histogram(const size_t * stats_v);
+
+void roy_string_char_stats(const char * str, size_t * stats_v) {
   while (*str != '\0') {
     if (isupper(*str)) {
       stats_v[*str - 'A']++;
@@ -16,7 +26,7 @@ void do_stats(const char * str, size_t * stats_v) {
 }
 
 void histogram(const size_t * stats_v) {
-  const char blocks[STRING_CAPACITY] = "ï¿½xï¿½yï¿½zï¿½{ï¿½|ï¿½}ï¿½~ï¿½ï¿½";
+  const char blocks[STRING_CAPACITY] = "¨x¨y¨z¨{¨|¨}¨~¨€";
   size_t non_zero_length = 0;
   size_t max_count = 0;
 
@@ -54,7 +64,7 @@ void histogram(const size_t * stats_v) {
   for (int i = 0; i != N_MAX; i++) {
     size_t cur_count = stats_v[i];
     if (cur_count != 0) {
-      printf("%-3c", 'A' + i);
+      printf("%c  ", 'A' + i);
     } 
   }
 }
@@ -69,6 +79,6 @@ int main(void) {
     "uncover the true nature of Red Falcon, the alien entity controlling them.";
   size_t stats_v[N_MAX] = {0};
 
-  do_stats(str, stats_v);
+  roy_string_char_stats(str, stats_v);
   histogram(stats_v);
 }

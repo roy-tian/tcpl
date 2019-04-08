@@ -1,5 +1,10 @@
 #include <stdio.h>
-#include "roystring.h"
+
+#define STRING_CAPACITY 1023
+
+#define ROY_STRING(str, size)\
+        char str[size + 1];\
+        memset(str, '\0', size + 1);
 
 int get_line(char * dest, int max_length) {
   int i = 0, ch;
@@ -16,8 +21,7 @@ int get_line(char * dest, int max_length) {
 
 int get_line_without_and(char * dest, int max_length) {
   int i = 0, ch = getchar();
-  for (; (i < max_length - 1) + (ch != '\n') + (ch != EOF) == 3; 
-       i++) {
+  for (; (i < max_length - 1) + (ch != '\n') + (ch != EOF) == 3; i++) {
     dest[i] = ch;
     ch = getchar();
   }

@@ -4,6 +4,9 @@
 #define FAHRENHEIT_UPPER 101.0  // upper limit
 #define STEP 0.1
 
+double fahrenheitToCelsius(double fahrenheit);
+void printTemprTable(double begin, double end, double step);
+
 double fahrenheitToCelsius(double fahrenheit) {
   return 5.0 / 9.0 * (fahrenheit - 32.0);
 }

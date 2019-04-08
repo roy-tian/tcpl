@@ -2,6 +2,12 @@
 #include <string.h>
 #define STRING_CAPACITY 1023
 
+size_t roy_string_count_char(const char * str, int ch);
+size_t roy_string_count_line(const char * str);
+size_t roy_string_line_length(const char * str, size_t line_number);
+char * roy_string_line(char * line_content,
+                       const char * str,
+                       size_t line_number);
 
 size_t roy_string_count_char(const char * str, int ch) {
   size_t count = 0;
