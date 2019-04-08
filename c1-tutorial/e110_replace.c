@@ -13,7 +13,7 @@ char * roy_string_replace_all(char * str,
                               const char * old_sub,
                               const char * new_sub) {
   // temp_str: a temporary-stored string.
-  // Undefined behaviors would occur if str is insufficient.
+  // Undefined behaviors would occur if str grows out of its capacity.
   ROY_STRING(temp_str, strlen(str))
   // a pointer to the real temp_str.
   char * ptemp_str = temp_str;

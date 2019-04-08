@@ -16,7 +16,7 @@ void do_stats(const char * str, size_t * stats_v) {
 }
 
 void histogram(const size_t * stats_v) {
-  const char blocks[8 * 3 + 1] = "¨x¨y¨z¨{¨|¨}¨~¨€";
+  const char blocks[STRING_CAPACITY] = "ï¿½xï¿½yï¿½zï¿½{ï¿½|ï¿½}ï¿½~ï¿½ï¿½";
   size_t non_zero_length = 0;
   size_t max_count = 0;
 
@@ -51,7 +51,7 @@ void histogram(const size_t * stats_v) {
     printf("-");
   }
   printf("\n");
-  for (size_t i = 0; i != N_MAX; i++) {
+  for (int i = 0; i != N_MAX; i++) {
     size_t cur_count = stats_v[i];
     if (cur_count != 0) {
       printf("%-3c", 'A' + i);
