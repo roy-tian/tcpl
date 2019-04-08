@@ -13,7 +13,7 @@ void printTemprTable(double begin, double end, double step) {
   puts("------------------");
   for (double valuef = begin, valuec; valuef <= end; valuef += step) {
     valuec = fahrenheitToCelsius(valuef);
-    printf("%6.1f ¨H  %5.1f ¡æ\n", valuef, valuec);
+    printf("%6.1f\xE2\x84\x89  %5.1f\xE2\x84\x83\n", valuef, valuec);
   }
 }
 
