@@ -18,10 +18,10 @@ typedef enum NumberLength_ {
 // 'dest' must be a string no shorter than 65 characters.
 char * roy_number_to_binary(char * dest, long long number, NumberLength length);
 // Behavior is undefined if 'position' and 'length' is invalid.
-long long roy_number_set_bits(long long * number,
+long long roy_number_set_bits(long long * dest,
                               int         position,
                               size_t      length,
-                              int         bit);
+                              long long   src);
 void print_clearly(char * binary);
 
 char * roy_number_to_binary(char * dest, long long number, NumberLength length) {
@@ -39,15 +39,12 @@ char * roy_number_to_binary(char * dest, long long number, NumberLength length) 
   return dest;
 }
 
-long long roy_number_set_bits(long long * number,
+long long roy_number_set_bits(long long * dest,
                               int         position,
                               size_t      length,
-                              int         bit) {
-  long long dest = *number;
-  *number = (dest & (~0U << (position + 1))) +
-            (bit ? (~(~0U << length) << (position + 1 - length)) : 0) +
-            (dest & ~(~0U << (position + 1 - length)));
-  return *number;
+                              long long   src) {
+  return *dest = *dest & ~(~(~0U << length)  << (position + 1 - length)) |
+                 (src  &   ~(~0U << length)) << (position + 1 - length);
 }
 
 void print_clearly(char * binary) {
@@ -65,8 +62,10 @@ void print_clearly(char * binary) {
 
 int main(void) {
   ROY_STRING(str, STRING_CAPACITY)
-  long long num = INT_MAX;
-  print_clearly(roy_number_to_binary(str, num, DWORD));
-  roy_number_set_bits(&num, 10, 7, 0);  
-  print_clearly(roy_number_to_binary(str, num, DWORD));
+  long long num1 = INT_MAX;
+  long long num2 = 6552144;
+  print_clearly(roy_number_to_binary(str, num1, DWORD));
+  print_clearly(roy_number_to_binary(str, num2, DWORD));
+  roy_number_set_bits(&num1, 9, 10, num2);  
+  print_clearly(roy_number_to_binary(str, num1, DWORD));
 }

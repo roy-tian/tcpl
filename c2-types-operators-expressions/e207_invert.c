@@ -38,19 +38,8 @@ char * roy_number_to_binary(char * dest, long long number, NumberLength length) 
   return dest;
 }
 
-long long roy_number_get_bits(long long number, int position, size_t length) {
-  return (number >> (position + 1 - length)) & ~(~0 << length);
-}
-
 long long roy_number_invert(long long * number, int position, size_t length) {
-  long long dest = *number;
-  long long temp = *number;
-  temp = ~roy_number_get_bits(temp, position, length);
-  temp <<= (position + 1 - length);
-  *number = (dest & (~0U << (position + 1))) +
-            temp +
-            (dest & ~(~0U << (position + 1 - length)));
-  return *number;
+  return *number = *number ^ ~(~0U << length) << (position + 1 - length);
 }
 
 void print_clearly(char * binary) {
@@ -68,7 +57,7 @@ void print_clearly(char * binary) {
 
 int main(void) {
   ROY_STRING(str, STRING_CAPACITY)
-  long long num = 7654321;
+  long long num = INT_MAX;
   print_clearly(roy_number_to_binary(str, num, DWORD));
   roy_number_invert(&num, 10, 7);  
   print_clearly(roy_number_to_binary(str, num, DWORD));
