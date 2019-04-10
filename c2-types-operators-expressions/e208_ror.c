@@ -16,14 +16,10 @@ typedef enum NumberLength_ {
 } NumberLength;
 
 // 'dest' must be a string no shorter than 65 characters.
-char * roy_number_to_binary(char * dest, unsigned long long number, NumberLength length);
-// Behavior is undefined if 'position' and 'length' is invalid.
-unsigned long long roy_number_invert(unsigned long long * number,
-                            int         position,
-                            size_t      length);
+char * roy_number_to_binary(char * dest, long long number, NumberLength length);
 void print_clearly(char * binary);
 
-char * roy_number_to_binary(char * dest, unsigned long long number, NumberLength length) {
+char * roy_number_to_binary(char * dest, long long number, NumberLength length) {
   int pn = 1;
   if (number < 0) {
     pn = 0;
@@ -36,6 +32,20 @@ char * roy_number_to_binary(char * dest, unsigned long long number, NumberLength
   }
   *dest = pn ? '0' : '1';
   return dest;
+}
+
+long long roy_number_right_rotate(long long   * number,
+                                  int           times,
+                                  NumberLength  length) {
+                                  long long end;
+  ROY_STRING(str, STRING_CAPACITY)
+  while (times-- > 0) {
+    end = (*number & 1) << 30;
+    *number >>= 1;
+    print_clearly(roy_number_to_binary(str, end, DWORD));
+    *number |= end;
+  }
+  return *number;
 }
 
 void print_clearly(char * binary) {
@@ -51,24 +61,9 @@ void print_clearly(char * binary) {
   putchar('\n');
 }
 
-unsigned long long roy_number_right_rotate(unsigned long long   * number,
-                                  int           times,
-                                  NumberLength  length) {
-                                    unsigned long long end;
-  ROY_STRING(str, STRING_CAPACITY)
-  while (times-- > 0) {
-    end = (*number & 1) << (length);
-    *number >>= 1;
-    print_clearly(roy_number_to_binary(str, end, DWORD));
-    *number |= end;
-  }
-  return *number;
-}
-
-
 int main(void) {
   ROY_STRING(str, STRING_CAPACITY)
-  unsigned long long num = 7654321;
+  long long num = 7654321;
   print_clearly(roy_number_to_binary(str, num, DWORD));
   roy_number_right_rotate(&num, 1, DWORD);  
   print_clearly(roy_number_to_binary(str, num, DWORD));

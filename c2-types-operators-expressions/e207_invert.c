@@ -20,7 +20,7 @@ char * roy_number_to_binary(char * dest, long long number, NumberLength length);
 // Behavior is undefined if 'position' and 'length' is invalid.
 long long roy_number_invert(long long * number,
                             int         position,
-                            size_t      length);
+                            size_t      count);
 void print_clearly(char * binary);
 
 char * roy_number_to_binary(char * dest, long long number, NumberLength length) {
@@ -38,8 +38,12 @@ char * roy_number_to_binary(char * dest, long long number, NumberLength length) 
   return dest;
 }
 
-long long roy_number_invert(long long * number, int position, size_t length) {
-  return *number = *number ^ ~(~0U << length) << (position + 1 - length);
+long long roy_number_reveal(int position, size_t count) {
+  return ~(~0U << count) << (position + 1 - count);
+}
+
+long long roy_number_invert(long long * number, int position, size_t count) {
+  return *number = *number ^ roy_number_reveal(position, count);
 }
 
 void print_clearly(char * binary) {

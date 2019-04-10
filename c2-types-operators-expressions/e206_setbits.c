@@ -17,10 +17,10 @@ typedef enum NumberLength_ {
 
 // 'dest' must be a string no shorter than 65 characters.
 char * roy_number_to_binary(char * dest, long long number, NumberLength length);
-// Behavior is undefined if 'position' and 'length' is invalid.
+// Behavior is undefined if 'position' and 'count' is invalid.
 long long roy_number_set_bits(long long * dest,
                               int         position,
-                              size_t      length,
+                              size_t      count,
                               long long   src);
 void print_clearly(char * binary);
 
@@ -39,12 +39,20 @@ char * roy_number_to_binary(char * dest, long long number, NumberLength length) 
   return dest;
 }
 
+long long roy_number_mask(int position, size_t count) {
+  return ~(~(~0U << count) << (position + 1 - count));
+}
+
+long long roy_number_reveal(int position, size_t count) {
+  return ~(~0U << count) << (position + 1 - count);
+}
+
 long long roy_number_set_bits(long long * dest,
                               int         position,
-                              size_t      length,
+                              size_t      count,
                               long long   src) {
-  return *dest = *dest & ~(~(~0U << length)  << (position + 1 - length)) |
-                 (src  &   ~(~0U << length)) << (position + 1 - length);
+  return *dest = (*dest & roy_number_mask(position, count)) |
+                 ( src  & roy_number_reveal(position, count));
 }
 
 void print_clearly(char * binary) {
