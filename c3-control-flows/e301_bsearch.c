@@ -24,8 +24,9 @@ const void * bsearch_(const void * key,
     mid = ptr + (count / 2 - 1) * size;
     if (comp(key, mid) == 0) {
       return mid;
-    } else {
+    } else if (comp(key, mid) < 0) {
       bsearch_(key, ptr, count / 2, size, comp);
+    } else if (comp(key, mid) > 0) {
       bsearch_(key, mid + size, count / 2, size, comp);
     }
   }

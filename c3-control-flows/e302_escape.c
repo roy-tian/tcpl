@@ -43,6 +43,7 @@ char * roy_string_escape(char * dest, const char * src) {
 }
 
 char * roy_string_grab(char * dest, const char * src) {
+  char * pdest = dest;
 
 }
 
