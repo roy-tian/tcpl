@@ -44,7 +44,38 @@ char * roy_string_escape(char * dest, const char * src) {
 
 char * roy_string_grab(char * dest, const char * src) {
   char * pdest = dest;
-
+  while (*src != '\0') {
+    if (*src == '\\') {
+      switch (*(src + 1)) {
+      case 'n':
+        *pdest++ = '\n';
+        break;
+      case 't':
+        *pdest++ = '\t';
+        break;
+      case '\"':
+        *pdest++ = '\"';
+        break;
+      case '\'':
+        *pdest++ = '\'';
+        break;
+      case '\\':
+        *pdest++ = '\\';
+        break;
+      case '\0':
+        *pdest = '\0';
+        return dest;
+      default:
+        *pdest++ = '\\';
+        *pdest++ = *(src + 1);
+      }
+      src += 2;
+    } else {
+      *pdest++ = *src++;
+    }
+  }
+  *pdest = '\0';
+  return dest;
 }
 
 int main(void) {
@@ -58,5 +89,8 @@ int main(void) {
   char dest[STRING_CAPACITY + 1] = {'\0'};
   roy_string_escape(dest, src);
   puts("ESCAPED STRING\n==============");
+  puts(dest);
+  roy_string_grab(dest, src);
+  puts("RECOVERED STRING\n==============");
   puts(dest);
 }
