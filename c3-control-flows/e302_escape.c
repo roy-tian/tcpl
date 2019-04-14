@@ -3,7 +3,7 @@
 #define STRING_CAPACITY 1023
 
 // Reveals all characters that 'iscntrl' .
-// this function does the same things of 'roy_string_replace_all()' yet faster.
+// this function does the same things of 'roy_string_replace_all()', yet faster.
 // The behavior is undefined if the capacity of 'dest' is insufficient.
 char * roy_string_escape(char * dest, const char * src);
 char * roy_string_grab(char * dest, const char * src);

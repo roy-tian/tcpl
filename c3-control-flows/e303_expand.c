@@ -8,6 +8,11 @@
         char str[size + 1];\
         memset(str, '\0', size + 1);
 
+// An algorithm far more effective than mine,
+// invented by Axel-Tobias Schreiner, 
+// when he was a CS Professor at University of Osnabrück.
+char * as_string_fill_sequence(char * dest, const char * pattern);
+
 char * roy_string_sequence(char * dest, int front_ch, int back_ch) {
   char * pdest = dest;
   while (front_ch <= back_ch) {
@@ -48,7 +53,26 @@ char * roy_string_fill_sequence(char * dest, const char * pattern) {
   return dest;
 }
 
+
+char * as_string_fill_sequence(char * dest, const char * pattern) {
+  int i_pattern = 0, i_dest = 0;
+  char ch;
+  while ((ch = pattern[i_pattern]) != '\0') {
+    if (pattern[i_pattern] == '-' && pattern[i_pattern + 1] >= ch) {
+      i_pattern++;
+      while (ch < pattern[i_pattern]) {
+        dest[i_dest++] = ch++;
+      }
+    } else {
+      dest[i_dest++] = ch;
+    }
+  }
+  dest[i_dest] = '\0';
+  return dest;
+}
+
 int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
   puts(roy_string_fill_sequence(buf, "-a----z1-9-"));
+  puts(as_string_fill_sequence(buf, "a-z"));
 }

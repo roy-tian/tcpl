@@ -11,9 +11,6 @@
 // numbers of characters
 #define N_MAX 26 
 
-void roy_string_char_stats(const char * str, size_t * stats_v);
-void histogram(const size_t * stats_v);
-
 void roy_string_char_stats(const char * str, size_t * stats_v) {
   while (*str != '\0') {
     if (isupper(*str)) {

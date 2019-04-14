@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-size_t roy_string_break_index(const char * str, const char * set);
-
 size_t roy_string_break_index(const char * str, const char * set) {
   size_t pos = 0;
   while (*(str + pos) != '\0' && !strchr(set, *(str + pos))) {

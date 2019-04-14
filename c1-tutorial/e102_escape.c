@@ -1,8 +1,5 @@
 #include <stdio.h>
 
-const struct EscapeSequence;
-void printTable(void);
-
 const struct EscapeSequence {
   int sequenceNumber;
   char * sequenceString;

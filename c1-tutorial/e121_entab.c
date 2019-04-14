@@ -10,12 +10,6 @@
 char * roy_string_replace_index(char * str,
                                 size_t old_sub_pos,
                                 size_t old_sub_len,
-                                const char * new_sub);
-char * roy_string_entab(char * str, size_t tab_size);                             
-
-char * roy_string_replace_index(char * str,
-                                size_t old_sub_pos,
-                                size_t old_sub_len,
                                 const char * new_sub) {
   ROY_STRING(temp_str, strlen(str) + strlen(new_sub) - old_sub_len)
   strncpy(temp_str, str, old_sub_pos);

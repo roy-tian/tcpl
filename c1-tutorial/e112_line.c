@@ -5,11 +5,6 @@
 
 #define STRING_CAPACITY 1023
 
-char * roy_string_replace_all_char(char * str, int old_ch, int new_ch);
-char * roy_string_replace_all_char_if(char * str,
-                                      int (*condition)(int),
-                                      int new_ch);
-
 char * roy_string_replace_all_char(char * str, int old_ch, int new_ch) {
   char * pstr = str;
   while (*pstr != '\0') {

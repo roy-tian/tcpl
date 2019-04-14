@@ -11,10 +11,6 @@
 
 char * roy_string_replace_all(char * str,
                               const char * old_sub,
-                              const char * new_sub);
-
-char * roy_string_replace_all(char * str,
-                              const char * old_sub,
                               const char * new_sub) {
   // temp_str: a temporary-stored string.
   // Undefined behaviors would occur if str grows out of its capacity.

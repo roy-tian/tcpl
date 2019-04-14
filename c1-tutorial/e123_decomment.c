@@ -20,7 +20,6 @@ char * decomment(char * str);
 char * roy_string_read_from_file(char * dest, const char * path);
 int roy_string_append_to_file(const char * src, const char * path);
 
-
 char * roy_string_replace_index(char * str,
                                 size_t old_sub_pos,
                                 size_t old_sub_len,

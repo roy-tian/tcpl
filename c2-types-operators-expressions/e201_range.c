@@ -3,10 +3,6 @@
 #include <math.h>
 #include <stdio.h>
 
-void integer_limits(void);
-void integer_bitwise(void);
-void float_limits(void);
-
 void integer_limits(void) {
   printf("  CHAR_BIT |  2 ^ %2g     | %20d | %16X\n",
          log2(CHAR_BIT), CHAR_BIT, CHAR_BIT);

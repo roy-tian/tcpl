@@ -1,36 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <time.h>
 
 const void * bsearch_(const void * key,
-                const void * ptr,
-                size_t       count, 
-                size_t       size,
-                int (*comp)(const void *, const void *));
+                      const void * ptr,
+                      size_t       count, 
+                      size_t       size,
+                      int       (* comp)(const void *, const void *));
+int comp_int(const void * var1, const void * var2);
+int next_random(int min, int max);
+void populate(int * arr, int min, size_t max);
+void print(const int * arr);
+
 
 const void * bsearch_(const void * key,
-                const void * ptr,
-                size_t       count, 
-                size_t       size,
-                int (*comp)(const void *, const void *)) {
-  const void * left = ptr;
-  const void * mid;
+                      const void * ptr,
+                      size_t       count, 
+                      size_t       size,
+                      int       (* comp)(const void *, const void *)) {
   const void * right = ptr + (count - 1) * size;
+  const void * mid = ptr + (count - 1) / 2 * size;
 
-    printf("P %d ", *(const int *)ptr);
-    printf("L %d ", *(const int *)left);
-    printf("R %d ", count);
-  while (left <= right) {
-    mid = ptr + (count / 2 - 1) * size;
-    if (comp(key, mid) == 0) {
-      return mid;
-    } else if (comp(key, mid) < 0) {
-      bsearch_(key, ptr, count / 2, size, comp);
-    } else if (comp(key, mid) > 0) {
-      bsearch_(key, mid + size, count / 2, size, comp);
+  while (comp(ptr, right) <= 0 && comp(key, mid) != 0) {
+    count /= 2;
+    if (comp(key, mid) < 0) {
+      right = mid - size;
+    } else /* if (comp(key, mid) > 0) */ {
+      ptr = mid + size;
     }
+    mid = ptr + (count - 1) / 2 * size;
   }
-  return NULL;
+  return (comp(key, mid) == 0) ? mid : NULL;
 }
 
 int comp_int(const void * var1, const void * var2) {
@@ -39,8 +40,9 @@ int comp_int(const void * var1, const void * var2) {
   return (val1 > val2) - (val1 < val2);
 }
 
-int next_random(int min, size_t max) {
-   return min + rand()/((RAND_MAX + 1U)/max);
+int next_random(int min, int max) {
+  return min + rand() % max;
+  // return min + rand() / ((RAND_MAX + 1U) / max);
 }
 
 void populate(int * arr, int min, size_t max) {
@@ -67,6 +69,8 @@ int main(void) {
   qsort(array, 100, sizeof(int), comp_int);
   printf("\n");
   print(array);
-  printf("\n%d\n", *(const int *)bsearch (&key, array, 100, sizeof(int), comp_int));
-  printf("%d\n",   *(const int *)bsearch_(&key, array, 100, sizeof(int), comp_int));
+  printf("\n   STD METHOD: %d\n",
+         *(const int *)bsearch (&key, array, 100, sizeof(int), comp_int));
+  printf("CUSTOM METHOD: %d\n",
+         *(const int *)bsearch_(&key, array, 100, sizeof(int), comp_int));
 }

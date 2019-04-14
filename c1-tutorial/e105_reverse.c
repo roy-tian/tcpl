@@ -4,9 +4,6 @@
 #define CELSIUS_UPPER 38.5      // upper limit
 #define STEP 0.1
 
-double celsiusToFahrenheit(const double celsius);
-void printTemprTable(double begin, double end, double step);
-
 double celsiusToFahrenheit(const double celsius) {
   return celsius * 1.8 + 32.0;
 }

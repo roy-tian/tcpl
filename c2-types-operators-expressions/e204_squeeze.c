@@ -3,8 +3,6 @@
 
 #define STRING_CAPACITY 1023
 
-char * roy_stirng_squeeze(char * str, const char * set);
-
 char * roy_stirng_squeeze(char * str, const char * set) {
   int i = 0, j = 0;
   while (*(str + i) != '\0') {

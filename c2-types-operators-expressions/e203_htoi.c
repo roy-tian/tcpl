@@ -2,8 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 
-long long roy_parse_hexadecimal(const char * str);
-
 long long roy_parse_hexadecimal(const char * str) {
   long long ret = 0;
   long long pn = 1;
@@ -36,8 +34,12 @@ int main(void) {
   char * str2 = "fantasy";
   char * str3 = "-123afCdE  ";
   char * str4 = "0x   ";
-  printf("%12s | %16llX | %10lld\n", str1, roy_parse_hexadecimal(str1), roy_parse_hexadecimal(str1));
-  printf("%12s | %16llX | %10lld\n", str2, roy_parse_hexadecimal(str2), roy_parse_hexadecimal(str2));
-  printf("%12s | %16llX | %10lld\n", str3, roy_parse_hexadecimal(str3), roy_parse_hexadecimal(str3));
-  printf("%12s | %16llX | %10lld\n", str4, roy_parse_hexadecimal(str4), roy_parse_hexadecimal(str4));
+  printf("%12s | %16llX | %10lld\n",
+         str1, roy_parse_hexadecimal(str1), roy_parse_hexadecimal(str1));
+  printf("%12s | %16llX | %10lld\n",
+         str2, roy_parse_hexadecimal(str2), roy_parse_hexadecimal(str2));
+  printf("%12s | %16llX | %10lld\n",
+         str3, roy_parse_hexadecimal(str3), roy_parse_hexadecimal(str3));
+  printf("%12s | %16llX | %10lld\n",
+         str4, roy_parse_hexadecimal(str4), roy_parse_hexadecimal(str4));
 }
