@@ -56,8 +56,8 @@ char * roy_string_fill_sequence(char * dest, const char * pattern) {
 
 char * as_string_fill_sequence(char * dest, const char * pattern) {
   int i_pattern = 0, i_dest = 0;
-  char ch;
-  while ((ch = pattern[i_pattern]) != '\0') {
+  int ch;
+  while ((ch = pattern[i_pattern++]) != '\0') {
     if (pattern[i_pattern] == '-' && pattern[i_pattern + 1] >= ch) {
       i_pattern++;
       while (ch < pattern[i_pattern]) {
@@ -74,5 +74,5 @@ char * as_string_fill_sequence(char * dest, const char * pattern) {
 int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
   puts(roy_string_fill_sequence(buf, "-a----z1-9-"));
-  puts(as_string_fill_sequence(buf, "a-z"));
+  puts( as_string_fill_sequence(buf, "-a----z1-9-"));
 }
