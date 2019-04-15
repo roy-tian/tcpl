@@ -16,7 +16,7 @@ enum NumberLength {
 };
 
 // 'dest' must be a string no shorter than 'length+1' characters.
-char * roy_ullong_to_binary(char               * dest,
+char * roy_ullong_to_string_binary(char               * dest,
                             unsigned long long   number,
                             size_t               length);
 unsigned long long
@@ -26,7 +26,7 @@ roy_ullong_right_rotate(unsigned long long   * number,
 void print_clearly(char * binary);
 
 
-char * roy_ullong_to_binary(char               * dest,
+char * roy_ullong_to_string_binary(char               * dest,
                             unsigned long long   number,
                             size_t               length) {
   for (int i = length - 1; i >= 0; i--) {
@@ -64,7 +64,7 @@ int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
   unsigned long long num = 7654321;
   for (int i = 0; i != 10; i++) {
-    print_clearly(roy_ullong_to_binary(buf, num, DWORD));
+    print_clearly(roy_ullong_to_string_binary(buf, num, DWORD));
     roy_ullong_right_rotate(&num, 1, DWORD);  
   }
 }

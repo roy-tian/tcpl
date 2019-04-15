@@ -15,7 +15,7 @@ enum NumberLength {
 };
 
 int roy_ullong_count_bit(unsigned long long number);
-char * roy_ullong_to_binary(char               * dest,
+char * roy_ullong_to_string_binary(char               * dest,
                             unsigned long long   number,
                             size_t               length);
 void print_clearly(char * binary);
@@ -30,7 +30,7 @@ int roy_ullong_count_bit(unsigned long long number) {
   return count;
 }
 
-char * roy_ullong_to_binary(char               * dest,
+char * roy_ullong_to_string_binary(char               * dest,
                             unsigned long long   number,
                             size_t               length) {
   for (int i = length - 1; i >= 0; i--) {
@@ -56,6 +56,6 @@ void print_clearly(char * binary) {
 int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
   unsigned long long num = 555666888;
-  print_clearly(roy_ullong_to_binary(buf, num, DWORD));
+  print_clearly(roy_ullong_to_string_binary(buf, num, DWORD));
   printf("Number of 1: %d", roy_ullong_count_bit(num));
 }

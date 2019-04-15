@@ -15,14 +15,14 @@ enum NumberLength {
   QWORD = 64
 };
 
-char * roy_llong_to_binary(char * dest, long long number, size_t length);
+char * roy_llong_to_string_binary(char * dest, long long number, size_t length);
 // Behavior is undefined if 'position' and 'count' is invalid.
 long long roy_llong_invert(long long * number,
                             int         position,
                             size_t      count);
 void print_clearly(char * binary);
 
-char * roy_llong_to_binary(char * dest, long long number, size_t length) {
+char * roy_llong_to_string_binary(char * dest, long long number, size_t length) {
   int pn = 1;
   if (number > (1 << (length - 1)) - 1 || number < -(1 << (length - 1))) {
     strcpy(dest, "overflow");
@@ -60,7 +60,7 @@ void print_clearly(char * binary) {
 int main(void) {
   ROY_STRING(str, STRING_CAPACITY)
   long long num = INT_MAX;
-  print_clearly(roy_llong_to_binary(str, num, DWORD));
+  print_clearly(roy_llong_to_string_binary(str, num, DWORD));
   roy_llong_invert(&num, 10, 7);  
-  print_clearly(roy_llong_to_binary(str, num, DWORD));
+  print_clearly(roy_llong_to_string_binary(str, num, DWORD));
 }

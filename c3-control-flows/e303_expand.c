@@ -8,9 +8,14 @@
         char str[size + 1];\
         memset(str, '\0', size + 1);
 
+char * roy_string_sequence(char * dest, int front_ch, int back_ch);
+char * roy_string_fill_sequence(char * dest, const char * pattern);
 // An algorithm far more effective than mine,
 // invented by Axel-Tobias Schreiner, 
 // when he was a CS Professor at University of Osnabrück.
+// I think 'a--' is an incorrect input and should return a nil string,
+// but this function will return 'a--' itself, 
+// which, to my opinion, is an undefined behavior.
 char * as_string_fill_sequence(char * dest, const char * pattern);
 
 char * roy_string_sequence(char * dest, int front_ch, int back_ch) {
@@ -73,6 +78,6 @@ char * as_string_fill_sequence(char * dest, const char * pattern) {
 
 int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
-  puts(roy_string_fill_sequence(buf, "-a----z1-9-"));
-  puts( as_string_fill_sequence(buf, "-a----z1-9-"));
+  puts(roy_string_fill_sequence(buf, "-a----z0-9-"));
+  puts( as_string_fill_sequence(buf, "-a----z0-9-"));
 }

@@ -8,10 +8,8 @@ char * roy_string_reverse(char * str) {
   char * pstr_tail = str + strlen(str) - 1;
   while (pstr_tail > pstr_head) {
     char temp = *pstr_head;
-    *pstr_head = *pstr_tail;
-    *pstr_tail = temp;
-    pstr_head++;
-    pstr_tail--;
+    *pstr_head++ = *pstr_tail;
+    *pstr_tail-- = temp;
   }
   return str;
 }
