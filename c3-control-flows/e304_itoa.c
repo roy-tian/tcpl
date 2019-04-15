@@ -13,7 +13,6 @@ char * roy_string_reverse(char * str);
 
 // The 'abs' strategy calculates |digit| several times,
 // so it is less efficient than this one.
-//
 // Deprecated: sprintf is a better choice for its comprehensive format support.
 char * roy_llong_to_string(char * dest, long long number);
 

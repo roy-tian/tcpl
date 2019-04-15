@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define STRING_CAPACITY 1023
 
@@ -68,6 +69,7 @@ char * roy_string_grab(char * dest, const char * src) {
       default:
         *pdest++ = '\\';
         *pdest++ = *(src + 1);
+        break;
       }
       src += 2;
     } else {

@@ -20,7 +20,7 @@ int roy_string_substring_index(const char * str, const char * sub) {
 }
 
 int roy_string_substring_reverse_index(const char * str, const char * sub) {
-  int ri_str = strlen(str) - 1;
+  int ri_str = strlen(str) - strlen(sub);
   int ri_str_cur, ri_sub;
   while (ri_str >= 0) {
     ri_str_cur = ri_str;
