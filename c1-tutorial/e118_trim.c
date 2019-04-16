@@ -54,9 +54,9 @@ char * roy_string_trim_line(char * str) {
 
 char * roy_string_trim(char * str) {
   size_t capacity = strlen(str);
-  ROY_STRING(temp_str, capacity);
+  ROY_STRING(temp_str, capacity)
   for (int i = 1; i <= roy_string_count_line(str); i++) {
-    ROY_STRING(cur_line, capacity);
+    ROY_STRING(cur_line, capacity)
     roy_string_line(cur_line, str, i);
     roy_string_trim_line(cur_line);
     if (strlen(cur_line) != 0) { 

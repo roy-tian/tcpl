@@ -12,8 +12,8 @@ const void * bsearch_(const void * key,
                       int       (* comp)(const void *, const void *));
 int comp_int(const void * var1, const void * var2);
 int next_random(int min, int max);
-void populate(int * arr, size_t count, int min, size_t max);
-void print(const int * arr, size_t count);
+void populate(int * arr, int min, size_t max);
+void print(const int * arr);
 
 
 const void * bsearch_(const void * key,
@@ -49,14 +49,14 @@ int next_random(int min, int max) {
   return min + rand() % max;
 }
 
-void populate(int * arr, size_t count, int min, size_t max) {
-  for (int i = 0; i != count; i++) {
+void populate(int * arr, int min, size_t max) {
+  for (int i = 0; i != ELEMENT_COUNT; i++) {
     *(arr + i) = next_random(min, max);
   }
 } 
 
-void print(const int * arr, size_t count) {
-  for (int i = 0; i != count; i++) {
+void print(const int * arr) {
+  for (int i = 0; i != ELEMENT_COUNT; i++) {
     printf("%5d", *(arr + i));
     if ((i + 1) % 10 == 0) {
       printf("\n");
@@ -67,12 +67,12 @@ void print(const int * arr, size_t count) {
 int main(void) {
   srand(time(NULL));
   int array[ELEMENT_COUNT];
-  populate(array, ELEMENT_COUNT, 0, 9999);
+  populate(array, 0, 9999);
   int key = array[ELEMENT_COUNT / 2];
-  print(array, ELEMENT_COUNT);
+  print(array);
   qsort(array, sizeof array / sizeof *array, sizeof *array, comp_int);
   printf("\n");
-  print(array, ELEMENT_COUNT);
+  print(array);
   printf("\n   STD METHOD: %d\n",
          *(const int *)bsearch (&key, array,
                                 sizeof array / sizeof *array, sizeof *array,

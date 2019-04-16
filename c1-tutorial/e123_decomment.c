@@ -12,13 +12,13 @@ char * roy_string_replace_index(char * str,
                                 size_t old_sub_pos,
                                 size_t old_sub_len,
                                 const char * new_sub);
-char * replace_between(char * str,
+char * roy_string_replace_between(char * str,
                        const char * pattern_head,
                        const char * pattern_tail,
                        const char * new_sub);
-char * decomment(char * str);
 char * roy_string_read_from_file(char * dest, const char * path);
 int roy_string_append_to_file(const char * src, const char * path);
+char * decomment(char * str);
 
 char * roy_string_replace_index(char * str,
                                 size_t old_sub_pos,
@@ -32,7 +32,7 @@ char * roy_string_replace_index(char * str,
   return str;
 }
 
-char * replace_between(char * str,
+char * roy_string_replace_between(char * str,
                        const char * pattern_head,
                        const char * pattern_tail,
                        const char * new_sub) {
@@ -54,8 +54,8 @@ char * replace_between(char * str,
 }
 
 char * decomment(char * str) {
-  replace_between(str, "/*", "*/", "");
-  replace_between(str, "//", "\n", "\n");
+  roy_string_replace_between(str, "/*", "*/", "");
+  roy_string_replace_between(str, "//", "\n", "\n");
   return str;
 }
 

@@ -46,13 +46,8 @@ char * roy_string_fill_sequence(char * dest, const char * pattern) {
     }
     pattern++;
   }
-  
-  if (flag == 2) {
-    *pdest++ = *(pattern - 2);
-    *pdest++ = *(pattern - 1);
-  }
-  if (flag == 1) {
-    *pdest++ = *(pattern - 1);
+  while (flag > 0) {
+    *pdest++ = *(pattern - flag--);
   }
   *pdest = '\0';
   return dest;

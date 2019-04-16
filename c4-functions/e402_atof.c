@@ -4,15 +4,15 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define STR_TO_INT(num, str)    \
-        while (isdigit(*str)) { \
-          num *= 10.0;          \
-          num += *str++ - '0';  \
+#define STR_TO_INT(num, str)      \
+        while (isdigit(*str)) {   \
+          num *= 10.0;            \
+          num += *str++ - '0';    \
         }
 
-#define STR_INC(set, str)       \
-        if (strchr(set, *str)) {\
-          str++;                \
+#define STR_INC(set, str)         \
+        if (strchr(set, *str)) {  \
+          str++;                  \
         }
 
 double roy_parse_double(const char * str) {

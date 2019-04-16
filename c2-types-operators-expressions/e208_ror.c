@@ -15,34 +15,32 @@ enum NumberLength {
   QWORD = 64
 };
 
-// 'dest' must be a string no shorter than 'length+1' characters.
+// 'dest' must be a string no shorter than 'width+1' characters.
 char * roy_ullong_to_string_binary(char               * dest,
-                            unsigned long long   number,
-                            size_t               length);
-unsigned long long
-roy_ullong_right_rotate(unsigned long long   * number,
-                        int                    times,
-                        size_t                 length);
+                                   unsigned long long   number,
+                                   size_t               width);
+unsigned long long roy_ullong_rotate_right(unsigned long long   * number,
+                                           int                    steps,
+                                           size_t                 width);
 void print_clearly(char * binary);
 
 
 char * roy_ullong_to_string_binary(char               * dest,
-                            unsigned long long   number,
-                            size_t               length) {
-  for (int i = length - 1; i >= 0; i--) {
+                                   unsigned long long   number,
+                                   size_t               width) {
+  for (int i = width - 1; i >= 0; i--) {
     *(dest + i) = number % 2 ? '1' : '0';
     number >>= 1;
   }
   return dest;
 }
 
-unsigned long long
-roy_ullong_right_rotate(unsigned long long * number,
-                        int                  times,
-                        size_t               length) {
+unsigned long long roy_ullong_rotate_right(unsigned long long * number,
+                                           int                  steps,
+                                           size_t               width) {
   unsigned long long end;
-  end = (*number & ~(~0U << times)) << (length - times);
-  *number >>= times;
+  end = (*number & ~(~0ULL << steps)) << (width - steps);
+  *number >>= steps;
   *number |= end;
   return *number;
 }
@@ -65,6 +63,6 @@ int main(void) {
   unsigned long long num = 7654321;
   for (int i = 0; i != 10; i++) {
     print_clearly(roy_ullong_to_string_binary(buf, num, DWORD));
-    roy_ullong_right_rotate(&num, 1, DWORD);  
+    roy_ullong_rotate_right(&num, 1, DWORD);  
   }
 }

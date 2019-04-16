@@ -15,33 +15,34 @@ enum NumberLength {
   QWORD = 64
 };
 
-char * roy_llong_to_string_binary(char * dest, long long number, size_t length);
+char * roy_ullong_to_string_binary(char               * dest,
+                                   unsigned long long   number,
+                                   size_t               width);
 // Behavior is undefined if 'position' and 'count' is invalid.
-long long roy_llong_invert(long long * number,
-                            int         position,
-                            size_t      count);
+unsigned long long roy_ullong_invert(unsigned long long * number,
+                                     int                  position,
+                                     size_t               count);
 void print_clearly(char * binary);
 
-char * roy_llong_to_string_binary(char * dest, long long number, size_t length) {
-  int pn = 1;
-  if (number > (1 << (length - 1)) - 1 || number < -(1 << (length - 1))) {
+char * roy_ullong_to_string_binary(char               * dest,
+                                   unsigned long long   number,
+                                   size_t               width) {
+  if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
-    if (number < 0) {
-      pn = 0;
-      number = ~number + 1;
-    }
-    for (int i = length - 1; i != 0; i--) {
+    *(dest + width) = '\0';
+    for (int i = width - 1; i >= 0; i--) {
       *(dest + i) = number % 2 ? '1' : '0';
       number >>= 1;
     }
-    *dest = pn ? '0' : '1';
   }
   return dest;
 }
 
-long long roy_llong_invert(long long * number, int position, size_t count) {
-  return *number = *number ^ ~(~0U << count) << (position + 1 - count);
+unsigned long long roy_ullong_invert(unsigned long long * number,
+                                     int                  position,
+                                     size_t               count) {
+  return *number = *number ^ ~(~0ULL << count) << (position + 1 - count);
 }
 
 void print_clearly(char * binary) {
@@ -59,8 +60,8 @@ void print_clearly(char * binary) {
 
 int main(void) {
   ROY_STRING(str, STRING_CAPACITY)
-  long long num = INT_MAX;
-  print_clearly(roy_llong_to_string_binary(str, num, DWORD));
-  roy_llong_invert(&num, 10, 7);  
-  print_clearly(roy_llong_to_string_binary(str, num, DWORD));
+  unsigned long long num = UINT_MAX;
+  print_clearly(roy_ullong_to_string_binary(str, num, DWORD));
+  roy_ullong_invert(&num, 10, 7);  
+  print_clearly(roy_ullong_to_string_binary(str, num, DWORD));
 }
