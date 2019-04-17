@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <stdbool.h>
 
 #define STRING_CAPACITY 1023
 
@@ -15,37 +16,55 @@ enum NumberLength {
   QWORD = 64
 };
 
-// 'dest' must be a string no shorter than 'width+1' characters.
-char * roy_ullong_to_string_binary(char               * dest,
-                                   unsigned long long   number,
-                                   size_t               width);
-unsigned long long roy_ullong_rotate_right(unsigned long long   * number,
-                                           int                    steps,
-                                           size_t                 width);
+char * roy_string_reverse(char * str);
+char * roy_ullong_to_string(char * dest, unsigned long long number, size_t base, size_t width, bool fill_zero);
+unsigned long long roy_ullong_rotate_right(unsigned long long * number, int steps, size_t width);
 void print_clearly(char * binary);
 
-
-char * roy_ullong_to_string_binary(char               * dest,
-                                   unsigned long long   number,
-                                   size_t               width) {
-  for (int i = width - 1; i >= 0; i--) {
-    *(dest + i) = number % 2 ? '1' : '0';
-    number >>= 1;
+char *
+roy_string_reverse(char * str) {
+  char * pstr_head = str;
+  char * pstr_tail = str + strlen(str) - 1;
+  while (pstr_tail > pstr_head) {
+    char temp = *pstr_head;
+    *pstr_head++ = *pstr_tail;
+    *pstr_tail-- = temp;
   }
-  return dest;
+  return str;
 }
 
-unsigned long long roy_ullong_rotate_right(unsigned long long * number,
-                                           int                  steps,
-                                           size_t               width) {
-  unsigned long long end;
-  end = (*number & ~(~0ULL << steps)) << (width - steps);
+char *
+roy_ullong_to_string(char               * dest,
+                     unsigned long long   number,
+                     size_t               base,
+                     size_t               width,
+                     bool                 fill_zero) {
+  char * pdest = dest;
+  do {
+    int cur_digit = number % base;
+    *pdest++ = cur_digit + (cur_digit <= 9 ? '0' : 'A' - 10);
+  } while ((number /= base) > 0); 
+  size_t dest_width = pdest - dest;
+  while (width-- > dest_width) {
+    *pdest++ = fill_zero ? '0' : ' ';
+  }
+  *pdest = '\0';
+  return roy_string_reverse(dest);
+}
+
+unsigned long long
+roy_ullong_rotate_right(unsigned long long * number,
+                        int                  steps,
+                        size_t               width) {
+  unsigned long long right = (*number & ~(~0ULL << steps)) << (width - steps);
   *number >>= steps;
-  *number |= end;
+  *number |= right;
   return *number;
 }
 
-void print_clearly(char * binary) {
+
+void
+print_clearly(char * binary) {
   char * pbinary = binary;
   while (*pbinary != '\0') {
     putchar(*pbinary);
@@ -61,8 +80,8 @@ void print_clearly(char * binary) {
 int main(void) {
   ROY_STRING(buf, STRING_CAPACITY)
   unsigned long long num = 7654321;
-  for (int i = 0; i != 10; i++) {
-    print_clearly(roy_ullong_to_string_binary(buf, num, DWORD));
-    roy_ullong_rotate_right(&num, 1, DWORD);  
+  for (int i = 0; i != 20; i++) {
+    print_clearly(roy_ullong_to_string(buf, num, 2, DWORD, true));
+    roy_ullong_rotate_left(&num, 1, DWORD);  
   }
 }
