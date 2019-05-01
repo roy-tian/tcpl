@@ -22,7 +22,7 @@ Student student_make(int student_index, int score) {
   Student ret;
   FILE * fp = fopen("namelist.txt", "r");
   char name[STRING_CAPACITY] = {'\0'};
-  for (int i = 0; i != student_index; i++) {
+  for (int i = 0; i <= student_index; i++) {
     fgets(name, STRING_CAPACITY, fp);
   }
   strcpy(ret.name, name);
@@ -54,7 +54,7 @@ int main(void) {
   int len = roy_deque_length(deque);
   for (int i = 0; i != len; i++) {
     student_print(roy_deque_at(deque, Student, i));
-    if ((i + 1) % 4 == 0) {
+    if ((i + 1) % 5 == 0) {
       printf("|\n");
     }
   }
@@ -72,7 +72,7 @@ int main(void) {
 
   for (int i = 0; i != len; i++) {
     student_print(roy_deque_at(deque, Student, i));
-    if ((i + 1) % 4 == 0) {
+    if ((i + 1) % 5 == 0) {
       printf("|\n");
     }
   }
