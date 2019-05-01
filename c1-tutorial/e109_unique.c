@@ -37,9 +37,9 @@ char * roy_string_unique_char(char * str, int ch) {
 int main(void) {
   char str[STRING_CAPACITY + 1] = 
     "Winning that ticket, Rose, was the best thing that ever happened to me...\n"
-    "it brought me to you.     And I’m thankful for that, Rose. I’m thankful.\n"
-    "You must do me this      honor.      You must promise me you’ll survive.\n"
-    "That you won’t give up,  no matter what happens, no matter how hopeless.\n"
+    "it brought me to you.     And I'm thankful for that, Rose. I'm thankful.\n"
+    "You must do me this      honor.      You must promise me you'll survive.\n"
+    "That you won't give up,  no matter what happens, no matter how hopeless.\n"
     "Promise me now,          Rose,         and never let go of that promise.\n";
   printf("ORIGINAL STRING:\n%s\n", str);
   printf("RESULT STRING:\n%s\n", roy_string_unique_char(str, ' '));
