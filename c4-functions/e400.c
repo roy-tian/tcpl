@@ -1,14 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-#include "../../roylib/include/roystring.h"
-#include "../../roylib/include/roydeque.h"
+#include "../../roylib/roy.h"
 
 struct _Student {
-  char name[STRING_CAPACITY];
-  bool gender;
+  char     name[STRING_CAPACITY];
+  bool     gender;
   unsigned score;
 };
 
@@ -27,53 +21,35 @@ Student student_make(int student_index, int score) {
   }
   strcpy(ret.name, name);
   *(ret.name + strlen(ret.name) - 1) = '\0';
-  ret.gender = (student_index % 2 != 0);
+  ret.gender = !(student_index % 2);
   ret.score = score;
   return ret;
 }
 
-void student_print(Student * student) {
-  printf("| %-11s %-4s %3d ",
+void student_print(const Student * student) {
+  printf("%-11s %-4s %3d\n",
          student->name,
          student->gender ? "Boy" : "Girl",
          student->score);
 }
 
+int student_compare(const Student * student1, const Student * student2) {
+  return (student1->score > student2->score) -
+         (student1->score < student2->score);
+}
+
+bool student_qualified(const Student * student) {
+  return student->score >= 60;
+}
+
 int main(void) {
   srand(time(NULL));
-  RoyDeque * deque = roy_deque_new(sizeof(Student));
-  for (int i = 0; i != 100; i++) {
+  RoyMSet * set = NULL;
+  for (int i = 1; i != 101; i++) {
     Student s = student_make(next_rand(0, 99), next_rand(0, 100));
-    if ((i + 1) % 2 == 0) {
-      roy_deque_push_front(deque, &s);
-    } else {
-      roy_deque_push_back(deque, &s);
-    }
+    roy_mset_insert(&set, &s, sizeof(Student), ROY_COMPARE(student_compare));
   }
+  roy_mset_for_each(set, ROY_ITERATOR(student_print));
 
-  int len = roy_deque_length(deque);
-  for (int i = 0; i != len; i++) {
-    student_print(roy_deque_at(deque, Student, i));
-    if ((i + 1) % 5 == 0) {
-      printf("|\n");
-    }
-  }
-
-  for (int i = 0; i != 50; i++) {
-    if ((i + 1) % 2 == 0) {
-      roy_deque_pop_front(deque);
-    } else {
-      roy_deque_pop_back(deque);
-    }
-  }
-
-  len = roy_deque_length(deque);
-  printf("====== %d\n", len);
-
-  for (int i = 0; i != len; i++) {
-    student_print(roy_deque_at(deque, Student, i));
-    if ((i + 1) % 5 == 0) {
-      printf("|\n");
-    }
-  }
+  student_print(roy_mset_const_max(set)->key);
 }
