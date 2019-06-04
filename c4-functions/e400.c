@@ -23,6 +23,7 @@ Student student_make(int student_index, int score) {
   *(ret.name + strlen(ret.name) - 1) = '\0';
   ret.gender = !(student_index % 2);
   ret.score = score;
+  fclose(fp);
   return ret;
 }
 
@@ -45,11 +46,11 @@ bool student_qualified(const Student * student) {
 int main(void) {
   srand(time(NULL));
   RoyMSet * set = NULL;
-  for (int i = 1; i != 101; i++) {
+  for (int i = 1; i != 1001; i++) {
     Student s = student_make(next_rand(0, 99), next_rand(0, 100));
     roy_mset_insert(&set, &s, sizeof(Student), ROY_COMPARE(student_compare));
   }
   roy_mset_for_each(set, ROY_ITERATOR(student_print));
 
-  student_print(roy_mset_const_max(set)->key);
+  student_print(roy_mset_const_back(set)->key);
 }
