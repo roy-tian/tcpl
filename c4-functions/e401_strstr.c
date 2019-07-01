@@ -3,20 +3,20 @@
 
 int roy_string_substring_index(const char * str, const char * sub) {
   int i_str = 0, i_str_cur, i_sub;
-  while (*(str + i_str) != '\0') {
-    i_str_cur = i_str;
-    i_sub = 0;
-    while (*(sub + i_sub) != '\0' &&
-           *(str + i_str_cur) == *(sub + i_sub)) {
-      i_str_cur++;
-      i_sub++;
+  while (*(str + i_str) != '\0') {                 // 遍历字符串 str 中所有的字符
+    i_str_cur = i_str;                             // 指向 str 的第 i 位
+    i_sub = 0;                                     // 指向 sub 的第 i 位
+    while (*(sub + i_sub) != '\0' &&               // 在需要匹配的字符串 sub 内
+           *(str + i_str_cur) == *(sub + i_sub)) { // 只要 sub 中当前位与 str 当前位的字符匹配
+      i_str_cur++;  // 就看下一位
+      i_sub++;      // 就看下一位
     }
-    if (i_sub != 0 && *(sub + i_sub) == '\0') {
-      return i_str;
+    if (i_sub != 0 && *(sub + i_sub) == '\0') {    // 如果匹配有效
+      return i_str;                                // 返回 str 中的位置
     }
     i_str++;
   }
-  return -1;
+  return -1;                                       // 完成循环但是没有匹配到
 }
 
 int roy_string_substring_reverse_index(const char * str, const char * sub) {

@@ -50,7 +50,7 @@ int main(void) {
     Student s = student_make(next_rand(0, 99), next_rand(0, 100));
     roy_mset_insert(&set, &s, sizeof(Student), ROY_COMPARE(student_compare));
   }
-  roy_mset_for_each(set, ROY_ITERATOR(student_print));
+  roy_mset_for_each(set, ROY_OPERATE(student_print));
 
-  student_print(roy_mset_const_back(set)->key);
+  student_print(roy_mset_const_max(set)->key);
 }
