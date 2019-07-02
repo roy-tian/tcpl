@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../../roylib/roy.h"
 
 void open_file(RoyDeque * parsed_line);
 
