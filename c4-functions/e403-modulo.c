@@ -2,21 +2,23 @@
 
 char content[STRING_CAPACITY_HUGE] = "\0";
 
-void open(RoyDeque * deque) {
-  const char * name = roy_deque_at(deque, char, 1);
+void open(RoyShell * shell) {
+  const char * name = roy_shell_argument_at(shell, 1);
   FILE * fp = fopen(name, "r");
   if (fp) {
     fseek(fp, 0, SEEK_END);
     size_t size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
+    memset(content, '\0', STRING_CAPACITY_HUGE);
     fread(content, sizeof(char), size, fp);
     printf("%s open successfully.\n", name);
   } else {
     puts("file not found.");
   }
+  fclose(fp);
 }
 
-void show(RoyDeque * deque) {
+void show(RoyShell * shell) {
   if (content) {
     puts(content);
   } else {
@@ -24,8 +26,12 @@ void show(RoyDeque * deque) {
   }
 }
 
-void quit(RoyDeque * deque) {
+void quit(RoyShell * shell) {
   exit(EXIT_SUCCESS);
+}
+
+void error(RoyShell * shell) {
+  printf("Unrecognised command: %s\n", roy_shell_argument_at(shell, 1));
 }
 
 int main(void) {
@@ -33,5 +39,6 @@ int main(void) {
   roy_shell_add_command(shell, "open", open);
   roy_shell_add_command(shell, "show", show);
   roy_shell_add_command(shell, "quit", quit);
+  roy_shell_add_command(shell, "", error);
   roy_shell_start(shell);
 }
