@@ -1,16 +1,19 @@
 #include "../../roylib/roy.h"
 
-const char * DIGIT = "0123456789.eE";
+const char * restrict DIGIT = "0123456789.eE";
+const char * restrict OPERTOR = "+-*/%";
 
 RoyStack * stack;
 
-int isfloat(int ch) {
-  return isdigit(ch) || (strchr(".eE", ch) ? 1 : 0);
-}
+typedef double(*BinaryOperator)(double, double);
 
-int isoperator(int ch) {
-  return strchr("+-*/^%", ch) ? 1 : 0;
-}
+BinaryOperator binaryOperate(int ch);
+double plus(double operand1, double operand2);
+double minus(double operand1, double operand2);
+double times(double operand1, double operand2);
+double divide(double operand1, double operand2);
+double modulo(double operand1, double operand2);
+void rpc(const RoyShell * shell);
 
 // Reverse Polish Calculator
 void rpc(const RoyShell * shell) {
@@ -22,13 +25,58 @@ void rpc(const RoyShell * shell) {
       size_t dec_len = strspn(pline, DIGIT);
       strncpy(buf, pline, dec_len);
       roy_stack_push(stack, &buf);
-    } else if (isoperator(*pline)) {
-      if (index != 0) {
-        buf[index] = '\0';
-        double temp = atof(buf);
-        roy_stack_push(stack, &temp);
+      pline++;
+    } else
+    if (strchr(OPERTOR, *pline)) { // current char is a operator.
+      double operand1, operand2, result;
+      if (roy_stack_size(stack) < 2) {
+        fputs(stderr, "Syntex error.");
+        return;
+      } else {
+        operand1 = *roy_stack_top(stack, double);
+        roy_stack_pop(stack);
+        operand2 = *roy_stack_top(stack, double);
+        result = binaryOperate(*pline)(operand1, operand2);
+        roy_stack_push(stack, &result);
       }
+      pline++;
+    } else
+    if (isblank(*pline)) { 
+      pline++;
+    } else { // not digit, not operator, nor blank, it's invalid.
+      fputs(stderr, "Syntex error.");
+      return;
     }
+  }
+}
+
+double plus(double operand1, double operand2) {
+  return operand1 + operand2;
+}
+
+double minus(double operand1, double operand2) {
+  return operand1 - operand2;
+}
+
+double times(double operand1, double operand2) {
+  return operand1 * operand2;
+}
+double divide(double operand1, double operand2) {
+  return operand1 / operand2;
+}
+
+double modulo(double operand1, double operand2) {
+  return (double)((int)operand1 % (int)operand2);
+}
+
+BinaryOperator binaryOperate(int ch) {
+  switch (ch) {
+  case '+': return plus;
+  case '-': return minus;
+  case '*': return times;
+  case '/': return divide;
+  case '%': return modulo;
+  default : return NULL; 
   }
 }
 
