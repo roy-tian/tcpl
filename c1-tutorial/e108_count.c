@@ -3,20 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define STRING_CAPACITY 1023
+enum {
+  STRING_CAPACITY = 1023
+};
 
-#define ROY_STRING(str, size)\
-        char str[size + 1];\
-        memset(str, '\0', size + 1);
-
-char * roy_string_to_lower(char * str);
-size_t roy_string_count_char(const char * str, int ch);
-size_t roy_string_count_char_if(const char * str, int (*condition)(int));
-size_t roy_string_count_substring(const char * str,
-                                  const char * sub,
-                                  bool sensibility);
-
-char * roy_string_to_lower(char * str) {
+char *
+stringToLower(char * str) {
   char * pstr = str;
   while ((*pstr = tolower(*pstr)) != '\0') {
     pstr++;
@@ -24,7 +16,9 @@ char * roy_string_to_lower(char * str) {
   return str;
 }
 
-size_t roy_string_count_char(const char * str, int ch) {
+size_t
+countChar(const char * str,
+          int          ch) {
   size_t count = 0;
   while (*str != '\0') {
     if (*str++ == ch) {
@@ -34,7 +28,9 @@ size_t roy_string_count_char(const char * str, int ch) {
   return count;
 }
 
-size_t roy_string_count_char_if(const char * str, int (*condition)(int)) {
+size_t
+countCharIf(const char * str,
+            int       (* condition)(int)) {
   size_t count = 0;
   while (*str != '\0') {
     if (condition(*str++)) {
@@ -44,25 +40,26 @@ size_t roy_string_count_char_if(const char * str, int (*condition)(int)) {
   return count;
 }
 
-size_t roy_string_count_substring(const char * str,
-                                  const char * sub,
-                                  bool sensibility) {
+size_t
+countSub(const char * str,
+         const char * sub,
+         bool         sensibility) {
   size_t count = 0;
   const char * pstr;
   const char * psub;
-  ROY_STRING(lower_str, strlen(str))
-  ROY_STRING(lower_sub, strlen(sub))
+  char lower_str[STRING_CAPACITY + 1] = "\0";
+  char lower_sub[STRING_CAPACITY + 1] = "\0";
 
   if (sensibility) {
     pstr = str;
     psub = sub;
   } else {
     strcpy(lower_str, str);
-    roy_string_to_lower(lower_str);
+    stringToLower(lower_str);
     pstr = lower_str;
 
     strcpy(lower_sub, sub);
-    roy_string_to_lower(lower_sub);
+    stringToLower(lower_sub);
     psub = lower_sub;
   }
 
@@ -83,10 +80,11 @@ int main(void) {
     "Or to take Arms against a Sea of troubles...";
 
   printf("ORIGINAL STRING:\n%s\n", str);
-  printf("   NUMBER OF BLANKS: %zu\n", roy_string_count_char(str, ' '));
-  printf("     NUMBER OF TABS: %zu\n", roy_string_count_char(str, '\t'));
-  printf(" NUMBER OF NEWLINES: %zu\n", roy_string_count_char(str, '\n'));
-  printf("        SPACE TOTAL: %zu\n", roy_string_count_char_if(str, isspace));
-  printf("    NUMBER OF 'to's: %zu\n", roy_string_count_substring(str, "to", true));
-  printf(" NUMBER OF 'To/to's: %zu\n", roy_string_count_substring(str, "to", false));
+  printf("\nNUMBER OF:\n");
+  printf("  BLANKS: %zu\n", countChar(str, ' '));
+  printf("    TABS: %zu\n", countChar(str, '\t'));
+  printf("NEWLINES: %zu\n", countChar(str, '\n'));
+  printf("  SPACES: %zu\n", countCharIf(str, isspace));
+  printf("   'to's: %zu\n", countSub(str, "to", true));
+  printf("'To/to's: %zu\n", countSub(str, "to", false));
 }

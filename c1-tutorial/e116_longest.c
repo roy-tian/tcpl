@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <string.h>
-#define STRING_CAPACITY 1023
 
-size_t roy_string_count_char(const char * str, int ch);
-size_t roy_string_count_line(const char * str);
-size_t roy_string_line_length(const char * str, size_t line_number);
-char * roy_string_line(char * line_content,
-                       const char * str,
-                       size_t line_number);
+enum {
+  STRING_CAPACITY = 1023
+};
 
-size_t roy_string_count_char(const char * str, int ch) {
+size_t countChar(const char * str, int ch);
+size_t countLine(const char * str);
+size_t lineLength(const char * str, size_t line_number);
+char * lineContent(char * line_content, const char * str, size_t line_number);
+
+size_t
+countChar(const char * str,
+          int          ch) {
   size_t count = 0;
   while (*str != '\0') {
     if (*str++ == ch) {
@@ -19,9 +22,10 @@ size_t roy_string_count_char(const char * str, int ch) {
   return count;
 }
 
-size_t roy_string_count_line(const char * str) {
+size_t
+countLine(const char * str) {
   size_t str_length = strlen(str);
-  size_t count = roy_string_count_char(str, '\n');
+  size_t count = countChar(str, '\n');
   if (str_length != 0 && *(str + str_length - 1) != '\n') {
     // last char is not '\n', but that line still needs to be counted.
     count++;
@@ -29,7 +33,9 @@ size_t roy_string_count_line(const char * str) {
   return count;
 }
 
-size_t roy_string_line_length(const char * str, size_t line_number) {
+size_t
+lineLength(const char * str,
+           size_t       line_number) {
   while ((line_number-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
@@ -41,9 +47,10 @@ size_t roy_string_line_length(const char * str, size_t line_number) {
   }
 }
 
-char * roy_string_line(char * line_content,
-                       const char * str,
-                       size_t line_number) {
+char *
+lineContent(char       * line_content,
+            const char * str,
+            size_t       line_number) {
   while ((line_number-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
@@ -77,17 +84,16 @@ int main(void) {
     "It oft will sit;\n"
     "And I love it.";
   int max_length = 0, max_line = 1;
-  for (int i = 1; i <= roy_string_count_line(str); i++) {
-    int cur_length = roy_string_line_length(str, i);
+  for (int i = 1; i <= countLine(str); i++) {
+    int cur_length = lineLength(str, i);
     if (cur_length > max_length) {
       max_length = cur_length;
       max_line = i;
     }
     printf("WORDS OF LINE %2d: %2d\n", i, cur_length);
   }
-  char longest[STRING_CAPACITY] = {'\0'};
+  char longest[STRING_CAPACITY + 1] = "\0";
   printf("\nLONGEST LINE [%d]: ", max_line);
-  printf("%s\n", roy_string_line(longest, str, max_line));
+  printf("%s\n", lineContent(longest, str, max_line));
   printf("   ITS LENGTH IS: %2d\n", max_length);
-
 }

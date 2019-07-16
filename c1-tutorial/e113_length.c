@@ -2,10 +2,15 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define STRING_CAPACITY 1023
-#define WORD_LENGTH_MAX 45
+enum {
+  STRING_CAPACITY = 1023,
+  WORD_LENGTH_MAX = 45
+};
 
-void roy_string_word_length_stats(const char * str,  size_t * stats_v) {
+size_t stats_v[WORD_LENGTH_MAX] = {0};
+
+void
+lengthStats(const char * str) {
   bool flag = false;
   size_t cur_length = 0;
   do {
@@ -23,7 +28,8 @@ void roy_string_word_length_stats(const char * str,  size_t * stats_v) {
   } while (*str != '\0');
 }
 
-void histogram_horizontal(const size_t * stats_v) {
+void
+histogramHorizontal(void) {
   for (int i = 1; i != WORD_LENGTH_MAX; i++) {
     size_t cur_count = stats_v[i];
     if (cur_count) {
@@ -37,7 +43,8 @@ void histogram_horizontal(const size_t * stats_v) {
   printf("\n");
 }
 
-void histogram_vertical(const size_t * stats_v) {
+void
+histogramVertical(void) {
   size_t non_zero_length = 0;
   size_t max_count = 0;
 
@@ -78,12 +85,8 @@ int main(void) {
     "Telecommunication is the transmission of signs, signals, messages, words, "
     "writings, images and sounds or information of any nature by wire, radio, "
     "optical or other electromagnetic systems.";
-
-  size_t stats_v[WORD_LENGTH_MAX] = {0};
-  size_t non_zero_length = 0;
-  size_t max_count = 0;
-
-  roy_string_word_length_stats(str, stats_v);
-  histogram_horizontal(stats_v);
-  histogram_vertical(stats_v);
+    
+  lengthStats(str);
+  histogramHorizontal();
+  histogramVertical();
 }

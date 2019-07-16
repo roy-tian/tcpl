@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_CAPACITY 1023
+enum {
+  STRING_CAPACITY = 1023
+};
 
-char * roy_string_squeeze(char * str, const char * set) {
+char * squeeze(char * str, const char * set) {
   int i = 0, j = 0;
   while (*(str + i) != '\0') {
     if (strchr(set, *(str + i))) { /* character belongs to 'set' */
@@ -40,5 +42,5 @@ int main(void) {
   printf("%s", str);
 
   printf("\nLYRIC WITHOUT PUNCUATION:\n========================\n");
-  printf("%s", roy_string_squeeze(str, "\"'.,?!;"));
+  printf("%s", squeeze(str, "\"'.,?!;"));
 }

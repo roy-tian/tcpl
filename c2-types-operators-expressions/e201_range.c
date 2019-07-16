@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 
-void integer_limits(void) {
+void integerLimits(void) {
   printf("  CHAR_BIT |  2 ^ %2g     | %20d | %16X\n",
          log2(CHAR_BIT), CHAR_BIT, CHAR_BIT);
   printf("  CHAR_MIN | -2 ^ %2g     | %20d | %16X\n",
@@ -38,7 +38,7 @@ void integer_limits(void) {
          log2(ULLONG_MAX), ULLONG_MAX, ULLONG_MAX);
 }
 
-void integer_bitwise(void) {
+void integerBitwise(void) {
   printf("   INT_MIN | -(~0U   >> 1) - 1 | %20d | %16X\n",
          -(~0U >> 1) - 1, -(~0U >> 1) - 1);
   printf("   INT_MAX |   ~0U   >> 1      | %20d | %16X\n",
@@ -59,7 +59,7 @@ void integer_bitwise(void) {
          ~0ULL, ~0ULL);
 }
 
-void float_limits(void) {
+void floatLimits(void) {
   printf(" FLT_MIN | %.36g\n", FLT_MIN);
   printf(" FLT_MAX | %.36g\n", FLT_MAX);
   printf(" DBL_MIN | %.36g\n", DBL_MIN);
@@ -69,9 +69,9 @@ void float_limits(void) {
 }
 
 int main(void) {
-  integer_limits();
+  integerLimits();
   printf("\n");
-  integer_bitwise();
+  integerBitwise();
   printf("\n");
-  float_limits();
+  floatLimits();
 }

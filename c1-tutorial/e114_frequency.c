@@ -7,11 +7,15 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define STRING_CAPACITY 1023
-// numbers of characters
-#define N_MAX 26 
+enum {
+  STRING_CAPACITY = 1023,
+  N_MAX = 26
+};
 
-void roy_string_char_stats(const char * str, size_t * stats_v) {
+size_t stats_v[N_MAX] = {0};
+
+void
+charStats(const char * str) {
   while (*str != '\0') {
     if (isupper(*str)) {
       stats_v[*str - 'A']++;
@@ -22,7 +26,8 @@ void roy_string_char_stats(const char * str, size_t * stats_v) {
   }
 }
 
-void histogram(const size_t * stats_v) {
+void
+histogram(void) {
   const char blocks[STRING_CAPACITY] = "¨x¨y¨z¨{¨|¨}¨~¨€";
   size_t non_zero_length = 0;
   size_t max_count = 0;
@@ -74,8 +79,7 @@ int main(void) {
     "(an elite group of soldiers specializing in guerrilla warfare), "
     "are sent to the island to destroy the enemy forces and "
     "uncover the true nature of Red Falcon, the alien entity controlling them.";
-  size_t stats_v[N_MAX] = {0};
 
-  roy_string_char_stats(str, stats_v);
-  histogram(stats_v);
+  charStats(str);
+  histogram();
 }

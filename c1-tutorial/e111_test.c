@@ -2,7 +2,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-size_t roy_string_count_word(const char * str) {
+size_t
+countWord(const char * str) {
   const char * pstr = str;
   size_t count = 0;
   bool flag = false;
@@ -18,13 +19,10 @@ size_t roy_string_count_word(const char * str) {
 }
 
 int main(void) {
-  printf("     EMPTY STRING: %zu\n", roy_string_count_word(""));
-  printf("       ALL ENTERS: %zu\n", roy_string_count_word("\n\n\n"));
-  printf("        ALL CTRLS: %zu\n", roy_string_count_word("\n \t"));
-  printf("   BLANKS AT TAIL: %zu\n", roy_string_count_word("Hello   "));
-  printf("   BLANKS AT HEAD: %zu\n", roy_string_count_word("   world"));
-  printf("ONE WORD PER LINE: %zu\n", roy_string_count_word("It's\n"
-                                                           "finger\n"
-                                                           "licking\n"
-                                                           "good.\n"));
+  printf("  EMPTY STRING: %zu\n", countWord(""));
+  printf("    ALL ENTERS: %zu\n", countWord("\n\n\n"));
+  printf("     ALL CTRLS: %zu\n", countWord("\n \t"));
+  printf("BLANKS AT TAIL: %zu\n", countWord("Hello   "));
+  printf("BLANKS AT HEAD: %zu\n", countWord("   world"));
+  printf("  ONE PER LINE: %zu\n", countWord("It's\nfinger\nlicking\ngood.\n"));
 }

@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_CAPACITY 1023
-#define TAB_SIZE 4
-#define ROY_STRING(str, size)\
-        char str[size + 1];\
-        memset(str, '\0', size + 1);
+enum {
+  STRING_CAPACITY = 1023
+};
 
-char * roy_string_replace_index(char * str,
-                                size_t old_sub_pos,
-                                size_t old_sub_len,
-                                const char * new_sub) {
-  ROY_STRING(temp_str, strlen(str) + strlen(new_sub) - old_sub_len)
+char * replaceIndex(char * str, size_t old_sub_pos, size_t old_sub_len, const char * new_sub);
+char * entab(char * str, size_t tab_size);
+
+char *
+replaceIndex(char       * str,
+             size_t       old_sub_pos,
+             size_t       old_sub_len,
+             const char * new_sub) {
+  char temp_str[STRING_CAPACITY + 1] = "\0";
   strncpy(temp_str, str, old_sub_pos);
   strcat(temp_str, new_sub);
   strcat(temp_str, str + old_sub_pos + old_sub_len);
@@ -19,7 +21,9 @@ char * roy_string_replace_index(char * str,
   return str;
 }
 
-char * roy_string_entab(char * str, size_t tab_size) {
+char *
+entab(char   * str,
+      size_t   tab_size) {
   char * pstr = str;
   size_t pos = 1;
   while (*pstr != '\0') {
@@ -28,7 +32,7 @@ char * roy_string_entab(char * str, size_t tab_size) {
       while (*pblank == ' ') {
         pblank--;
       }
-      roy_string_replace_index(str, pblank - str + 1, pstr - pblank, "\t");
+      replaceIndex(str, pblank - str + 1, pstr - pblank, "\t");
       pos += pstr - pblank - 1;
     }
     if (*pstr == '\n') {
@@ -41,7 +45,7 @@ char * roy_string_entab(char * str, size_t tab_size) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] =
+  char str[STRING_CAPACITY + 1] =
     "def ask_ok(prompt, retries = 4, reminder = 'Please try again!'):\n"
     "while True:\n"
     "    ok = input(prompt)\n"
@@ -57,6 +61,6 @@ int main(void) {
   fputs("ORIGINAL CODE:\n=============\n", fp);
   fputs(str, fp);
   fputs("\n\nAFTER ENTAB:\n=============\n", fp);
-  fputs(roy_string_entab(str, TAB_SIZE), fp);
+  fputs(entab(str, 4), fp);
   fclose(fp);
 }

@@ -3,26 +3,21 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#define STRING_CAPACITY 1023
-
-#define ROY_STRING(str, size)\
-        char str[size + 1];\
-        memset(str, '\0', size + 1);
-
-enum NumberLength {
+enum {
+  STRING_CAPACITY = 127,
   BYTE = 8,
   WORD = 16,
   DWORD = 32,
   QWORD = 64
 };
 
-char * roy_string_reverse(char * str);
-char * roy_ullong_to_string(char * dest, unsigned long long number, size_t base, size_t width, bool fill_zero);
-unsigned long long roy_ullong_rotate_right(unsigned long long * number, int steps, size_t width);
-void print_clearly(char * binary);
+char * stringReverse(char * str);
+char * ullongToBinaryString(char * dest, unsigned long long number, size_t base, size_t width, bool fill_zero);
+unsigned long long ullongRoR(unsigned long long * number, int steps, size_t width);
+void printClearly(char * binary);
 
 char *
-roy_string_reverse(char * str) {
+stringReverse(char * str) {
   char * pstr_head = str;
   char * pstr_tail = str + strlen(str) - 1;
   while (pstr_tail > pstr_head) {
@@ -34,7 +29,7 @@ roy_string_reverse(char * str) {
 }
 
 char *
-roy_ullong_to_string(char               * dest,
+ullongToBinaryString(char               * dest,
                      unsigned long long   number,
                      size_t               base,
                      size_t               width,
@@ -49,13 +44,13 @@ roy_ullong_to_string(char               * dest,
     *pdest++ = fill_zero ? '0' : ' ';
   }
   *pdest = '\0';
-  return roy_string_reverse(dest);
+  return stringReverse(dest);
 }
 
 unsigned long long
-roy_ullong_rotate_right(unsigned long long * number,
-                        int                  steps,
-                        size_t               width) {
+ullongRoR(unsigned long long * number,
+          int                  steps,
+          size_t               width) {
   unsigned long long right = (*number & ~(~0ULL << steps)) << (width - steps);
   *number >>= steps;
   *number |= right;
@@ -64,7 +59,7 @@ roy_ullong_rotate_right(unsigned long long * number,
 
 
 void
-print_clearly(char * binary) {
+printClearly(char * binary) {
   char * pbinary = binary;
   while (*pbinary != '\0') {
     putchar(*pbinary);
@@ -78,10 +73,10 @@ print_clearly(char * binary) {
 }
 
 int main(void) {
-  ROY_STRING(buf, STRING_CAPACITY)
+  char buf[STRING_CAPACITY] = "\0";
   unsigned long long num = 7654321;
   for (int i = 0; i != 20; i++) {
-    print_clearly(roy_ullong_to_string(buf, num, 2, DWORD, true));
-    roy_ullong_rotate_left(&num, 1, DWORD);  
+    printClearly(ullongToBinaryString(buf, num, 2, DWORD, true));
+    ullongRoR(&num, 1, DWORD);  
   }
 }

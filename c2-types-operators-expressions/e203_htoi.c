@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-long long roy_parse_hexadecimal(const char * str) {
+long long parseHexadecimal(const char * str) {
   long long ret = 0;
   long long pn = 1;
   if (strchr(str, '-') == str) {
@@ -35,11 +35,11 @@ int main(void) {
   char * str3 = "-123afCdE  ";
   char * str4 = "0x   ";
   printf("%12s | %16llX | %10lld\n",
-         str1, roy_parse_hexadecimal(str1), roy_parse_hexadecimal(str1));
+         str1, parseHexadecimal(str1), parseHexadecimal(str1));
   printf("%12s | %16llX | %10lld\n",
-         str2, roy_parse_hexadecimal(str2), roy_parse_hexadecimal(str2));
+         str2, parseHexadecimal(str2), parseHexadecimal(str2));
   printf("%12s | %16llX | %10lld\n",
-         str3, roy_parse_hexadecimal(str3), roy_parse_hexadecimal(str3));
+         str3, parseHexadecimal(str3), parseHexadecimal(str3));
   printf("%12s | %16llX | %10lld\n",
-         str4, roy_parse_hexadecimal(str4), roy_parse_hexadecimal(str4));
+         str4, parseHexadecimal(str4), parseHexadecimal(str4));
 }
