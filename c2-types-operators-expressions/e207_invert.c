@@ -50,7 +50,7 @@ void printClearly(char * binary) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] = "\0";
+  char str[STRING_CAPACITY + 1] = "\0";
   unsigned long long num = UINT_MAX;
   printClearly(ullongToBinaryString(str, num, DWORD));
   ullongInvert(&num, 10, 7);  

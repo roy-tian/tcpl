@@ -3,24 +3,18 @@
 #include <limits.h>
 #include <time.h>
 
-#define ELEMENT_COUNT 200
+const void * bsearch_(const void * key, const void * ptr, size_t count, size_t size, int (* comp)(const void *, const void *));
+int intComp(const void * var1, const void * var2);
+int nextRandom(int min, int max);
+void populateArray(int * arr, size_t size, int min, int max);
+void printArray(const int * arr, size_t size);
 
-const void * bsearch_(const void * key,
-                      const void * ptr,
-                      size_t       count, 
-                      size_t       size,
-                      int       (* comp)(const void *, const void *));
-int comp_int(const void * var1, const void * var2);
-int next_random(int min, int max);
-void populate(int * arr, int min, size_t max);
-void print(const int * arr);
-
-
-const void * bsearch_(const void * key,
-                      const void * ptr,
-                      size_t       count, 
-                      size_t       size,
-                      int       (* comp)(const void *, const void *)) {
+const void *
+bsearch_(const void * key,
+         const void * ptr,
+         size_t       count, 
+         size_t       size,
+         int       (* comp)(const void *, const void *)) {
   const void * right = ptr + (count - 1) * size;
   const void * mid = ptr + (count - 1) / 2 * size;
 
@@ -36,27 +30,37 @@ const void * bsearch_(const void * key,
   return (comp(key, mid) == 0) ? mid : NULL;
 }
 
-int comp_int(const void * var1, const void * var2) {
+int
+intComp(const void * var1,
+        const void * var2) {
   int val1 = *(const int *)var1;
   int val2 = *(const int *)var2;
   return (val1 > val2) - (val1 < val2);
 }
 
-int next_random(int min, int max) {
+int
+nextRandom(int min,
+           int max) {
   if (RAND_MAX == INT_MAX) {
     return min + rand() / ((RAND_MAX + 1U) / max);
   }
   return min + rand() % max;
 }
 
-void populate(int * arr, int min, size_t max) {
-  for (int i = 0; i != ELEMENT_COUNT; i++) {
-    *(arr + i) = next_random(min, max);
+void
+populateArray(int    * arr,
+              size_t   size,
+              int      min,
+              int      max) {
+  for (int i = 0; i != size; i++) {
+    *(arr + i) = nextRandom(min, max);
   }
 } 
 
-void print(const int * arr) {
-  for (int i = 0; i != ELEMENT_COUNT; i++) {
+void
+printArray(const int * arr,
+           size_t      size) {
+  for (int i = 0; i != size; i++) {
     printf("%5d", *(arr + i));
     if ((i + 1) % 10 == 0) {
       printf("\n");
@@ -65,20 +69,25 @@ void print(const int * arr) {
 }
 
 int main(void) {
+  enum {ARRAY_SIZE = 200, MAX = 9999};
   srand(time(NULL));
-  int array[ELEMENT_COUNT];
-  populate(array, 0, 9999);
-  int key = array[ELEMENT_COUNT / 2];
-  print(array);
-  qsort(array, sizeof array / sizeof *array, sizeof *array, comp_int);
+  int array[ARRAY_SIZE];
+  populateArray(array, ARRAY_SIZE, 0, MAX);
+  int key = array[ARRAY_SIZE / 2];
+  printArray(array, ARRAY_SIZE);
+  qsort(array, sizeof array / sizeof *array, sizeof *array, intComp);
   printf("\n");
-  print(array);
+  printArray(array, ARRAY_SIZE);
   printf("\n   STD METHOD: %d\n",
-         *(const int *)bsearch (&key, array,
-                                sizeof array / sizeof *array, sizeof *array,
-                                comp_int));
+         *(const int *)bsearch (&key,
+                                array,
+                                sizeof array / sizeof *array,
+                                sizeof *array,
+                                intComp));
   printf("CUSTOM METHOD: %d\n",
-         *(const int *)bsearch_(&key, array,
-                                sizeof array / sizeof *array, sizeof *array,
-                                comp_int));
+         *(const int *)bsearch_(&key,
+                                array,
+                                sizeof array / sizeof *array,
+                                sizeof *array,
+                                intComp));
 }

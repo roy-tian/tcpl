@@ -28,7 +28,7 @@ charStats(const char * str) {
 
 void
 histogram(void) {
-  const char blocks[STRING_CAPACITY] = "¨x¨y¨z¨{¨|¨}¨~¨€";
+  const char blocks[STRING_CAPACITY + 1] = "ï¿½xï¿½yï¿½zï¿½{ï¿½|ï¿½}ï¿½~ï¿½ï¿½";
   size_t non_zero_length = 0;
   size_t max_count = 0;
 

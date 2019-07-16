@@ -19,7 +19,7 @@ char * squeeze(char * str, const char * set) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] = 
+  char str[STRING_CAPACITY + 1] = 
     "THIS IS THE NEW SHIT\n"
     "Everything has been said before,\n"
     "There's nothing left to say anymore;\n"

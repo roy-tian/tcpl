@@ -7,11 +7,12 @@ int tolower_(int ch) {
          ch;
 }
 
-void stringToLower(char * str) {
+char * stringToLower(char * str) {
   char * pstr = str;
   while ((*pstr = tolower_(*pstr)) != '\0') {
     pstr++;
-  } 
+  }
+  return str;
 }
 
 int main(void) {

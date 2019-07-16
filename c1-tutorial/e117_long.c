@@ -64,7 +64,7 @@ char * lineContent(char       * line_content,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] =
+  char str[STRING_CAPACITY + 1] =
     "The C language also exhibits the following characteristics:\n"
     "There is a small, fixed number of keywords, including a full set of control flow primitives: for, if/else, while, switch, and do/while. User-defined names are not distinguished from keywords by any kind of sigil.\n"
     "There are a large number of arithmetical and logical operators, such as +, +=, ++, &, ~, etc.\n"
@@ -78,7 +78,7 @@ int main(void) {
 
     for (int i = 1; i < countLine(str); i++) {
       if (lineLength(str, i) > WIDTH) {
-        char cur_line[STRING_CAPACITY] = "\0";
+        char cur_line[STRING_CAPACITY + 1] = "\0";
         printf("[%d] %s\n", i, lineContent(cur_line, str, i));
       }
     }

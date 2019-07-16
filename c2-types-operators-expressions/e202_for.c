@@ -48,7 +48,7 @@ int getLineWithoutFor(char * dest, int max_length) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] = "\0";
+  char str[STRING_CAPACITY + 1] = "\0";
   int len = getLineWithoutFor(str, 80);
   printf("%d\n%s", len, str);
 }

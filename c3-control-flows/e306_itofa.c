@@ -3,11 +3,9 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#define STRING_CAPACITY 1023
-
-#define ROY_STRING(str, size)\
-        char str[size + 1];\
-        memset(str, '\0', size + 1);
+enum {
+  STRING_CAPACITY = 127
+};
 
 char * roy_string_reverse(char * str);
 // Deprecated: use sprintf instead.
@@ -53,7 +51,7 @@ char * roy_llong_to_string_width(char * dest, long long number, size_t width) {
 }
 
 int main(void) {
-  ROY_STRING(buf, STRING_CAPACITY)
+  char buf[STRING_CAPACITY] = "\0";
   long long number = -13579246810;
   printf("%16lld\n", number);
   puts(roy_llong_to_string_width(buf, number, 16));

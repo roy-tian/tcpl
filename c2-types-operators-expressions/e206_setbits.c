@@ -53,7 +53,7 @@ void printClearly(const char * binary) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] = "\0";
+  char str[STRING_CAPACITY + 1] = "\0";
   unsigned long long num1 = UINT_MAX;
   unsigned long long num2 = 6552144;
   printClearly(ullongToBinaryString(str, num1, DWORD));

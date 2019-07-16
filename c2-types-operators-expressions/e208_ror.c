@@ -73,7 +73,7 @@ printClearly(char * binary) {
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY] = "\0";
+  char buf[STRING_CAPACITY + 1] = "\0";
   unsigned long long num = 7654321;
   for (int i = 0; i != 20; i++) {
     printClearly(ullongToBinaryString(buf, num, 2, DWORD, true));

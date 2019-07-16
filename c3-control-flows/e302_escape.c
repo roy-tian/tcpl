@@ -1,41 +1,28 @@
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_CAPACITY 1023
+enum {
+  STRING_CAPACITY = 1023
+};
 
 // Reveals all characters that 'iscntrl' .
-// this function does the same things of 'roy_string_replace_all()', yet faster.
+// this function does the same things of 'replaceAll', yet faster.
 // The behavior is undefined if the capacity of 'dest' is insufficient.
-char * roy_string_escape(char * dest, const char * src);
-char * roy_string_grab(char * dest, const char * src);
+char * escape(char * dest, const char * src);
+char * grab(char * dest, const char * src);
 
-char * roy_string_escape(char * dest, const char * src) {
+char *
+escape(char       * dest,
+       const char * src) {
   char * pdest = dest;
   while (*src != '\0') {
     switch (*src) {
-    case '\n':
-      *pdest++ = '\\';
-      *pdest++ = 'n';
-      break;
-    case '\t':
-      *pdest++ = '\\';
-      *pdest++ = 't';
-      break;
-    case '\'':  
-      *pdest++ = '\\';
-      *pdest++ = '\'';
-      break;
-    case '\"':  
-      *pdest++ = '\\';
-      *pdest++ = '\"';
-      break;
-    case '\\':  
-      *pdest++ = '\\';
-      *pdest++ = '\\';
-      break;
-    default:
-      *pdest++ = *src;
-      break;
+    case '\n': *pdest++ = '\\'; *pdest++ = 'n';  break;
+    case '\t': *pdest++ = '\\'; *pdest++ = 't';  break;
+    case '\'': *pdest++ = '\\'; *pdest++ = '\''; break;
+    case '\"': *pdest++ = '\\'; *pdest++ = '\"'; break;
+    case '\\': *pdest++ = '\\'; *pdest++ = '\\'; break;
+    default:   *pdest++ = *src; break;
     }
     src++;
   }
@@ -43,33 +30,20 @@ char * roy_string_escape(char * dest, const char * src) {
   return dest;
 }
 
-char * roy_string_grab(char * dest, const char * src) {
+char * grab(char * dest, const char * src) {
   char * pdest = dest;
   while (*src != '\0') {
     if (*src == '\\') {
       switch (*(src + 1)) {
-      case 'n':
-        *pdest++ = '\n';
-        break;
-      case 't':
-        *pdest++ = '\t';
-        break;
-      case '\"':
-        *pdest++ = '\"';
-        break;
-      case '\'':
-        *pdest++ = '\'';
-        break;
-      case '\\':
-        *pdest++ = '\\';
-        break;
-      case '\0':
-        *pdest = '\0';
-        return dest;
-      default:
-        *pdest++ = '\\';
-        *pdest++ = *(src + 1);
-        break;
+      case 'n':  *pdest++ = '\n'; break;
+      case 't':  *pdest++ = '\t'; break;
+      case '\"': *pdest++ = '\"'; break;
+      case '\'': *pdest++ = '\''; break;
+      case '\\': *pdest++ = '\\'; break;
+      case '\0': *pdest = '\0';   return dest;
+      default:   *pdest++ = '\\';
+                 *pdest++ = *(src + 1);
+                 break;
       }
       src += 2;
     } else {
@@ -88,11 +62,9 @@ int main(void) {
     "at first in technical literature, but later in popular use. \n\t\n";
   puts("ORIGINAL STRING\n===============");
   puts(src);
-  char dest[STRING_CAPACITY + 1] = {'\0'};
-  roy_string_escape(dest, src);
+  char dest[STRING_CAPACITY + 1] = "\0";
   puts("ESCAPED STRING\n==============");
-  puts(dest);
-  roy_string_grab(dest, src);
+  puts(escape(dest, src));
   puts("RECOVERED STRING\n==============");
-  puts(dest);
+  puts(grab(dest, src));
 }

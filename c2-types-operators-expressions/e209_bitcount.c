@@ -13,7 +13,8 @@ size_t ullongCountBit(unsigned long long number);
 char * ullongToBinaryString(char * dest, unsigned long long number, size_t length);
 void printClearly(char * binary);
 
-size_t ullongCountBit(unsigned long long number) {
+size_t
+ullongCountBit(unsigned long long number) {
   size_t count = 0;
   // 'n & n - 1' deletes the rightmost '1' of n.
   for (; number != 0; number &= number - 1) { 
@@ -22,9 +23,10 @@ size_t ullongCountBit(unsigned long long number) {
   return count;
 }
 
-char * ullongToBinaryString(char               * dest,
-                            unsigned long long   number,
-                            size_t               width) {
+char *
+ullongToBinaryString(char               * dest,
+                     unsigned long long   number,
+                     size_t               width) {
   if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
@@ -37,7 +39,8 @@ char * ullongToBinaryString(char               * dest,
   return dest;
 }
 
-void printClearly(char * binary) {
+void
+printClearly(char * binary) {
   char * pbinary = binary;
   while (*pbinary != '\0') {
     putchar(*pbinary);
@@ -51,7 +54,7 @@ void printClearly(char * binary) {
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY] = "\0";
+  char buf[STRING_CAPACITY + 1] = "\0";
   unsigned long long num = 555666888;
   printClearly(ullongToBinaryString(buf, num, DWORD));
   printf("Number of 1: %zu", ullongCountBit(num));

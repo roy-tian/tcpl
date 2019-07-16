@@ -3,20 +3,19 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#define STRING_CAPACITY 1023
+enum {
+  STRING_CAPACITY = 127
+};
 
-#define ROY_STRING(str, size)\
-        char str[size + 1];\
-        memset(str, '\0', size + 1);
-
-char * roy_string_reverse(char * str);
+char * stringReverse(char * str);
 
 // The 'abs' strategy calculates |digit| several times,
 // so it is less efficient than this one.
 // Deprecated: sprintf is a better choice for its comprehensive format support.
-char * roy_llong_to_string(char * dest, long long number);
+char * llongToString(char * dest, long long number);
 
-char * roy_string_reverse(char * str) {
+char *
+stringReverse(char * str) {
   char * pstr_head = str;
   char * pstr_tail = str + strlen(str) - 1;
   while (pstr_tail > pstr_head) {
@@ -27,7 +26,9 @@ char * roy_string_reverse(char * str) {
   return str;
 }
 
-char * roy_llong_to_string(char * dest, long long number) {
+char *
+llongToString(char      * dest,
+              long long   number) {
   bool pn = true, llong_min = false;
   if (number == LLONG_MIN) {
     llong_min = true;
@@ -48,13 +49,14 @@ char * roy_llong_to_string(char * dest, long long number) {
     (*dest)++;
   }
   *pdest = '\0';
-  return roy_string_reverse(dest);
+  return stringReverse(dest);
 }
 
 int main(void) {
-  ROY_STRING(buf, STRING_CAPACITY)
-  printf("%d\n", 1133557799);
-  puts(roy_llong_to_string(buf, 1133557799));
+  char buf[STRING_CAPACITY + 1] = "\0";
+  long long number = 1133557799;
+  printf("%lld\n", number);
+  puts(llongToString(buf, number));
   printf("%lld\n", LLONG_MIN);
-  puts(roy_llong_to_string(buf, LLONG_MIN));
+  puts(llongToString(buf, LLONG_MIN));
 }
