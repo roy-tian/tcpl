@@ -1,5 +1,4 @@
 #include <stdio.h>
-#define STRING_CAPACITY 1024
 
 // Deprecated: this version won't be more effective than the std one.
 int tolower_(int ch) {
@@ -16,7 +15,7 @@ void stringToLower(char * str) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY] = "PACK MY BOX WITH FIVE DOZEN LIQUOR JUGS.";
+  char str[] = "PACK MY BOX WITH FIVE DOZEN LIQUOR JUGS.";
   puts(str);
   stringToLower(str + 1);
   puts(str);
