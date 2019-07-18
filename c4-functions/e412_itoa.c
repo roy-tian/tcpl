@@ -1,23 +1,23 @@
 #include <stdio.h>
 
-char str[128];
-char *pstr = str;
-void doItoa(int number, int radix);
-
-void doItoa(int number, int radix) {
+// Bad idea: non-recuresive version is easier to read and understand.
+void itoa_(int number, char * str, int radix) {
+  static int index;
   if (number < 0) {
-    *pstr++ = '-';
+    str[0] = '-';
     number = -number;
   }
   if (number / radix != 0) {
-    doItoa(number / radix, radix);
+    itoa_(number / radix, str, radix);
   }
-  *pstr++ = '0' + number % 10;
+  str[index++] = '0' + number % 10;
+  str[index] = '\0';
 }
 
 
 int main(void) {
   int number = 31415926;
-  doItoa(number, 10);
+  char str[100] = "\0";
+  itoa_(number, str, 10);
   puts(str);
 }

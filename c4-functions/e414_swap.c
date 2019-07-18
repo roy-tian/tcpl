@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// Inspiration of polymophysm.
 #define swap(t, x, y) { t temp = x; x = y; y = temp; }
 
 enum {
@@ -18,8 +19,8 @@ void AnimalPrint(const Animal * animal);
 
 Animal
 AnimalMake(const char * name,
-            const char * say,
-            const char * can) {
+           const char * say,
+           const char * can) {
   Animal ret;
   strcpy(ret.name, name);
   strcpy(ret.say, say);
