@@ -14,11 +14,11 @@ typedef struct Animal {
   char can[STRING_CAPACITY + 1];
 } Animal;
 
-Animal AnimalMake(const char * name, const char * say, const char * can);
-void AnimalPrint(const Animal * animal);
+Animal animalMake(const char * name, const char * say, const char * can);
+void animalPrint(const Animal * animal);
 
 Animal
-AnimalMake(const char * name,
+animalMake(const char * name,
            const char * say,
            const char * can) {
   Animal ret;
@@ -29,7 +29,7 @@ AnimalMake(const char * name,
 }
 
 void
-AnimalPrint(const Animal * animal) {
+animalPrint(const Animal * animal) {
   printf("A %s says '%s', it can %s.\n",
          animal->name, animal->say, animal->can);
 }
@@ -45,11 +45,11 @@ int main(void) {
   swap(double, dec1, dec2);
   printf("x: %.8g | y: %.8g\n", dec1, dec2);
 
-  Animal animal1 = AnimalMake("cat", "meow", "catch mouse");
-  Animal animal2 = AnimalMake("fox", "ringdingding", "cheat");
-  AnimalPrint(&animal1);
-  AnimalPrint(&animal2);
+  Animal animal1 = animalMake("cat", "meow", "catch mouse");
+  Animal animal2 = animalMake("fox", "ringdingding", "cheat");
+  animalPrint(&animal1);
+  animalPrint(&animal2);
   swap(Animal, animal1, animal2);
-  AnimalPrint(&animal1);
-  AnimalPrint(&animal2);
+  animalPrint(&animal1);
+  animalPrint(&animal2);
 }

@@ -1,7 +1,8 @@
 *.exe
 *.out
+*.plist
 e*.txt
+.DS_Store
 /.idea
 /.vscode
 /.vs
-.DS_Store

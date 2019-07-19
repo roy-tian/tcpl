@@ -5,17 +5,12 @@
 #include "../../roylib/roy.h"
 
 const char * restrict DIGIT = "0123456789.eE";
-const char * restrict OPERTOR = "+-*/%";
+const char * restrict BINARY_OPERTOR = "+-*/%";
 
 typedef double(*BinaryOperator)(double, double);
 
-void rpc(RoyShell * shell);
-// Handles the number at the beginning of 'line', pushes it into 'stack', returns the length of the number.
-size_t doNumber(const char * line, RoyStack * stack);
-// Handles the operator at the beginning of 'line', uses the first two doubles on the top of 'stack' as operands, calculates the result, pushes it back into 'stack', returns 1 if success.
-size_t doOperator(const char * line, RoyStack * stack);
-void doError(void);
-void quit(RoyShell * shell);
+void rpc(RoyShell * shell, char * output);
+void quit(RoyShell * shell, char * output);
 
 BinaryOperator binaryOperate(int ch);
 double plus(double operand1, double operand2);
@@ -24,64 +19,34 @@ double times(double operand1, double operand2);
 double divide(double operand1, double operand2);
 double modulo(double operand1, double operand2);
 
-// Reverse Polish Calculator
-void rpc(RoyShell * shell) {
-  RoyStack * stack = roy_stack_new(100, sizeof(double));
-  const char * pline = roy_shell_line(shell);
-  while (*pline != '\0') {
-    if (strchr(DIGIT, *pline)) { // current char is a first shown digit of pline.
-      pline += doNumber(pline, stack);
+void rpc(RoyShell * shell, char * output) {
+  enum { STACK_CAPACITY = 128 };
+  RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  for (int i = 1; i != roy_shell_argument_count(shell); i++) {
+    const char * arg = roy_shell_argument_at(shell, i);
+    if (strspn(arg, DIGIT) == strlen(arg)) {  // arg is a number
+      double value = atof(arg);
+      roy_stack_push(stack, &value);
     } else
-    if (strchr(OPERTOR, *pline)) { // current char is a operator.
-      if (doOperator(pline, stack) == 1) {
-        pline++;
-      } else {
-        doError();
-        return;
-      }
-    } else
-    if (isblank(*pline)) { 
-      pline++;
-    } else { // not digit, not operator, nor blank, it's invalid.
-       doError();
-       return;
+    if (strchr(BINARY_OPERTOR, *arg) &&
+        strlen(arg) == 1 &&                   // arg is a binary operator
+        roy_stack_size(stack) >= 2) {         // enough operand
+      double operand1 = *roy_stack_top(stack, double);
+      roy_stack_pop(stack);
+      double operand2 = *roy_stack_top(stack, double);
+      roy_stack_pop(stack);
+      double result = binaryOperate(*arg)(operand2, operand1);
+      roy_stack_push(stack, &result);
+    } else {
+      strcpy(output, "Syntax error.");
+      return;
     }
   }
-  if (roy_stack_size(stack) == 1) {
-    printf("%.16g\n", *roy_stack_top(stack, double));
-  } else {
-    doError();
-  }
+  sprintf(output, "%.16g", *roy_stack_top(stack, double));
+  roy_stack_delete(stack);
 }
 
-size_t doNumber(const char * line, RoyStack * stack) {
-  size_t numLen = strspn(line, DIGIT);
-  char buf[STRING_CAPACITY + 1] = "\0";
-  strncpy(buf, line, numLen);
-  double result = atof(buf);
-  roy_stack_push(stack, &result);
-  return numLen;
-}
-
-size_t doOperator(const char * line, RoyStack * stack) {
-  if (roy_stack_size(stack) < 2) {
-    return 0;
-  } else {
-    double operand1 = *roy_stack_top(stack, double);
-    roy_stack_pop(stack);
-    double operand2 = *roy_stack_top(stack, double);
-    roy_stack_pop(stack);
-    double result = binaryOperate(*line)(operand2, operand1);
-    roy_stack_push(stack, &result);
-    return 1;
-  }
-}
-
-void doError(void) {
-  puts("Syntex error.");
-}
-
-void quit(RoyShell * shell) {
+void quit(RoyShell * shell, char * output) {
   exit(EXIT_SUCCESS);
 }
 
