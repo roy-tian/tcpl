@@ -9,8 +9,8 @@ const char * restrict BINARY_OPERTOR = "+-*/%";
 
 typedef double(*BinaryOperator)(double, double);
 
-void rpc(RoyShell * shell, char * output);
-void quit(RoyShell * shell, char * output);
+void rpc(RoyShell * shell);
+void quit(RoyShell * shell);
 
 BinaryOperator binaryOperate(int ch);
 double plus(double operand1, double operand2);
@@ -19,7 +19,7 @@ double times(double operand1, double operand2);
 double divide(double operand1, double operand2);
 double modulo(double operand1, double operand2);
 
-void rpc(RoyShell * shell, char * output) {
+void rpc(RoyShell * shell) {
   enum { STACK_CAPACITY = 128 };
   RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
   for (int i = 1; i != roy_shell_argument_count(shell); i++) {
@@ -38,15 +38,17 @@ void rpc(RoyShell * shell, char * output) {
       double result = binaryOperate(*arg)(operand2, operand1);
       roy_stack_push(stack, &result);
     } else {
-      strcpy(output, "Syntax error.");
+      roy_shell_output_append(shell, "Syntax error");
       return;
     }
   }
+  ROY_STRING(output, STRING_CAPACITY)
   sprintf(output, "%.16g", *roy_stack_top(stack, double));
+  roy_shell_output_append(shell, output);
   roy_stack_delete(stack);
 }
 
-void quit(RoyShell * shell, char * output) {
+void quit(RoyShell * shell) {
   exit(EXIT_SUCCESS);
 }
 
@@ -82,7 +84,7 @@ BinaryOperator binaryOperate(int ch) {
 
 int main(void) {
   RoyShell * shell = roy_shell_new();
-  roy_shell_add_command(shell, "", rpc);
-  roy_shell_add_command(shell, "quit", quit);
+  roy_shell_command_add(shell, "", rpc);
+  roy_shell_command_add(shell, "quit", quit);
   roy_shell_start(shell);
 }

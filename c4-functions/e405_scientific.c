@@ -7,8 +7,8 @@ const char * restrict OPERTOR = "+-*/%";
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
 
-void rpc(RoyShell *, char * output);
-void quit(RoyShell *, char * output);
+void rpc(RoyShell *);
+void quit(RoyShell *);
 
 UnaryOperator unaryOperate(const char *);
 BinaryOperator binaryOperate(const char *);
@@ -18,7 +18,7 @@ double times(double, double);
 double divide(double, double);
 double modulo(double, double);
 
-void rpc(RoyShell * shell, char * output) {
+void rpc(RoyShell * shell) {
   enum { STACK_CAPACITY = 128 };
   RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
   UnaryOperator unyOp;
@@ -30,7 +30,7 @@ void rpc(RoyShell * shell, char * output) {
       roy_stack_push(stack, &value);
     } else
     if ((binOp = binaryOperate(arg)) &&   // arg is a binary operator
-        roy_stack_size(stack) >= 2) {     // enough operand
+        roy_stack_size(stack) >= 2) {     // enough operands
       double operand1 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
       double operand2 = *roy_stack_top(stack, double);
@@ -44,15 +44,17 @@ void rpc(RoyShell * shell, char * output) {
       double result = unyOp(operand);
       roy_stack_push(stack, &result);
     } else {
-      strcpy(output, "Syntax error.");
+      puts("Syntax error.");
       return;
     }
   }
+  ROY_STRING(output, STRING_CAPACITY)
   sprintf(output, "%.16g", *roy_stack_top(stack, double));
+  roy_shell_output_append(shell, output);
   roy_stack_delete(stack);
 }
 
-void quit(RoyShell * shell, char * output) {
+void quit(RoyShell * shell) {
   exit(EXIT_SUCCESS);
 }
 
@@ -99,7 +101,7 @@ UnaryOperator unaryOperate(const char * _operator) {
 
 int main(void) {
   RoyShell * shell = roy_shell_new();
-  roy_shell_add_command(shell, "", rpc);
-  roy_shell_add_command(shell, "quit", quit);
+  roy_shell_command_add(shell, "", rpc);
+  roy_shell_command_add(shell, "quit", quit);
   roy_shell_start(shell);
 }
