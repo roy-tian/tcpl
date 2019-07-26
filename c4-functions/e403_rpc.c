@@ -7,12 +7,11 @@
 const char * restrict DIGIT = "0123456789.eE";
 const char * restrict BINARY_OPERTOR = "+-*/%";
 
-typedef double(*BinaryOperator)(double, double);
-
 void rpc(RoyShell * shell);
 void quit(RoyShell * shell);
 
-BinaryOperator binaryOperate(int ch);
+typedef double(*BinaryOperator)(double, double);
+const BinaryOperator charToBinaryOperator(int ch);
 double plus(double operand1, double operand2);
 double minus(double operand1, double operand2);
 double times(double operand1, double operand2);
@@ -28,23 +27,20 @@ void rpc(RoyShell * shell) {
       double value = atof(arg);
       roy_stack_push(stack, &value);
     } else
-    if (strchr(BINARY_OPERTOR, *arg) &&
-        strlen(arg) == 1 &&                   // arg is a binary operator
-        roy_stack_size(stack) >= 2) {         // enough operand
+    if (charToBinaryOperator(arg) &&               // arg is a binary operator
+        roy_stack_size(stack) >= 2) {  // enough operand
       double operand1 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
       double operand2 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
-      double result = binaryOperate(*arg)(operand2, operand1);
+      double result = charToBinaryOperator(*arg)(operand2, operand1);
       roy_stack_push(stack, &result);
     } else {
-      roy_shell_output_append(shell, "Syntax error");
+      roy_shell_output_append(shell, "Syntax error.");
       return;
     }
   }
-  ROY_STRING(output, STRING_CAPACITY)
-  sprintf(output, "%.16g", *roy_stack_top(stack, double));
-  roy_shell_output_append(shell, output);
+  roy_shell_output_append(shell, "%.16g", *roy_stack_top(stack, double));
   roy_stack_delete(stack);
 }
 
@@ -71,7 +67,7 @@ double modulo(double operand1, double operand2) {
   return (double)((int)operand1 % (int)operand2);
 }
 
-BinaryOperator binaryOperate(int ch) {
+const BinaryOperator charToBinaryOperator(int ch) {
   switch (ch) {
   case '+': return plus;
   case '-': return minus;
