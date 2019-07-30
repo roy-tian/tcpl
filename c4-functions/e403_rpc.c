@@ -2,7 +2,7 @@
  * gcc *.c -L"PATH_TO_ROYLIB" -lroylib
  */
 
-#include "../../roylib/roy.h"
+#include "roy.h"
 
 const char * restrict DIGIT = "0123456789.eE";
 const char * restrict BINARY_OPERTOR = "+-*/%";

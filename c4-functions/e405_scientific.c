@@ -1,4 +1,4 @@
-#include "../../roylib/roy.h"
+#include "roy.h"
 #include <math.h>
 
 const char * restrict DIGIT = "0123456789.eE";

@@ -1,4 +1,4 @@
-#include "../../roylib/roy.h"
+#include "roy.h"
 
 RoyStack * stack;
 
