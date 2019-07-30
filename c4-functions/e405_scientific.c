@@ -48,9 +48,7 @@ void rpc(RoyShell * shell) {
       return;
     }
   }
-  ROY_STRING(output, STRING_CAPACITY)
-  sprintf(output, "%.16g", *roy_stack_top(stack, double));
-  roy_shell_output_append(shell, output);
+  roy_shell_log_append(shell, "%.16g", *roy_stack_top(stack, double));
   roy_stack_delete(stack);
 }
 
