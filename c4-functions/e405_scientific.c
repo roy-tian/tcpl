@@ -9,8 +9,8 @@ void quit(RoyShell *);
 
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
-const UnaryOperator charToUnaryOperator(const char *);
-const BinaryOperator charToBinaryOperator(const char *);
+const UnaryOperator strToUnaryOperator(const char *);
+const BinaryOperator strToBinaryOperator(const char *);
 double plus(double, double);
 double minus(double, double);
 double times(double, double);
@@ -28,7 +28,7 @@ void rpc(RoyShell * shell) {
       double value = atof(arg);
       roy_stack_push(stack, &value);
     } else
-    if ((binOp = charToBinaryOperator(arg)) &&  // arg is a binary operator
+    if ((binOp = strToBinaryOperator(arg)) &&  // arg is a binary operator
         roy_stack_size(stack) >= 2) {     // enough operands
       double operand1 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
@@ -37,7 +37,7 @@ void rpc(RoyShell * shell) {
       double result = binOp(operand2, operand1);
       roy_stack_push(stack, &result);
     } else 
-    if ((unyOp = charToUnaryOperator(arg)) &&   // arg is a unary operator
+    if ((unyOp = strToUnaryOperator(arg)) &&   // arg is a unary operator
         !roy_stack_empty(stack)) {        // has operand
       double operand = *roy_stack_top(stack, double);
       double result = unyOp(operand);
@@ -75,7 +75,7 @@ double modulo(double operand1, double operand2) {
   return (double)((int)operand1 % (int)operand2);
 }
 
-const UnaryOperator charToUnaryOperator(const char * _operator) {
+const UnaryOperator strToUnaryOperator(const char * _operator) {
   if (strcmp(_operator, "sin"  ) == 0) { return sin; }
   if (strcmp(_operator, "cos"  ) == 0) { return cos; }
   if (strcmp(_operator, "tan"  ) == 0) { return tan; }
@@ -87,7 +87,7 @@ const UnaryOperator charToUnaryOperator(const char * _operator) {
   return NULL;
 }
 
-const BinaryOperator charToBinaryOperator(const char * _operator) {
+const BinaryOperator strToBinaryOperator(const char * _operator) {
   if (strcmp(_operator, "+"  ) == 0) { return plus; }
   if (strcmp(_operator, "-"  ) == 0) { return minus; }
   if (strcmp(_operator, "*"  ) == 0) { return times; }

@@ -1,9 +1,13 @@
+#include "calc.h"
 #include <math.h>
 #include <stdio.h>
-#include "calc.h"
+#include <string.h> 
 
-const char * DIGIT = "0123456789.eE";
-const char * OPERTOR = "+-*/%";
+double plus(double, double);
+double minus(double, double);
+double times(double, double);
+double divide(double, double);
+double modulo(double, double);
 
 double plus(double operand1, double operand2) {
   return operand1 + operand2;
@@ -24,7 +28,7 @@ double modulo(double operand1, double operand2) {
   return (double)((int)operand1 % (int)operand2);
 }
 
-BinaryOperator charToBinaryOperator(const char * _operator) {
+BinaryOperator strToBinaryOperator(const char * _operator) {
   if (strcmp(_operator, "+"  ) == 0) { return plus; }
   if (strcmp(_operator, "-"  ) == 0) { return minus; }
   if (strcmp(_operator, "*"  ) == 0) { return times; }
@@ -34,7 +38,7 @@ BinaryOperator charToBinaryOperator(const char * _operator) {
   return NULL; 
 }
 
-UnaryOperator charToUnaryOperator(const char * _operator) {
+UnaryOperator strToUnaryOperator(const char * _operator) {
   if (strcmp(_operator, "sin"  ) == 0) { return sin; }
   if (strcmp(_operator, "cos"  ) == 0) { return cos; }
   if (strcmp(_operator, "tan"  ) == 0) { return tan; }
