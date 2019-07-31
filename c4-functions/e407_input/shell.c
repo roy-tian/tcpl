@@ -2,13 +2,12 @@
 
 bool validNumber(const RoyString * arg);
 bool validVariable(const RoyString * arg);
-bool validShowInput(const RoyString * arg);
+bool doShowInput(const RoyString * arg);
 UnaryOperator validUnaryOperator(const RoyString * arg);
 BinaryOperator validBinaryOperator(const RoyString * arg);
 
 void doNumber(const RoyString * arg);
 void doVariable(const RoyString * arg);
-void doShowInput(void);
 void doUnaryOperator(const UnaryOperator op);
 void doBinaryOperator(const BinaryOperator op);
 void doError(void);
@@ -28,9 +27,6 @@ void rpc(RoyShell * shell) {
     } else
     if ((binOp = validBinaryOperator(arg))) {
       doBinaryOperator(binOp);
-    } else
-    if (validShowInput(arg)) {
-
     } else
     if (validVariable(arg)) {
       doVariable(arg);
@@ -57,6 +53,10 @@ bool validNumber(const RoyString * arg) {
 
 bool validVariable(const RoyString * arg) {
   return roy_string_match(arg, "^[A-Za-z_]\\w*$");
+}
+
+bool validShowInput(const RoyString * arg) {
+  return strcmp(roy_string_cstr(arg), "input") == 0;
 }
 
 UnaryOperator validUnaryOperator(const RoyString * arg) {
@@ -91,6 +91,10 @@ void doVariable(const RoyString * arg) {
   roy_stack_push(operands, &value);
 }
 
+void doShowInput() {
+  puts(roy_shell_ihistory_at(shell, -1));
+}
+
 void doUnaryOperator(const UnaryOperator op) {
   double operand = *roy_stack_top(operands, double);
   double result = op(operand);
@@ -104,6 +108,7 @@ void doBinaryOperator(const BinaryOperator op) {
   roy_stack_pop(operands);
   double result = op(operand2, operand1);
   roy_stack_push(operands, &result);
+
 }
 
 void doError(void) {
