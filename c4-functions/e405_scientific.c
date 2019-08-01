@@ -1,58 +1,65 @@
 #include "roy.h"
 #include <math.h>
 
-const char * restrict DIGIT = "0123456789.eE";
-const char * restrict OPERTOR = "+-*/%";
+enum { STACK_CAPACITY = 128 };
 
-void rpc(RoyShell *);
-void quit(RoyShell *);
+RoyStack * operands;
+RoyShell * shell;
 
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
-const UnaryOperator strToUnaryOperator(const char *);
-const BinaryOperator strToBinaryOperator(const char *);
+
+UnaryOperator strToUnaryOperator(const char *);
+BinaryOperator strToBinaryOperator(const char *);
+
 double plus(double, double);
 double minus(double, double);
 double times(double, double);
 double divide(double, double);
 double modulo(double, double);
 
+void rpc(RoyShell *);
+void quit(RoyShell *);
+
+bool validNumber(const RoyString * arg);
+UnaryOperator validUnaryOperator(const RoyString * arg);
+BinaryOperator validBinaryOperator(const RoyString * arg);
+
+void doNumber(const RoyString * arg);
+void doVariable(const RoyString * arg);
+void doShowInput(void);
+void doUnaryOperator(UnaryOperator op);
+void doBinaryOperator(BinaryOperator op);
+void doError(void);
+
 void rpc(RoyShell * shell) {
-  enum { STACK_CAPACITY = 128 };
-  RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  roy_stack_clear(operands);
   UnaryOperator unyOp;
   BinaryOperator binOp;
-  for (int i = 1; i != roy_shell_argument_count(shell); i++) {
-    const char * arg = roy_shell_argument_at(shell, i);
-    if (strspn(arg, DIGIT) == strlen(arg)) {  // arg is a number
-      double value = atof(arg);
-      roy_stack_push(stack, &value);
+  RoyString * arg = roy_string_new();
+  for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
+    roy_string_assign(arg, roy_shell_argument_at(shell, i));
+    if (validNumber(arg)) {
+      doNumber(arg);
     } else
-    if ((binOp = strToBinaryOperator(arg)) &&  // arg is a binary operator
-        roy_stack_size(stack) >= 2) {     // enough operands
-      double operand1 = *roy_stack_top(stack, double);
-      roy_stack_pop(stack);
-      double operand2 = *roy_stack_top(stack, double);
-      roy_stack_pop(stack);
-      double result = binOp(operand2, operand1);
-      roy_stack_push(stack, &result);
-    } else 
-    if ((unyOp = strToUnaryOperator(arg)) &&   // arg is a unary operator
-        !roy_stack_empty(stack)) {        // has operand
-      double operand = *roy_stack_top(stack, double);
-      double result = unyOp(operand);
-      roy_stack_push(stack, &result);
+    if ((unyOp = validUnaryOperator(arg))) {
+      doUnaryOperator(unyOp);
+    } else
+    if ((binOp = validBinaryOperator(arg))) {
+      doBinaryOperator(binOp);
     } else {
-      puts("Syntax error.");
-      roy_stack_delete(stack);
+      doError();
+      roy_string_delete(arg);
       return;
     }
   }
-  roy_shell_log_append(shell, "%.16g", *roy_stack_top(stack, double));
-  roy_stack_delete(stack);
+  roy_shell_log_append(shell, "%.16g", *roy_stack_top(operands, double));
+  roy_string_delete(arg);
 }
 
 void quit(RoyShell * shell) {
+  roy_stack_delete(operands);
+  roy_shell_delete(shell);
   exit(EXIT_SUCCESS);
 }
 
@@ -75,7 +82,7 @@ double modulo(double operand1, double operand2) {
   return (double)((int)operand1 % (int)operand2);
 }
 
-const UnaryOperator strToUnaryOperator(const char * _operator) {
+UnaryOperator strToUnaryOperator(const char * _operator) {
   if (strcmp(_operator, "sin"  ) == 0) { return sin; }
   if (strcmp(_operator, "cos"  ) == 0) { return cos; }
   if (strcmp(_operator, "tan"  ) == 0) { return tan; }
@@ -87,7 +94,7 @@ const UnaryOperator strToUnaryOperator(const char * _operator) {
   return NULL;
 }
 
-const BinaryOperator strToBinaryOperator(const char * _operator) {
+BinaryOperator strToBinaryOperator(const char * _operator) {
   if (strcmp(_operator, "+"  ) == 0) { return plus; }
   if (strcmp(_operator, "-"  ) == 0) { return minus; }
   if (strcmp(_operator, "*"  ) == 0) { return times; }
@@ -98,8 +105,57 @@ const BinaryOperator strToBinaryOperator(const char * _operator) {
 }
 
 
+bool validNumber(const RoyString * arg) {
+  return roy_string_match(arg, "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$");
+}
+
+bool validVariable(const RoyString * arg) {
+  return roy_string_match(arg, "^[A-Za-z_]\\w*$");
+}
+
+UnaryOperator validUnaryOperator(const RoyString * arg) {
+  UnaryOperator unyOp = strToUnaryOperator(roy_string_cstr(arg)); // unyOp not null: arg is a unary operator
+  if (unyOp && !roy_stack_empty(operands)) {                      // stack not empty: enough operand
+    return unyOp;
+  }
+  return NULL;
+}
+
+BinaryOperator validBinaryOperator(const RoyString * arg) {
+  BinaryOperator binOp = strToBinaryOperator(roy_string_cstr(arg));  // binOp not null: arg is a binary operator
+  if (binOp && roy_stack_size(operands) >= 2) {      // stack size >= 2 : enough operands
+    return binOp;
+  }
+  return NULL;
+}
+
+void doNumber(const RoyString * arg) {
+  double value = atof(roy_string_cstr(arg));
+  roy_stack_push(operands, &value);
+}
+
+void doUnaryOperator(UnaryOperator op) {
+  double operand = *roy_stack_top(operands, double);
+  double result = op(operand);
+  roy_stack_push(operands, &result);
+}
+
+void doBinaryOperator(BinaryOperator op) {
+  double operand1 = *roy_stack_top(operands, double);
+  roy_stack_pop(operands);
+  double operand2 = *roy_stack_top(operands, double);
+  roy_stack_pop(operands);
+  double result = op(operand2, operand1);
+  roy_stack_push(operands, &result);
+}
+
+void doError(void) {
+  puts("Syntax error.");
+}
+
 int main(void) {
-  RoyShell * shell = roy_shell_new();
+  shell = roy_shell_new();
+  operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
   roy_shell_command_add(shell, "", rpc);
   roy_shell_command_add(shell, "quit", quit);
   roy_shell_start(shell);

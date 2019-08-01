@@ -4,14 +4,11 @@
 
 #include "roy.h"
 
-const char * restrict DIGIT = "0123456789.eE";
-const char * restrict BINARY_OPERTOR = "+-*/%";
-
 void rpc(RoyShell * shell);
 void quit(RoyShell * shell);
 
 typedef double(*BinaryOperator)(double, double);
-const BinaryOperator charToBinaryOperator(int ch);
+BinaryOperator charToBinaryOperator(int ch);
 
 double plus(double operand1, double operand2);
 double minus(double operand1, double operand2);
@@ -22,30 +19,36 @@ double modulo(double operand1, double operand2);
 void rpc(RoyShell * shell) {
   enum { STACK_CAPACITY = 128 };
   RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
-  for (int i = 1; i != roy_shell_argument_count(shell); i++) {
-    const char * arg = roy_shell_argument_at(shell, i);
-    if (strspn(arg, DIGIT) == strlen(arg)) {  // arg is a number
-      double value = atof(arg);
+  RoyString * arg = roy_string_new();
+  BinaryOperator op;
+  for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
+    roy_string_assign(arg, roy_shell_argument_at(shell, i));
+    if (roy_string_match(arg, "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$")) {  // arg is a number
+      double value = atof(roy_string_cstr(arg));
       roy_stack_push(stack, &value);
     } else
-    if (charToBinaryOperator(*arg) &&   // arg is a binary operator
+    if ((op = charToBinaryOperator(roy_string_at(arg, 0))) &&   // arg is a binary operator
         roy_stack_size(stack) >= 2) {  // enough operand
       double operand1 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
       double operand2 = *roy_stack_top(stack, double);
       roy_stack_pop(stack);
-      double result = charToBinaryOperator(*arg)(operand2, operand1);
+      double result = op(operand2, operand1);
       roy_stack_push(stack, &result);
     } else {
       puts("Syntax error.");
+      roy_string_delete(arg);
+      roy_stack_delete(stack);
       return;
     }
   }
   roy_shell_log_append(shell, "%.16g", *roy_stack_top(stack, double));
+  roy_string_delete(arg);
   roy_stack_delete(stack);
 }
 
 void quit(RoyShell * shell) {
+  roy_shell_delete(shell);
   exit(EXIT_SUCCESS);
 }
 
@@ -68,7 +71,7 @@ double modulo(double operand1, double operand2) {
   return (double)((int)operand1 % (int)operand2);
 }
 
-const BinaryOperator charToBinaryOperator(int ch) {
+BinaryOperator charToBinaryOperator(int ch) {
   switch (ch) {
   case '+': return plus;
   case '-': return minus;
