@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Deprecated: this version won't be more effective than the std one.
+char * strcat_(char * dest, const char * src) {
+  char * ptail = dest;
+  while (*ptail++ != '\0') { }
+  ptail--;
+  while ((*ptail++ = *src++) != '\0') { }
+  return dest;
+}
+
+size_t strlen_(const char * str) {
+  const char * ptail = str;
+  while (*ptail++ != '\0') { }
+  return ptail - str - 1;
+}
+
+char * stralloc(const char * src) {
+  char * dest = calloc(strlen_(src) + 1, sizeof(char));
+  char * pdest = dest;
+  while ((*pdest++ = *src++) != '\0') { }
+  return dest;
+}
+
+// This version won't be bothered with undefined behavior.
+char * strcat_m(char * dest, const char * src) {
+  char * temp = stralloc(dest);
+  char * ptemp = temp;
+  dest = realloc(dest, strlen_(dest) + strlen_(src) + 1);
+  char * pdest = dest;
+  while ((*pdest++ = *ptemp++) != '\0') { }
+  pdest--;
+  while ((*pdest++ = *src++) != '\0') { }
+  free(temp);
+  return dest;
+}
+
+int main() {
+  enum { STRING_CAPACITY = 127 };
+  char str1[STRING_CAPACITY] = "Chinese is ";
+  char str2[STRING_CAPACITY] = "the most beautiful language in the world.";
+
+  puts(strcat_(str1, str2));
+
+  char * str3 = stralloc("Le chinois est ");
+  char * str4 = stralloc("la plus belle langue du monde.");
+  
+  puts(strcat_m(str3, str4));
+  
+  free(str3);
+  free(str4);
+}
