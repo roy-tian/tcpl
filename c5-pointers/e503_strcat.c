@@ -4,16 +4,15 @@
 // Deprecated: this version won't be more effective than the std one.
 char * strcat_(char * dest, const char * src) {
   char * ptail = dest;
-  while (*ptail++ != '\0') { }
-  ptail--;
+  while (*++ptail != '\0') { }
   while ((*ptail++ = *src++) != '\0') { }
   return dest;
 }
 
 size_t strlen_(const char * str) {
   const char * ptail = str;
-  while (*ptail++ != '\0') { }
-  return ptail - str - 1;
+  while (*++ptail != '\0') { }
+  return ptail - str;
 }
 
 char * stralloc(const char * src) {
@@ -29,8 +28,7 @@ char * strcat_m(char * dest, const char * src) {
   char * ptemp = temp;
   dest = realloc(dest, strlen_(dest) + strlen_(src) + 1);
   char * pdest = dest;
-  while ((*pdest++ = *ptemp++) != '\0') { }
-  pdest--;
+  while ((*++pdest = *++ptemp) != '\0') { }
   while ((*pdest++ = *src++) != '\0') { }
   free(temp);
   return dest;
