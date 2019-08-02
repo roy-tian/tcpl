@@ -1,24 +1,51 @@
 #include <stdio.h>
 
 int strend(const char * str1, const char * str2) {
-  const char * pTailStr1 = str1;
-  const char * pTailStr2 = str2;
-  while (*++pTailStr1 != '\0') { } // end of str1
-  while (*++pTailStr2 != '\0') { } // end of str2
-  // tail pointers keep moving backward, until they are unequal or one of them reaches the head.
-  while (*pTailStr1-- == *pTailStr2-- && pTailStr1 != str1 && pTailStr2 != str2) { }
-  return (*pTailStr1 == *pTailStr2 && pTailStr2 == str2 && *pTailStr1 != '\0');
+  const char * ptail1 = str1;
+  const char * ptail2 = str2;
+  while (*ptail1 != '\0') { ptail1++; } // end of str1
+  while (*ptail2 != '\0') { ptail2++; } // end of str2
+  // tail pointers keep moving backward, until they are unequal or one of them reaches its head.
+  while (*ptail1 == *ptail2 && ptail1 != str1 && ptail2 != str2) { 
+    ptail1--;
+    ptail2--;
+  }
+  return (*ptail1 == *ptail2 && ptail2 == str2);
+}
+
+int strcmp_(const char * str1, const char * str2) {
+  while (*str1 && *str2 && *str1 == *str2) { 
+    str1++;
+    str2++;
+  }
+  return *str1 - *str2;
+}
+
+size_t strlen_(const char * str) {
+  const char * ptail = str;
+  while (*ptail != '\0') { ptail++; }
+  return ptail - str;
+}
+
+// This version is easier to understand but slower.
+int strend_(const char * str1, const char * str2) {
+  const char * psub = str1 + (strlen_(str1) - strlen_(str2));
+  return strcmp_(psub, str2) == 0;
 }
 
 int main() {
-  enum { STRING_CAPACITY = 255 };
-  const char * str1 = "Thunder always comes after lightenning.";
-  const char * str2 = "lightenning.";
-  const char * str3 = "lightenning McQueen.";
-  const char * str4 = "lighten";
-  const char * str5 = "";
-  printf("%d ", strend(str1, str2));
-  printf("%d ", strend(str1, str3));
-  printf("%d ", strend(str1, str4));
-  printf("%d ", strend(str1, str5));
+  const char * str = "Thunder always comes after lightenning.";
+  printf("%d ", strend_(str, "lightenning."));
+  printf("%d ", strend_(str, "lighten"));
+  printf("%d ", strend_(str, "lightenning mcqueen."));
+  printf("%d ", strend_(str, ""));
+  printf("%d ", strend_(str, str));
+  printf("%d\n", strend_(str, "The Thunder always comes after lightenning"));
+
+  printf("%d ", strend_(str, "lightenning."));
+  printf("%d ", strend_(str, "lighten"));
+  printf("%d ", strend_(str, "lightenning mcqueen."));
+  printf("%d ", strend_(str, ""));
+  printf("%d ", strend_(str, str));
+  printf("%d\n", strend_(str, "The Thunder always comes after lightenning."));
 }
