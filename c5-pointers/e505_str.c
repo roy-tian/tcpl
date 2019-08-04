@@ -32,5 +32,5 @@ int main() {
   puts(strncpy_(str3, str1, STRING_CAPACITY));
   puts(strncpy_(str3, str1, 19));
   printf("%d ", strncmp_(str1, str3, STRING_CAPACITY));
-  printf("%d ", strncmp_(str1, str3, 18));
+  printf("%d", strncmp_(str1, str3, 18));
 }

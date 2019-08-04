@@ -35,12 +35,12 @@ int strend_(const char * str1, const char * str2) {
 
 int main() {
   const char * str = "Thunder always comes after lightenning.";
-  printf("%d ", strend_(str, "lightenning."));
-  printf("%d ", strend_(str, "lighten"));
-  printf("%d ", strend_(str, "lightenning mcqueen."));
-  printf("%d ", strend_(str, ""));
-  printf("%d ", strend_(str, str));
-  printf("%d\n", strend_(str, "The Thunder always comes after lightenning"));
+  printf("%d ", strend(str, "lightenning."));
+  printf("%d ", strend(str, "lighten"));
+  printf("%d ", strend(str, "lightenning mcqueen."));
+  printf("%d ", strend(str, ""));
+  printf("%d ", strend(str, str));
+  printf("%d\n", strend(str, "The Thunder always comes after lightenning"));
 
   printf("%d ", strend_(str, "lightenning."));
   printf("%d ", strend_(str, "lighten"));

@@ -15,7 +15,7 @@ size_t strlen_(const char * str) {
   return ptail - str;
 }
 
-char * stralloc(const char * src) {
+char * stralloc_(const char * src) {
   char * dest = calloc(strlen_(src) + 1, sizeof(char));
   char * pdest = dest;
   while ((*pdest++ = *src++) != '\0') { }
@@ -23,18 +23,19 @@ char * stralloc(const char * src) {
 }
 
 // This version won't be bothered with undefined behavior.
-char * strcat_m(char * dest, const char * src) {
-  char * temp = stralloc(dest);
+char * strcat_m(char ** dest, const char * src) {
+  char * temp = stralloc_(*dest);
   char * ptemp = temp;
-  dest = realloc(dest, strlen_(dest) + strlen_(src) + 1);
-  char * pdest = dest;
-  while ((*pdest++ = *ptemp++) != '\0') { 
+  *dest = realloc(*dest, strlen_(*dest) + strlen_(src) + 1);
+  char * pdest = *dest;
+  while ((*pdest = *ptemp) != '\0') {
     pdest++;
     ptemp++;
   }
+
   while ((*pdest++ = *src++) != '\0') { }
   free(temp);
-  return dest;
+  return *dest;
 }
 
 int main() {
@@ -44,11 +45,8 @@ int main() {
 
   puts(strcat_(str1, str2));
 
-  char * str3 = stralloc("Le chinois est ");
-  char * str4 = stralloc("la plus belle langue du monde.");
+  char * str3 = stralloc_("Le chinois est ");
+  char * str4 = stralloc_("la plus belle langue du monde.");
   
-  puts(strcat_m(str3, str4));
-  
-  free(str3);
-  free(str4);
+  puts(strcat_m(&str3, str4)); 
 }
