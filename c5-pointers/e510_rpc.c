@@ -1,10 +1,13 @@
 #include "roy.h"
 #include <math.h>
 
-enum { STACK_CAPACITY = 128 };
+enum { 
+  STACK_CAPACITY = 128,
+  STRING_CAPACITY = 128
+};
 
 RoyStack * operands;
-RoyShell * shell;
+RoyDeque * args;
 
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
@@ -18,8 +21,7 @@ double times(double, double);
 double divide(double, double);
 double modulo(double, double);
 
-void rpc(RoyShell *);
-void quit(RoyShell *);
+void rpc(void);
 
 bool validNumber(const RoyString * arg);
 UnaryOperator validUnaryOperator(const RoyString * arg);
@@ -30,13 +32,12 @@ void doUnaryOperator(UnaryOperator op);
 void doBinaryOperator(BinaryOperator op);
 void doError(const RoyString * arg);
 
-void rpc(RoyShell * shell) {
-  roy_stack_clear(operands);
+void rpc() {
   UnaryOperator unyOp;
   BinaryOperator binOp;
   RoyString * arg = roy_string_new();
-  for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
-    roy_string_assign(arg, roy_shell_argument_at(shell, i));
+  for (size_t i = 0; i != roy_deque_size(args); i++) {
+    roy_string_assign(arg, roy_deque_at(args, char, i));
     if (validNumber(arg)) {
       doNumber(arg);
     } else
@@ -51,14 +52,10 @@ void rpc(RoyShell * shell) {
       return;
     }
   }
-  roy_shell_log_append(shell, "%.16g", *roy_stack_top(operands, double));
+  if (roy_stack_size(operands) != 0) {
+    printf("%.16g\n", *roy_stack_top(operands, double));
+  }
   roy_string_delete(arg);
-}
-
-void quit(RoyShell * shell) {
-  roy_stack_delete(operands);
-  roy_shell_delete(shell);
-  exit(EXIT_SUCCESS);
 }
 
 double plus(double operand1, double operand2) {
@@ -102,13 +99,8 @@ BinaryOperator strToBinaryOperator(const char * _operator) {
   return NULL; 
 }
 
-
 bool validNumber(const RoyString * arg) {
   return roy_string_match(arg, "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$");
-}
-
-bool validVariable(const RoyString * arg) {
-  return roy_string_match(arg, "^[A-Za-z_]\\w*$");
 }
 
 UnaryOperator validUnaryOperator(const RoyString * arg) {
@@ -149,13 +141,16 @@ void doBinaryOperator(BinaryOperator op) {
 }
 
 void doError(const RoyString * arg) {
-  printf("Unrecognised token: %s\n", roy_string_cstr(arg));
+  printf("Unrecgonised token: %s\n", roy_string_cstr(arg));
 }
 
-int main(void) {
-  shell = roy_shell_new();
+int main(int argc, char * argv[]) {
   operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
-  roy_shell_command_add(shell, "", rpc);
-  roy_shell_command_add(shell, "quit", quit);
-  roy_shell_start(shell);
+  args     = roy_deque_new(STRING_CAPACITY * sizeof(char));
+  while (--argc) {
+    roy_deque_push_back(args, *++argv);
+  }
+  rpc();
+  roy_deque_delete(args);
+  roy_stack_delete(operands);
 }
