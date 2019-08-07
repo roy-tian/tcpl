@@ -100,7 +100,7 @@ BinaryOperator strToBinaryOperator(const char * _operator) {
 }
 
 bool validNumber(const RoyString * arg) {
-  return roy_string_match(arg, "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$");
+  return roy_string_match(arg, "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?");
 }
 
 UnaryOperator validUnaryOperator(const RoyString * arg) {

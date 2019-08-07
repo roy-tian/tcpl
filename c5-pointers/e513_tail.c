@@ -76,7 +76,7 @@ int parseLine(int argc, char * argv[]) {
   while (--argc) {
     *argv++;
     if (**argv == '-') {
-      return atoi(*argv+1);
+      return atoi(*argv + 1);
     }
   }
   // line number starts from 1, 0 indecates line is not given.

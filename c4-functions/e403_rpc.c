@@ -24,7 +24,7 @@ void rpc(RoyShell * shell) {
   for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
     roy_string_assign(arg, roy_shell_argument_at(shell, i));
     if (roy_string_match(arg,
-                         "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$")) {  // arg is a number
+                         "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?")) {  // arg is a number
       double value = atof(roy_string_cstr(arg));
       roy_stack_push(stack, &value);
     } else

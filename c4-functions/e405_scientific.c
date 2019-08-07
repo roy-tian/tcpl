@@ -104,11 +104,11 @@ BinaryOperator strToBinaryOperator(const char * _operator) {
 
 
 bool validNumber(const RoyString * arg) {
-  return roy_string_match(arg, "^[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?$");
+  return roy_string_match(arg, "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?");
 }
 
 bool validVariable(const RoyString * arg) {
-  return roy_string_match(arg, "^[A-Za-z_]\\w*$");
+  return roy_string_match(arg, "[A-Za-z_]\\w*");
 }
 
 UnaryOperator validUnaryOperator(const RoyString * arg) {
