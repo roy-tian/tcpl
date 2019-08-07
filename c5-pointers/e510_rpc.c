@@ -52,8 +52,10 @@ void rpc() {
       return;
     }
   }
-  if (roy_stack_size(operands) != 0) {
+  if (roy_stack_size(operands) == 1) {
     printf("%.16g\n", *roy_stack_top(operands, double));
+  } else {
+    puts("Syntax error: stack not empty");
   }
   roy_string_delete(arg);
 }
@@ -152,5 +154,6 @@ int main(int argc, char * argv[]) {
   }
   rpc();
   roy_deque_delete(args);
+  
   roy_stack_delete(operands);
 }
