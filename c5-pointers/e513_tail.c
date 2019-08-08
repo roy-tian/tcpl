@@ -37,8 +37,7 @@ size_t strCountLine(const char * str) {
       count++;
     }
   }
-  str--;
-  if (*str != '\n') {
+  if (*--str != '\n') {
     // When last char is not '\n', that line still needs to be counted.
     count++;
   }
