@@ -21,5 +21,6 @@ void read(RoyShell * shell);
 void select(RoyShell * shell);
 void sort(RoyShell * shell);
 void quit(RoyShell * shell);
+void error(RoyShell * shell);
 
 #endif // SHELL_H

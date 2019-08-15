@@ -40,7 +40,9 @@ void sort(RoyShell * shell) {
   ((roy_shell_argument_find(shell, "-\\w*r\\w*|--reverse") != -1)
     ? SORT_REVERSELY : 0) |
   ((roy_shell_argument_find(shell, "-\\w*i\\w*|--insensitive") != -1)
-    ? SORT_INSENSITIVELY : 0);
+    ? SORT_INSENSITIVELY : 0) |
+  ((roy_shell_argument_find(shell, "-\\w*d\\w*|--directory") != -1)
+    ? SORT_DIRECTORY : 0);
   int (*comp)(const void *, const void *) = NULL;
 
   switch (method) {
@@ -56,8 +58,20 @@ void sort(RoyShell * shell) {
   case SORT_STRING | SORT_INSENSITIVELY:
     comp = ROY_COMPARE(strcmpi);
     break;
+  case SORT_STRING | SORT_DIRECTORY:
+    comp = ROY_COMPARE(strcmpi);
+    break;
   case SORT_STRING | SORT_REVERSELY | SORT_INSENSITIVELY:
     comp = ROY_COMPARE(strcmpri);
+    break;
+  case SORT_STRING | SORT_REVERSELY | SORT_DIRECTORY:
+    comp = ROY_COMPARE(strcmprd);
+    break;
+  case SORT_STRING | SORT_INSENSITIVELY | SORT_DIRECTORY:
+    comp = ROY_COMPARE(strcmpid);
+    break;
+  case SORT_STRING | SORT_REVERSELY | SORT_INSENSITIVELY | SORT_DIRECTORY:
+    comp = ROY_COMPARE(strcmprid);
     break;
   case SORT_STRING:
     comp = ROY_COMPARE(strcmp);
@@ -76,4 +90,8 @@ void quit(RoyShell * shell) {
   roy_vector_delete(elements);
   roy_shell_delete(shell);
   exit(EXIT_SUCCESS);
+}
+
+void error(RoyShell * shell) {
+  printf("Unrecognised command: %s\n", roy_shell_argument_at(shell, 1));
 }

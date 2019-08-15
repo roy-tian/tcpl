@@ -12,5 +12,6 @@ int main(void) {
   roy_shell_command_add(shell, "select", select);
   roy_shell_command_add(shell, "sort", sort);
   roy_shell_command_add(shell, "quit", quit);
+  roy_shell_command_add(shell, "", error);
   roy_shell_start(shell);
 }
