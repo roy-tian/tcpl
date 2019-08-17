@@ -49,7 +49,7 @@ int strcmpd(const char * str1, const char * str2) {
   strcpyd(str1u, str1);
   ROY_STR(str2u, strlen(str2))
   strcpyd(str2u, str2);
-  return strcmp(str_tolower(str1u), str_tolower(str2u)); 
+  return strcmp(str1u, str2u); 
 }
 
 int strcmpri(const char * str1, const char * str2) {
