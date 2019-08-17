@@ -116,7 +116,7 @@
 (173)[A.4.4] Type Qualifiers
 (173)[A.5] Objects and Lvalues
 (173)[A.6] Conversions
-(17)[A.6.1] Integral Promotion
+(173)[A.6.1] Integral Promotion
 (174)[A.6.2] Integral Conversions
 (174)[A.6.3] Integer and Floating
 (174)[A.6.4] Floating Types
