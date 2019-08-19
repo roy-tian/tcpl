@@ -28,7 +28,7 @@ charStats(const char * str) {
 
 void
 histogram(void) {
-  const char blocks[STRING_CAPACITY + 1] = "ï¿½xï¿½yï¿½zï¿½{ï¿½|ï¿½}ï¿½~ï¿½ï¿½";
+  const char blocks[STRING_CAPACITY + 1] = "¨x¨y¨z¨{¨|¨}¨~¨€";
   size_t non_zero_length = 0;
   size_t max_count = 0;
 
@@ -47,26 +47,32 @@ histogram(void) {
       if (cur_count > 0) {
         if (cur_count / 8 + 1 > i ||
             cur_count / 8 + 1 == i && cur_count % 8 == 0) {
-          printf("%c%c ", blocks[14], blocks[15]);
+          putchar(blocks[14]);
+          putchar(blocks[15]);
+          putchar(' ');
         } else if (cur_count / 8 + 1 == i && cur_count % 8 != 0) {
-          printf("%c%c ",
-                 blocks[cur_count % 8 * 2 - 2],
-                 blocks[cur_count % 8 * 2 - 1]);
+          putchar(blocks[cur_count % 8 * 2 - 2]);
+          putchar(blocks[cur_count % 8 * 2 - 1]);
+          putchar(' ');
         } else {
-          printf("   ");
+          putchar(' ');
+          putchar(' ');
+          putchar(' ');
         }
       }
     }
-    printf("\n");
+    puts("");
   }
   for (int i = 0; i != non_zero_length * 3; i++) {
-    printf("-");
+    putchar('-');
   }
-  printf("\n");
+  puts("");
   for (int i = 0; i != N_MAX; i++) {
     size_t cur_count = stats_v[i];
     if (cur_count != 0) {
-      printf("%c  ", 'A' + i);
+      putchar('A' + i);
+      putchar(' ');
+      putchar(' ');
     } 
   }
 }
