@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 // Inspiration of polymophysm.
 #define swap(t, x, y) { t temp = x; x = y; y = temp; }
@@ -40,10 +41,10 @@ int main(void) {
   swap(int, int1, int2);
   printf("x: %d | y: %d\n", int1, int2);
 
-  double dec1 = 3.1415926, dec2 = 2.7182818;
-  printf("x: %.8g | y: %.8g\n", dec1, dec2);
+  double dec1 = atan(1.0) * 4, dec2 = exp(1.0);
+  printf("x: %.16g | y: %.16g\n", dec1, dec2);
   swap(double, dec1, dec2);
-  printf("x: %.8g | y: %.8g\n", dec1, dec2);
+  printf("x: %.16g | y: %.16g\n", dec1, dec2);
 
   Animal animal1 = animalMake("cat", "meow", "catch mouse");
   Animal animal2 = animalMake("fox", "ringdingding", "cheat");
