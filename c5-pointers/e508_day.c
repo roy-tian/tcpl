@@ -42,9 +42,9 @@ int month_day(int year, unsigned _day_of_year, int * pmonth, int * pday) {
 int main() {
   for (int i = 1; i != 13; i++) {
     for (int j = 1; j != 32; j++) {
-      printf("%d ", day_of_year(2016, i, j));
+      printf("%3d ", day_of_year(2016, i, j));
     }
-    printf("\n");
+    puts("");
   }
   for (int i = 1; i != 400; i++) {
     int year = 2019, month, day;

@@ -70,8 +70,8 @@ void floatLimits(void) {
 
 int main(void) {
   integerLimits();
-  printf("\n");
+  puts("");
   integerBitwise();
-  printf("\n");
+  puts("");
   floatLimits();
 }
