@@ -21,6 +21,10 @@ const struct EscapeSequence {
   '\0'
 };
 
+/* LOOK DEEP AND THINK:
+ * how structs organize there data.
+ */
+
 void printTable(void) {
   puts("VALUE FORM DESCRIPTION");
   puts("------------------------------------");

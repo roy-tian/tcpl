@@ -39,3 +39,9 @@ int main(void) {
 
 // without }                   //  expected declaration or statement at end of input
 }
+
+/* EXTRA: you can printf a string literal,
+ * but printf a string variable directly seems not to be a good idea,
+ * for the variable may contains a '%' which will lead it to undefined behaviors,
+ * or someone else using your function will take advantage of it.
+ */
