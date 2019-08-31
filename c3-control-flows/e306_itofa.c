@@ -7,11 +7,11 @@ enum {
   STRING_CAPACITY = 127
 };
 
-char * roy_string_reverse(char * str);
+char * reverse(char * str);
 // Deprecated: use sprintf instead.
-char * roy_llong_to_string_width(char * dest, long long number, size_t width);
+char * llongToStrW(char * dest, long long number, size_t width);
 
-char * roy_string_reverse(char * str) {
+char * reverse(char * str) {
   char * pstr_head = str;
   char * pstr_tail = str + strlen(str) - 1;
   while (pstr_tail > pstr_head) {
@@ -22,7 +22,7 @@ char * roy_string_reverse(char * str) {
   return str;
 }
 
-char * roy_llong_to_string_width(char * dest, long long number, size_t width) {
+char * llongToStrW(char * dest, long long number, size_t width) {
   bool pn = true, llong_min = false;
   if (number == LLONG_MIN) {
     llong_min = true;
@@ -47,12 +47,12 @@ char * roy_llong_to_string_width(char * dest, long long number, size_t width) {
     *pdest++ = ' ';
   }
   *pdest = '\0';
-  return roy_string_reverse(dest);
+  return reverse(dest);
 }
 
 int main(void) {
   char buf[STRING_CAPACITY] = "\0";
   long long number = -13579246810;
   printf("%16lld\n", number);
-  puts(roy_llong_to_string_width(buf, number, 16));
+  puts(llongToStrW(buf, number, 16));
 }
