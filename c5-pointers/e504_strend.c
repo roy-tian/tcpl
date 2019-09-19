@@ -33,7 +33,7 @@ int strend_(const char * str1, const char * str2) {
   return strcmp_(psub, str2) == 0;
 }
 
-int main() {
+int main(void) {
   const char * str = "Thunder always comes after lightenning.";
   printf("%d ", strend(str, "lightenning."));
   printf("%d ", strend(str, "lighten"));

@@ -38,7 +38,7 @@ char * strcat_m(char ** dest, const char * src) {
   return *dest;
 }
 
-int main() {
+int main(void) {
   enum { STRING_CAPACITY = 127 };
   char str1[STRING_CAPACITY] = "Chinese is ";
   char str2[STRING_CAPACITY] = "the most beautiful language in the world.";

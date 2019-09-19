@@ -15,8 +15,8 @@ int main(void) {
                           sizeof(double),
                           ROY_COMPARE(strcmp));
   shell     = roy_shell_new();
-  roy_shell_command_add(shell, "", rpc);
-  roy_shell_command_add(shell, "playback", playback);
-  roy_shell_command_add(shell, "quit", quit);
+  roy_shell_default(shell, rpc);
+  roy_shell_add(shell, playback);
+  roy_shell_add(shell, quit);
   roy_shell_start(shell);  
 }

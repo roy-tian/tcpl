@@ -62,12 +62,12 @@ void quit(RoyShell * shell) {
 int main(void) {
   stack = roy_stack_new(1024, sizeof(double));
   RoyShell * shell = roy_shell_new();
-  roy_shell_command_add(shell, "push", push);
-  roy_shell_command_add(shell, "peek", peek);
-  roy_shell_command_add(shell, "pop", pop);
-  roy_shell_command_add(shell, "swap", swap);
-  roy_shell_command_add(shell, "clear", clear);
-  roy_shell_command_add(shell, "quit", quit);
+  roy_shell_add(shell, push);
+  roy_shell_add(shell, peek);
+  roy_shell_add(shell, pop);
+  roy_shell_add(shell, swap);
+  roy_shell_add(shell, clear);
+  roy_shell_add(shell, quit);
   roy_shell_start(shell);
 }
 
