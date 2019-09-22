@@ -32,7 +32,7 @@ void doUnaryOperator(UnaryOperator op);
 void doBinaryOperator(BinaryOperator op);
 void doError(const RoyString * arg);
 
-void rpc() {
+void rpc(void) {
   UnaryOperator unyOp;
   BinaryOperator binOp;
   RoyString * arg = roy_string_new();
@@ -154,6 +154,5 @@ int main(int argc, char * argv[]) {
   }
   rpc();
   roy_deque_delete(args);
-  
   roy_stack_delete(operands);
 }

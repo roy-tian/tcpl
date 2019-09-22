@@ -89,7 +89,7 @@ BinaryOperator charToBinaryOperator(int ch) {
 
 int main(void) {
   RoyShell * shell = roy_shell_new();
-  roy_shell_command_add(shell, "", rpc);
-  roy_shell_command_add(shell, "quit", quit);
+  roy_shell_default(shell, rpc);
+  roy_shell_add(shell, quit);
   roy_shell_start(shell);
 }

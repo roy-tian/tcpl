@@ -155,7 +155,7 @@ void doError(const RoyString * arg) {
 int main(void) {
   shell = roy_shell_new();
   operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
-  roy_shell_command_add(shell, "", rpc);
-  roy_shell_command_add(shell, "quit", quit);
+  roy_shell_default(shell, rpc);
+  roy_shell_add(shell, quit);
   roy_shell_start(shell);
 }

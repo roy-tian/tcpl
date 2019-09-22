@@ -23,7 +23,7 @@ int strncmp_(const char * str1, const char * str2, size_t count) {
   return *str1 - *str2;
 }
 
-int main() {
+int main(void) {
   enum { STRING_CAPACITY = 256 };
   char str1[STRING_CAPACITY] = "I'm gonna make him ";
   char str2[STRING_CAPACITY] = "an offer he can\'t refuse.";

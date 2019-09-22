@@ -39,7 +39,7 @@ int month_day(int year, unsigned _day_of_year, int * pmonth, int * pday) {
   return 1;
 }
 
-int main() {
+int main(void) {
   for (int i = 1; i != 13; i++) {
     for (int j = 1; j != 32; j++) {
       printf("%3d ", day_of_year(2016, i, j));
