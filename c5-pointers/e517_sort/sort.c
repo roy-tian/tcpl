@@ -14,7 +14,7 @@ int compPage(const char * str1, const char * str2) {
 }
 
 static int sectionValue(const char * str) {
-  int ret = roy_parse_hexadecimal(str) * 10000;
+  int ret = roy_parse_hex(str) * 10000;
   str = strpbrk(str, ".");
   if (str) {
     ret += atoi(++str) * 100;
