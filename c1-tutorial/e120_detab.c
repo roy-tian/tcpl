@@ -6,8 +6,8 @@ enum {
 };
 
 char * fillChar(char * dest, int ch, size_t count);
-char * replaceIndex(char * str, size_t old_sub_pos, size_t old_sub_len, const char * new_sub);
-char * detab(char * str, size_t tab_size);
+char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
+char * detab(char * str, size_t tabSize);
 
 char *
 fillChar(char * dest,
@@ -23,34 +23,34 @@ fillChar(char * dest,
 
 char *
 replaceIndex(char       * str,
-             size_t       old_sub_pos,
-             size_t       old_sub_len,
-             const char * new_sub) {
-  char temp_str[STRING_CAPACITY + 1] = "\0";
-  strncpy(temp_str, str, old_sub_pos);
-  strcat(temp_str, new_sub);
-  strcat(temp_str, str + old_sub_pos + old_sub_len);
-  strcpy(str, temp_str);
+             size_t       oldSubPosition,
+             size_t       oldSubLength,
+             const char * newSub) {
+  char tempStr[STRING_CAPACITY + 1] = "\0";
+  strncpy(tempStr, str, oldSubPosition);
+  strcat(tempStr, newSub);
+  strcat(tempStr, str + oldSubPosition + oldSubLength);
+  strcpy(str, tempStr);
   return str;
 }
 
-char * detab(char * str, size_t tab_size) {
-  char * pstr = str;
-  size_t tab_marker = 0;
-  while (*pstr != '\0') {
-    if (*pstr == '\t') {
-      char rpt_str[STRING_CAPACITY + 1] = "\0";
-      size_t rpt_count = tab_size - tab_marker % tab_size;
-      fillChar(rpt_str, ' ', rpt_count);
-      replaceIndex(str, pstr - str, 1, rpt_str);
-      tab_marker += rpt_count - 1;
-      pstr += rpt_count - 1;
-    } else if (*pstr == '\n') {
-      tab_marker = 0;
-      pstr++;
+char * detab(char * str, size_t tabSize) {
+  char * pStr = str;
+  size_t tabMarker = 0;
+  while (*pStr != '\0') {
+    if (*pStr == '\t') {
+      char repeatStr[STRING_CAPACITY + 1] = "\0";
+      size_t repeatCount = tabSize - tabMarker % tabSize;
+      fillChar(repeatStr, ' ', repeatCount);
+      replaceIndex(str, pStr - str, 1, repeatStr);
+      tabMarker += repeatCount - 1;
+      pStr += repeatCount - 1;
+    } else if (*pStr == '\n') {
+      tabMarker = 0;
+      pStr++;
     } else {
-      tab_marker++;
-      pstr++;
+      tabMarker++;
+      pStr++;
     }
   }
   return str;

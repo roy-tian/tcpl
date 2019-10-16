@@ -7,8 +7,8 @@ enum {
 
 size_t countChar(const char * str, int ch);
 size_t countLine(const char * str);
-size_t lineLength(const char * str, size_t line_number);
-char * lineContent(char * line_content, const char * str, size_t line_number);
+size_t lineLength(const char * str, size_t lineNumber);
+char * lineContent(char * lineContent, const char * str, size_t lineNumber);
 
 size_t
 countChar(const char * str,
@@ -16,7 +16,7 @@ countChar(const char * str,
   size_t count = 0;
   while (*str != '\0') {
     if (*str++ == ch) {
-      count ++;
+      count++;
     }
   }
   return count;
@@ -24,9 +24,9 @@ countChar(const char * str,
 
 size_t
 countLine(const char * str) {
-  size_t str_length = strlen(str);
+  size_t strLength = strlen(str);
   size_t count = countChar(str, '\n');
-  if (str_length != 0 && *(str + str_length - 1) != '\n') {
+  if (strLength != 0 && *(str + strLength - 1) != '\n') {
     // last char is not '\n', but that line still needs to be counted.
     count++;
   }
@@ -35,32 +35,32 @@ countLine(const char * str) {
 
 size_t
 lineLength(const char * str,
-           size_t       line_number) {
-  while ((line_number-- > 1) && strchr(str, '\n')) {
+           size_t       lineNumber) {
+  while ((lineNumber-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
-  const char * str_tail = strchr(str, '\n');
-  if (!str_tail) {
+  const char * strTail = strchr(str, '\n');
+  if (!strTail) {
     return strlen(str);
   } else {
-    return str_tail - str;
+    return strTail - str;
   }
 }
 
 char *
-lineContent(char       * line_content,
+lineContent(char       * lineContent,
             const char * str,
-            size_t       line_number) {
-  while ((line_number-- > 1) && strchr(str, '\n')) {
+            size_t       lineNumber) {
+  while ((lineNumber-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
-  const char * str_tail = strchr(str, '\n');
-  if (!str_tail) {
-    strcpy(line_content, str);
+  const char * strTail = strchr(str, '\n');
+  if (!strTail) {
+    strcpy(lineContent, str);
   } else {
-    strncpy(line_content, str, str_tail - str);
+    strncpy(lineContent, str, strTail - str);
   }
-  return line_content;
+  return lineContent;
 }
 
 int main(void) {
@@ -83,17 +83,17 @@ int main(void) {
     "And on my knee\n"
     "It oft will sit;\n"
     "And I love it.";
-  int max_length = 0, max_line = 1;
+  int maxLength = 0, maxLine = 1;
   for (int i = 1; i <= countLine(str); i++) {
-    int cur_length = lineLength(str, i);
-    if (cur_length > max_length) {
-      max_length = cur_length;
-      max_line = i;
+    int currentLength = lineLength(str, i);
+    if (currentLength > maxLength) {
+      maxLength = currentLength;
+      maxLine = i;
     }
-    printf("WORDS OF LINE %2d: %2d\n", i, cur_length);
+    printf("WORDS OF LINE %2d: %2d\n", i, currentLength);
   }
   char longest[STRING_CAPACITY + 1] = "\0";
-  printf("\nLONGEST LINE [%d]: ", max_line);
-  printf("%s\n", lineContent(longest, str, max_line));
-  printf("   ITS LENGTH IS: %2d\n", max_length);
+  printf("\nLONGEST LINE [%d]: ", maxLine);
+  printf("%s\n", lineContent(longest, str, maxLine));
+  printf("   ITS LENGTH IS: %2d\n", maxLength);
 }

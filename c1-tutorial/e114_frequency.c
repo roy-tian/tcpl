@@ -12,15 +12,15 @@ enum {
   N_MAX = 26
 };
 
-size_t stats_v[N_MAX] = {0};
+size_t statVec[N_MAX] = {0};
 
 void
 charStats(const char * str) {
   while (*str != '\0') {
     if (isupper(*str)) {
-      stats_v[*str - 'A']++;
+      statVec[*str - 'A']++;
     } else if (islower(*str)) {
-      stats_v[*str - 'a']++;
+      statVec[*str - 'a']++;
     }
     str++;
   }
@@ -29,30 +29,30 @@ charStats(const char * str) {
 void
 histogram(void) {
   const char blocks[STRING_CAPACITY + 1] = "¨x¨y¨z¨{¨|¨}¨~¨€";
-  size_t non_zero_length = 0;
-  size_t max_count = 0;
+  size_t nonZeroLength = 0;
+  size_t maxCount = 0;
 
   for (int i = 0; i != N_MAX; i++) {  
-    if (stats_v[i] > 0) {
-      non_zero_length++;
+    if (statVec[i] > 0) {
+      nonZeroLength++;
     }
-    if (stats_v[i] > max_count) {
-      max_count = stats_v[i];
+    if (statVec[i] > maxCount) {
+      maxCount = statVec[i];
     }
   }
 
-  for (size_t i = max_count / 8 + 1; i > 0; i--) {
+  for (size_t i = maxCount / 8 + 1; i > 0; i--) {
     for (size_t j = 0; j != N_MAX; j++) {
-      size_t cur_count = stats_v[j];
-      if (cur_count > 0) {
-        if (cur_count / 8 + 1 > i ||
-            cur_count / 8 + 1 == i && cur_count % 8 == 0) {
+      size_t currentCount = statVec[j];
+      if (currentCount > 0) {
+        if (currentCount / 8 + 1 > i ||
+            currentCount / 8 + 1 == i && currentCount % 8 == 0) {
           putchar(blocks[14]);
           putchar(blocks[15]);
           putchar(' ');
-        } else if (cur_count / 8 + 1 == i && cur_count % 8 != 0) {
-          putchar(blocks[cur_count % 8 * 2 - 2]);
-          putchar(blocks[cur_count % 8 * 2 - 1]);
+        } else if (currentCount / 8 + 1 == i && currentCount % 8 != 0) {
+          putchar(blocks[currentCount % 8 * 2 - 2]);
+          putchar(blocks[currentCount % 8 * 2 - 1]);
           putchar(' ');
         } else {
           putchar(' ');
@@ -63,13 +63,13 @@ histogram(void) {
     }
     puts("");
   }
-  for (int i = 0; i != non_zero_length * 3; i++) {
+  for (int i = 0; i != nonZeroLength * 3; i++) {
     putchar('-');
   }
   puts("");
   for (int i = 0; i != N_MAX; i++) {
-    size_t cur_count = stats_v[i];
-    if (cur_count != 0) {
+    size_t currentCount = statVec[i];
+    if (currentCount != 0) {
       putchar('A' + i);
       putchar(' ');
       putchar(' ');

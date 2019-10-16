@@ -6,39 +6,39 @@ enum {
   STRING_CAPACITY = 4095
 };
 
-char * replaceIndex(char * str, size_t old_sub_pos, size_t old_sub_len, const char * new_sub);
-char * replaceBetween(char * str, const char * pattern_head, const char * pattern_tail, const char * new_sub);
+char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
+char * replaceBetween(char * str, const char * patternHead, const char * patternTail, const char * newSub);
 char * readFromFile(char * dest, const char * path);
 int    appendToFile(const char * src, const char * path);
 char * decomment(char * str);
 
 char *
 replaceIndex(char       * str,
-             size_t       old_sub_pos,
-             size_t       old_sub_len,
-             const char * new_sub) {
-  char temp_str[STRING_CAPACITY + 1] = "\0";
-  strncpy(temp_str, str, old_sub_pos);
-  strcat(temp_str, new_sub);
-  strcat(temp_str, str + old_sub_pos + old_sub_len);
-  strcpy(str, temp_str);
+             size_t       oldSubPosition,
+             size_t       oldSubLength,
+             const char * newSub) {
+  char tempStr[STRING_CAPACITY + 1] = "\0";
+  strncpy(tempStr, str, oldSubPosition);
+  strcat(tempStr, newSub);
+  strcat(tempStr, str + oldSubPosition + oldSubLength);
+  strcpy(str, tempStr);
   return str;
 }
 
 char *
 replaceBetween(char       * str,
-               const char * pattern_head,
-               const char * pattern_tail,
-               const char * new_sub) {
-  char * phead = str;
+               const char * patternHead,
+               const char * patternTail,
+               const char * newSub) {
+  char * pHead = str;
   bool flag = false;
-  while ((phead = strstr(str, pattern_head))) {
+  while ((pHead = strstr(str, patternHead))) {
     if (flag == true) {
-      char * ptail = strstr(phead, pattern_tail);
+      char * pTail = strstr(pHead, patternTail);
       replaceIndex(str,
-                   phead - str,
-                   ptail - phead + strlen(pattern_tail),
-                   new_sub);
+                   pHead - str,
+                   pTail - pHead + strlen(patternTail),
+                   newSub);
       flag = false;  
     } else {
       flag = true;

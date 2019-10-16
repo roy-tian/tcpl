@@ -4,17 +4,17 @@
 
 size_t
 countWord(const char * str) {
-  const char * pstr = str;
+  const char * pStr = str;
   size_t count = 0;
   bool flag = false;
   do {
-    if (!flag && isalnum(*pstr)) {
+    if (!flag && isalnum(*pStr)) {
       flag = true;
-    } else if (flag && !isalnum(*pstr)) {
+    } else if (flag && !isalnum(*pStr)) {
       flag = false;
       count++;
     }
-  } while (*pstr++ != '\0');
+  } while (*pStr++ != '\0');
   return count;
 }
 

@@ -7,21 +7,21 @@ enum {
   WORD_LENGTH_MAX = 45
 };
 
-size_t stats_v[WORD_LENGTH_MAX] = {0};
+size_t statVec[WORD_LENGTH_MAX] = {0};
 
 void
 lengthStats(const char * str) {
   bool flag = false;
-  size_t cur_length = 0;
+  size_t currentLength = 0;
   do {
     if (!flag && isalnum(*str)) {
-      cur_length++;
+      currentLength++;
       flag = true;
     } else if (flag && isalnum(*str)) {
-      cur_length++;
+      currentLength++;
     } else if (flag && !isalnum(*str)) {
-      stats_v[cur_length]++;
-      cur_length = 0;
+      statVec[currentLength]++;
+      currentLength = 0;
       flag = false;
     } // (!flag && !isalnum(*pstr)) does nothing
     str++;
@@ -31,10 +31,10 @@ lengthStats(const char * str) {
 void
 histogramHorizontal(void) {
   for (int i = 1; i != WORD_LENGTH_MAX; i++) {
-    size_t cur_count = stats_v[i];
-    if (cur_count) {
-      printf("%2d CHAR: %2d |", i, cur_count);
-      for (int i = 0; i != cur_count; i++) {
+    size_t currentCount = statVec[i];
+    if (currentCount) {
+      printf("%2d CHAR: %2d |", i, currentCount);
+      for (int i = 0; i != currentCount; i++) {
         printf(" *");
       }
       printf("\n");
@@ -45,36 +45,36 @@ histogramHorizontal(void) {
 
 void
 histogramVertical(void) {
-  size_t non_zero_length = 0;
-  size_t max_count = 0;
+  size_t nonZeroLength = 0;
+  size_t maxCount = 0;
 
   for (int i = 0; i != WORD_LENGTH_MAX; i++) {  
-    if (stats_v[i] > 0) {
-      non_zero_length++;
+    if (statVec[i] > 0) {
+      nonZeroLength++;
     }
-    if (stats_v[i] > max_count) {
-      max_count = stats_v[i];
+    if (statVec[i] > maxCount) {
+      maxCount = statVec[i];
     }
   }
 
-  for (size_t i = max_count; i > 0; i--) {
+  for (size_t i = maxCount; i > 0; i--) {
     for (size_t j = 0; j != WORD_LENGTH_MAX; j++) {
-      size_t cur_count = stats_v[j];
-      if (cur_count >= i) {
+      size_t currentCount = statVec[j];
+      if (currentCount >= i) {
         printf("*  ");
-      } else if (cur_count > 0 && cur_count < i) {
+      } else if (currentCount > 0 && currentCount < i) {
         printf("   ");
       }
     }
     printf("\n");
   }
-  for (int i = 0; i != non_zero_length * 3; i++) {
+  for (int i = 0; i != nonZeroLength * 3; i++) {
     printf("-");
   }
   printf("\n");
   for (size_t i = 0; i != WORD_LENGTH_MAX; i++) {
-    size_t cur_count = stats_v[i];
-    if (cur_count != 0) {
+    size_t currentCount = statVec[i];
+    if (currentCount != 0) {
       printf("%-3zu", i);
     } 
   }

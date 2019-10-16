@@ -9,30 +9,30 @@ enum {
 char *
 unique(char * str,
        int    ch) {
-  // temp_str: a temporary-stored string.
+  // tempStr: a temporary-stored string.
   // Undefined behaviors would occur if str grows out of its capacity.
-  char temp_str[strlen(str)];
-  *temp_str = '\0';
-  // a pointer to the real temp_str.
-  char * ptemp_str = temp_str;
+  char tempStr[strlen(str)];
+  *tempStr = '\0';
+  // a pointer to the real tempStr.
+  char * pTempStr = tempStr;
   // a pointer to the real str.
-  char * pstr = str;
+  char * pStr = str;
   // stand when the first 'ch' is tracked, lay down when repeating 'ch's end.
   bool flag = false;
-  while (*pstr != '\0') {
-    if (!flag && *pstr == ch) {
+  while (*pStr != '\0') {
+    if (!flag && *pStr == ch) {
       flag = true;
-      *ptemp_str++ = *pstr++;
-    } else if (!flag && *pstr != ch) {
-      *ptemp_str++ = *pstr++;
-    } else if (flag && *pstr == ch) {
-      pstr++;
+      *pTempStr++ = *pStr++;
+    } else if (!flag && *pStr != ch) {
+      *pTempStr++ = *pStr++;
+    } else if (flag && *pStr == ch) {
+      pStr++;
     } else { // (flag && *src != ch)
       flag = false;
-      *ptemp_str++ = *pstr++;
+      *pTempStr++ = *pStr++;
     }
   }
-  strcpy(str, temp_str);
+  strcpy(str, tempStr);
   return str;
 }
 

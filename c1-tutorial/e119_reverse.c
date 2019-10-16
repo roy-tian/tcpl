@@ -7,12 +7,12 @@ enum {
 
 char *
 reverse(char * str) {
-  char * pstr_head = str;
-  char * pstr_tail = str + strlen(str) - 1;
-  while (pstr_tail > pstr_head) {
-    char temp = *pstr_head;
-    *pstr_head++ = *pstr_tail;
-    *pstr_tail-- = temp;
+  char * pStrHead = str;
+  char * pStrTail = str + strlen(str) - 1;
+  while (pStrTail > pStrHead) {
+    char temp = *pStrHead;
+    *pStrHead++ = *pStrTail;
+    *pStrTail-- = temp;
   }
   return str;
 }
