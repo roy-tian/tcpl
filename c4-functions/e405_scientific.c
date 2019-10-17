@@ -3,8 +3,6 @@
 
 enum { STACK_CAPACITY = 128 };
 
-RoyStack * operands;
-RoyShell * shell;
 
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
@@ -31,10 +29,10 @@ void doBinaryOperator(BinaryOperator op);
 void doError(const RoyString * arg);
 
 void rpc(RoyShell * shell) {
-  roy_stack_clear(operands);
+  RoyStack * operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  RoyString * arg = roy_string_new();
   UnaryOperator unyOp;
   BinaryOperator binOp;
-  RoyString * arg = roy_string_new();
   for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
     roy_string_assign(arg, roy_shell_argument_at(shell, i));
     if (validNumber(arg)) {
@@ -153,8 +151,7 @@ void doError(const RoyString * arg) {
 }
 
 int main(void) {
-  shell = roy_shell_new();
-  operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  RoyShell * shell = roy_shell_new();
   roy_shell_default(shell, rpc);
   roy_shell_add(shell, quit);
   roy_shell_start(shell);
