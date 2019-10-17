@@ -9,10 +9,10 @@
 
 enum {
   STRING_CAPACITY = 1023,
-  N_MAX = 26
+  MAX_CHAR = 26
 };
 
-size_t statVec[N_MAX] = {0};
+size_t statVec[MAX_CHAR] = {0};
 
 void
 charStats(const char * str) {
@@ -32,7 +32,7 @@ histogram(void) {
   size_t nonZeroLength = 0;
   size_t maxCount = 0;
 
-  for (int i = 0; i != N_MAX; i++) {  
+  for (int i = 0; i != MAX_CHAR; i++) {  
     if (statVec[i] > 0) {
       nonZeroLength++;
     }
@@ -42,7 +42,7 @@ histogram(void) {
   }
 
   for (size_t i = maxCount / 8 + 1; i > 0; i--) {
-    for (size_t j = 0; j != N_MAX; j++) {
+    for (size_t j = 0; j != MAX_CHAR; j++) {
       size_t currentCount = statVec[j];
       if (currentCount > 0) {
         if (currentCount / 8 + 1 > i ||
@@ -67,7 +67,7 @@ histogram(void) {
     putchar('-');
   }
   puts("");
-  for (int i = 0; i != N_MAX; i++) {
+  for (int i = 0; i != MAX_CHAR; i++) {
     size_t currentCount = statVec[i];
     if (currentCount != 0) {
       putchar('A' + i);

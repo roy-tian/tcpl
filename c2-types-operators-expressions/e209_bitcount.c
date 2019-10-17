@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 
 enum {
@@ -9,12 +10,12 @@ enum {
   QWORD = 64
 };
 
-size_t ullongCountBit(unsigned long long number);
-char * ullongToBinaryString(char * dest, unsigned long long number, size_t length);
+size_t uint64CountBit(uint64_t number);
+char * uint64ToBinaryString(char * dest, uint64_t number, size_t length);
 void printClearly(char * binary);
 
 size_t
-ullongCountBit(unsigned long long number) {
+uint64CountBit(uint64_t number) {
   size_t count = 0;
   // 'n & n - 1' deletes the rightmost '1' of n.
   for (; number != 0; number &= number - 1) { 
@@ -24,9 +25,9 @@ ullongCountBit(unsigned long long number) {
 }
 
 char *
-ullongToBinaryString(char               * dest,
-                     unsigned long long   number,
-                     size_t               width) {
+uint64ToBinaryString(char     * dest,
+                     uint64_t   number,
+                     size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
@@ -41,13 +42,13 @@ ullongToBinaryString(char               * dest,
 
 void
 printClearly(char * binary) {
-  char * pbinary = binary;
-  while (*pbinary != '\0') {
-    putchar(*pbinary);
-    if ((pbinary - binary + 1) % 4 == 0) {
+  char * pBinary = binary;
+  while (*pBinary != '\0') {
+    putchar(*pBinary);
+    if ((pBinary - binary + 1) % 4 == 0) {
       putchar(' ');
     }
-    pbinary++;
+    pBinary++;
   }
   putchar('\b');
   putchar('\n');
@@ -55,7 +56,7 @@ printClearly(char * binary) {
 
 int main(void) {
   char buf[STRING_CAPACITY + 1] = "\0";
-  unsigned long long num = 555666888;
-  printClearly(ullongToBinaryString(buf, num, DWORD));
-  printf("Number of 1: %zu", ullongCountBit(num));
+  uint64_t num = 555666888;
+  printClearly(uint64ToBinaryString(buf, num, DWORD));
+  printf("Number of 1: %zu", uint64CountBit(num));
 }

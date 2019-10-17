@@ -4,10 +4,10 @@
 
 enum {
   STRING_CAPACITY = 1023,
-  WORD_LENGTH_MAX = 45
+  MAX_LENGTH = 45
 };
 
-size_t statVec[WORD_LENGTH_MAX] = {0};
+size_t statVec[MAX_LENGTH] = {0};
 
 void
 lengthStats(const char * str) {
@@ -30,7 +30,7 @@ lengthStats(const char * str) {
 
 void
 histogramHorizontal(void) {
-  for (int i = 1; i != WORD_LENGTH_MAX; i++) {
+  for (int i = 1; i != MAX_LENGTH; i++) {
     size_t currentCount = statVec[i];
     if (currentCount) {
       printf("%2d CHAR: %2d |", i, currentCount);
@@ -48,7 +48,7 @@ histogramVertical(void) {
   size_t nonZeroLength = 0;
   size_t maxCount = 0;
 
-  for (int i = 0; i != WORD_LENGTH_MAX; i++) {  
+  for (int i = 0; i != MAX_LENGTH; i++) {  
     if (statVec[i] > 0) {
       nonZeroLength++;
     }
@@ -58,7 +58,7 @@ histogramVertical(void) {
   }
 
   for (size_t i = maxCount; i > 0; i--) {
-    for (size_t j = 0; j != WORD_LENGTH_MAX; j++) {
+    for (size_t j = 0; j != MAX_LENGTH; j++) {
       size_t currentCount = statVec[j];
       if (currentCount >= i) {
         printf("*  ");
@@ -72,7 +72,7 @@ histogramVertical(void) {
     printf("-");
   }
   printf("\n");
-  for (size_t i = 0; i != WORD_LENGTH_MAX; i++) {
+  for (size_t i = 0; i != MAX_LENGTH; i++) {
     size_t currentCount = statVec[i];
     if (currentCount != 0) {
       printf("%-3zu", i);

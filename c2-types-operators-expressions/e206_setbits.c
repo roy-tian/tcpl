@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <limits.h>
 #include <math.h>
@@ -11,14 +12,15 @@ enum {
   QWORD = 64
 };
 
-char * ullongToBinaryString(char * dest, unsigned long long number, size_t width);
+char * uint64ToBinaryString(char * dest, uint64_t number, size_t width);
 // Behavior is undefined if 'position' and 'count' is invalid.
-unsigned long long ullongSetBits(unsigned long long *dest, int position, size_t count, unsigned long long src);
+uint64_t uint64SetBits(uint64_t *dest, int position, size_t count, uint64_t src);
 void printClearly(const char * binary);
 
-char * ullongToBinaryString(char               * dest,
-                            unsigned long long   number,
-                            size_t               width) {
+char *
+uint64ToBinaryString(char     * dest,
+                     uint64_t   number,
+                     size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
@@ -31,22 +33,24 @@ char * ullongToBinaryString(char               * dest,
   return dest;
 }
 
-unsigned long long ullongSetBits(unsigned long long * dest,
-                                 int                  position,
-                                 size_t               count,
-                                 unsigned long long   src) {
+uint64_t
+uint64SetBits(uint64_t * dest,
+              int        position,
+              size_t     count,
+              uint64_t   src) {
   return *dest = (*dest & ~(~(~0ULL << count) << (position + 1 - count))) |
                  ( src  &   ~(~0ULL << count) << (position + 1 - count));
 }
 
-void printClearly(const char * binary) {
-  const char * pbinary = binary;
-  while (*pbinary != '\0') {
-    putchar(*pbinary);
-    if ((pbinary - binary + 1) % 4 == 0) {
+void
+printClearly(const char * binary) {
+  const char * pBinary = binary;
+  while (*pBinary != '\0') {
+    putchar(*pBinary);
+    if ((pBinary - binary + 1) % 4 == 0) {
       putchar(' ');
     }
-    pbinary++;
+    pBinary++;
   }
   putchar('\b');
   putchar('\n');
@@ -54,10 +58,10 @@ void printClearly(const char * binary) {
 
 int main(void) {
   char str[STRING_CAPACITY + 1] = "\0";
-  unsigned long long num1 = UINT_MAX;
-  unsigned long long num2 = 6552144;
-  printClearly(ullongToBinaryString(str, num1, DWORD));
-  printClearly(ullongToBinaryString(str, num2, DWORD));
-  ullongSetBits(&num1, 9, 10, num2);  
-  printClearly(ullongToBinaryString(str, num1, DWORD));
+  uint64_t num1 = UINT_MAX;
+  uint64_t num2 = 6552144;
+  printClearly(uint64ToBinaryString(str, num1, DWORD));
+  printClearly(uint64ToBinaryString(str, num2, DWORD));
+  uint64SetBits(&num1, 9, 10, num2);  
+  printClearly(uint64ToBinaryString(str, num1, DWORD));
 }

@@ -45,16 +45,16 @@ double parseDouble(const char * str) {
   STR_INC("+-", str)
   STR_TO_INT(result, str)
   STR_INC(".", str)
-  const char * pstr = str;
+  const char * pStr = str;
   double expo = 1.0;
   STR_TO_INT(result, str)
-  expo /= pow(10, str - pstr);
+  expo /= pow(10, str - pStr);
   STR_INC("eE", str)
-  int pn_expo = (*str == '-' ? -1 : 1);
+  int pnExpo = (*str == '-' ? -1 : 1);
   STR_INC("+-", str)
   double expo = 0.0;
   STR_TO_INT(expo, str)
-  expo *= pow(10.0, pn_expo * expo);
+  expo *= pow(10.0, expo * pnExpo);
   return pn * result * expo;
 }
 

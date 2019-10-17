@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -15,23 +16,23 @@ char * stringReverse(char * str);
 // Deprecated:
 // if decimal, octonary, or hexdecimal numbers are needed, use sprintf instead.
 // Only use this for other rare condition.
-char * llongToStringBase(char * dest, long long number, int base);
+char * int64ToStringBase(char * dest, int64_t number, int base);
 
 char * stringReverse(char * str) {
-  char * pstr_head = str;
-  char * pstr_tail = str + strlen(str) - 1;
-  while (pstr_tail > pstr_head) {
-    char temp = *pstr_head;
-    *pstr_head++ = *pstr_tail;
-    *pstr_tail-- = temp;
+  char * pHead = str;
+  char * pTail = str + strlen(str) - 1;
+  while (pTail > pHead) {
+    char temp = *pHead;
+    *pHead++ = *pTail;
+    *pTail-- = temp;
   }
   return str;
 }
 
-char * llongToStringBase(char * dest, long long number, int base) {
-  bool pn = true, llong_min = false;
+char * int64ToStringBase(char * dest, int64_t number, int base) {
+  bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
-    llong_min = true;
+    int64Min = true;
     number++;
   }
   if (number < 0) {
@@ -46,7 +47,7 @@ char * llongToStringBase(char * dest, long long number, int base) {
   if (!pn) {
     *pdest++ = '-';
   }
-  if (llong_min) {
+  if (int64Min) {
     (*dest)++;
   }
   *pdest = '\0';
@@ -55,12 +56,12 @@ char * llongToStringBase(char * dest, long long number, int base) {
 
 int main(void) {
   char buf[STRING_CAPACITY + 1] = "\0";
-  long long number = 224466881010;
+  int64_t number = 224466881010;
   printf("%llX\n", number);
-  puts(llongToStringBase(buf, number, HEXDECIMAL));
+  puts(int64ToStringBase(buf, number, HEXDECIMAL));
   printf("%lld\n", number);
-  puts(llongToStringBase(buf, number, DECIMAL));
+  puts(int64ToStringBase(buf, number, DECIMAL));
   printf("%llO\n", number);
-  puts(llongToStringBase(buf, number, OCTONARY));
-  puts(llongToStringBase(buf, number, BINARY));
+  puts(int64ToStringBase(buf, number, OCTONARY));
+  puts(int64ToStringBase(buf, number, BINARY));
 }

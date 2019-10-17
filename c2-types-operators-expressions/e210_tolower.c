@@ -8,9 +8,9 @@ int tolower_(int ch) {
 }
 
 char * stringToLower(char * str) {
-  char * pstr = str;
-  while ((*pstr = tolower_(*pstr)) != '\0') {
-    pstr++;
+  char * pStr = str;
+  while ((*pStr = tolower_(*pStr)) != '\0') {
+    pStr++;
   }
   return str;
 }
