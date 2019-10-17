@@ -7,47 +7,39 @@
 void rpc(RoyShell * shell);
 void quit(RoyShell * shell);
 
-typedef double(*BinaryOperator)(double, double);
-BinaryOperator charToBinaryOperator(int ch);
-
-double plus(double operand1, double operand2);
-double minus(double operand1, double operand2);
-double times(double operand1, double operand2);
-double divide(double operand1, double operand2);
-double modulo(double operand1, double operand2);
+bool validNumber(const RoyString * string);
+bool validOperator(const RoyString * string);
+void doNumber(RoyStack * stack, RoyString * string);
+void doOperate(RoyStack * stack, RoyString * string);
+void doError(RoyStack * stack, RoyString * string, const char * errInfo);
+double operate(double operand1, double operand2, int operator_);
 
 void rpc(RoyShell * shell) {
-  enum { STACK_CAPACITY = 128 };
-  RoyStack * stack = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  enum { CAPACITY = 128 };
+  RoyStack * stack = roy_stack_new(CAPACITY, sizeof(double));
   RoyString * arg = roy_string_new();
-  BinaryOperator op;
+  bool parseSucess = true;
   for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
     roy_string_assign(arg, roy_shell_argument_at(shell, i));
-    if (roy_string_match(arg,
-                         "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?")) {  // arg is a number
-      double value = atof(roy_string_cstr(arg));
-      roy_stack_push(stack, &value);
-    } else
-    if ((op = charToBinaryOperator(roy_string_at(arg, 0))) &&   // arg is a binary operator
-        roy_stack_size(stack) >= 2) {  // enough operand
-      double operand1 = *roy_stack_top(stack, double);
-      roy_stack_pop(stack);
-      double operand2 = *roy_stack_top(stack, double);
-      roy_stack_pop(stack);
-      double result = op(operand2, operand1);
-      roy_stack_push(stack, &result);
-    } else {
-      printf("Unrecognised token: %s\n", roy_string_cstr(arg));
-      roy_string_delete(arg);
-      roy_stack_delete(stack);
+    if (validNumber(arg)) {
+      doNumber(stack, arg);
+    } else if (validOperator(arg) && roy_stack_size(stack) >= 2) { // enough operands
+      doOperate(stack, arg);
+    } else if (validOperator(arg) && roy_stack_size(stack) < 2) {
+      doError(stack, arg, "not enough operands.");
       return;
+    } else {
+      roy_string_insert_str(arg, "unrecognised token - \'", 0);
+      roy_string_append_str(arg, "\'.");
+      doError(stack, arg, roy_string_cstr(arg));
+      return; 
     }
   }
-  if (roy_stack_size(stack) == 1) {
-    printf("%.16g\n", *roy_stack_top(stack, double));
-  } else {
-    printf("Syntax error: stack not empty.\n");
+  if (roy_stack_size(stack) > 1) {
+    doError(stack, arg, "stack not empty.");
+    return; 
   }
+  printf("%.16g\n", *roy_stack_top(stack, double));
   roy_string_delete(arg);
   roy_stack_delete(stack);
 }
@@ -57,34 +49,57 @@ void quit(RoyShell * shell) {
   exit(EXIT_SUCCESS);
 }
 
-double plus(double operand1, double operand2) {
-  return operand1 + operand2;
+bool
+validNumber(const RoyString * string) {
+  return
+  roy_string_match(string, "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?");
 }
 
-double minus(double operand1, double operand2) {
-  return operand1 - operand2;
+bool
+validOperator(const RoyString * string) {
+  return strlen(roy_string_cstr(string)) == 1 && 
+         strchr("+-*/%", roy_string_at(string, 0));
 }
 
-double times(double operand1, double operand2) {
-  return operand1 * operand2;
-}
-double divide(double operand1, double operand2) {
-  return operand1 / operand2;
-}
-
-double modulo(double operand1, double operand2) {
-  return (double)((int)operand1 % (int)operand2);
+void
+doNumber(RoyStack  * stack,
+         RoyString * string) {
+  double value = atof(roy_string_cstr(string));
+  roy_stack_push(stack, &value);
 }
 
-BinaryOperator charToBinaryOperator(int ch) {
-  switch (ch) {
-  case '+': return plus;
-  case '-': return minus;
-  case '*': return times;
-  case '/': return divide;
-  case '%': return modulo;
-  default : return NULL; 
-  }
+void
+doOperate(RoyStack  * stack,
+          RoyString * string) {
+  double operand1 = *roy_stack_top(stack, double);
+  roy_stack_pop(stack);
+  double operand2 = *roy_stack_top(stack, double);
+  roy_stack_pop(stack);
+  double result = operate(operand2, operand1, roy_string_at(string, 0));
+  roy_stack_push(stack, &result);
+}
+
+void
+doError(RoyStack   * stack,
+        RoyString  * string,
+        const char * errInfo) {
+  printf("Syntax error: %s\n", errInfo);
+  roy_string_delete(string);
+  roy_stack_delete(stack);
+}
+
+double
+operate(double operand1,
+        double operand2,
+        int    operator_) {
+  switch (operator_) {
+  case '+': return operand1 + operand2;
+  case '-': return operand1 - operand2;
+  case '*': return operand1 * operand2;
+  case '/': return operand1 / operand2;
+  case '%': return (double)((int)operand1 % (int)operand2);
+  default : return 0.0;
+  } 
 }
 
 int main(void) {
