@@ -3,7 +3,6 @@
 
 enum { STACK_CAPACITY = 128 };
 
-
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
 
@@ -37,11 +36,9 @@ void rpc(RoyShell * shell) {
     roy_string_assign(arg, roy_shell_argument_at(shell, i));
     if (validNumber(arg)) {
       doNumber(arg);
-    } else
-    if ((unyOp = validUnaryOperator(arg))) {
+    } else if ((unyOp = validUnaryOperator(arg))) {
       doUnaryOperator(unyOp);
-    } else
-    if ((binOp = validBinaryOperator(arg))) {
+    } else if ((binOp = validBinaryOperator(arg))) {
       doBinaryOperator(binOp);
     } else {
       doError(arg);
