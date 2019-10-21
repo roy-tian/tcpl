@@ -32,21 +32,21 @@ sequence(char * dest,
 char *
 fillSequence(char       * dest,
              const char * pattern) {
-  int flag = 0;
+  enum Flag { LEFT, MIDDLE, RIGHT };
+  enum Flag flag = 0;
   char * pdest = dest;
   while (*pattern != '\0') {
-    if (flag == 0 && isprint(*pattern)) {
-      flag++;
-    } else if (flag == 1 && *pattern == '-') {
-      flag++;
-    } else if (flag == 2 && isprint(*pattern)) {
+    if (flag == LEFT && isprint(*pattern)) {
+      flag = MIDDLE;
+    } else if (flag == MIDDLE && *pattern == '-') {
+      flag = RIGHT;
+    } else if (flag == RIGHT && isprint(*pattern)) {
       char buf[STRING_CAPACITY + 1] = "\0";
       strcat(dest, sequence(buf, *(pattern - 2), *pattern));
       pdest += strlen(buf);
-      flag = 0;
-    } else if (flag == 1 && isprint(*pattern)) {
+      flag = LEFT;
+    } else if (flag == MIDDLE && isprint(*pattern)) {
       *pdest++ = *(pattern - 1);
-      flag = 1;
     }
     pattern++;
   }
