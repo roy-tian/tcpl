@@ -1,7 +1,7 @@
 #include "roy.h"
 #include <math.h>
 
-enum { STACK_CAPACITY = 128 };
+enum { CAPACITY = 128 };
 
 static RoyShell * shell;
 static RoyMap * variableMap;
@@ -11,21 +11,22 @@ static RoyMap * binaryOperatorMap;
 typedef double (* BinaryOperator)(double, double);
 typedef double (* UnaryOperator)(double);
 
-void prepareMaps(void);
-
 void rpc(RoyShell *);
 void quit(RoyShell *);
 
+UnaryOperator unaryOperator(const RoyString *);
+BinaryOperator binaryOperator(const RoyString *);
+
 bool validNumber(const RoyString *);
-bool validVariable(const RoyString *);
 bool validUnaryOperator(const RoyStack *, const RoyString *);
 bool validBinaryOperator(const RoyStack *, const RoyString *);
-bool validOperatorButTokenNotEnough(const RoyStack *, const RoyString *);
+bool validVariable(const RoyStack *, const RoyString *);
+bool tokenNotEnough(const RoyStack *, const RoyString *);
 
 void doNumber(RoyStack *, const RoyString *);
+void doUnaryOperate(RoyStack *, const RoyString *);
+void doBinaryOperate(RoyStack *, const RoyString *);
 void doVariable(RoyStack *, const RoyString *);
-void doUnaryOperate(RoyStack *, UnaryOperator);
-void doBinaryOperate(RoyStack *, BinaryOperator);
 void doError(RoyStack *, RoyString *, const char *);
 
 double plus(double, double);
@@ -37,7 +38,7 @@ double modulo(double, double);
 void
 prepareMaps(void) {
   RoyPointer pointer;
-  binaryOperatorMap = roy_map_new(sizeof(char) * STACK_CAPACITY,
+  binaryOperatorMap = roy_map_new(sizeof(char) * CAPACITY,
                                  sizeof(RoyPointer),
                                  (RCompare)strcmp);
   roy_map_insert(binaryOperatorMap, "+",   roy_pointer_set(&pointer, plus));
@@ -47,7 +48,7 @@ prepareMaps(void) {
   roy_map_insert(binaryOperatorMap, "%",   roy_pointer_set(&pointer, modulo));
   roy_map_insert(binaryOperatorMap, "pow", roy_pointer_set(&pointer, pow));
 
-  unaryOperatorMap = roy_map_new(sizeof(char) * STACK_CAPACITY,
+  unaryOperatorMap = roy_map_new(sizeof(char) * CAPACITY,
                                  sizeof(RoyPointer),
                                  (RCompare)strcmp);
   roy_map_insert(unaryOperatorMap, "sin",   roy_pointer_set(&pointer, sin));
@@ -65,41 +66,36 @@ prepareMaps(void) {
 
 void
 rpc(RoyShell * shell) {
-  RoyStack * tokenStack = roy_stack_new(STACK_CAPACITY, sizeof(double));
-  RoyString * currentToken = roy_string_new();
+  RoyStack * tokens = roy_stack_new(CAPACITY, sizeof(double));
+  RoyString * token = roy_string_new();
   for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
-    roy_string_assign(currentToken, roy_shell_argument_at(shell, i));
-    if (validNumber(currentToken)) {
-      doNumber(tokenStack, currentToken);
-    } else if (validUnaryOperator(tokenStack, currentToken)) {
-      doUnaryOperate(tokenStack,
-                     roy_pointer_get(roy_map_at(unaryOperatorMap,
-                                                RoyPointer,
-                                                roy_string_cstr(currentToken))));
-    } else if (validBinaryOperator(tokenStack, currentToken)) {
-      doBinaryOperate(tokenStack,
-                      roy_pointer_get(roy_map_at(binaryOperatorMap,
-                                                 RoyPointer,
-                                                 roy_string_cstr(currentToken))));
-    } else if (validOperatorButTokenNotEnough(tokenStack, currentToken)) {
-      doError(tokenStack, currentToken, "tokens not enough.");
+    roy_string_assign(token, roy_shell_argument_at(shell, i));
+    if (validNumber(token)) {
+      doNumber(tokens, token);
+    } else if (validUnaryOperator(tokens, token)) {
+      doUnaryOperate(tokens, token);
+    } else if (validBinaryOperator(tokens, token)) {
+      doBinaryOperate(tokens, token);
+    } else if (tokenNotEnough(tokens, token)) {
+      doError(tokens, token, "tokens not enough.");
       return;
-    } else if (validVariable(currentToken)) {
-      doVariable(tokenStack, currentToken);
-    } else {
-      roy_string_prepend_str(currentToken, "unrecgonised token - \'");
-      roy_string_append_str(currentToken, "\'.");
-      doError(tokenStack, currentToken, roy_string_cstr(currentToken));
+    } else if (validVariable(tokens, token)) {
+      doVariable(tokens, token);
+    }
+    else {
+      roy_string_prepend_str(token, "unrecgonised token - \'");
+      roy_string_append_str(token, "\'.");
+      doError(tokens, token, roy_string_cstr(token));
       return;
     }
   }
-  if (roy_stack_size(tokenStack) > 1) {
-    doError(tokenStack, currentToken, "parsing ends but stack not empty.");
+  if (roy_stack_size(tokens) != 1) {
+    doError(tokens, token, "parsing ends but stack error.");
     return;
   }
-  printf("%.16g\n", *roy_stack_top(tokenStack, double));
-  roy_string_delete(currentToken);
-  roy_stack_delete(tokenStack);
+  printf("%.16g\n", *roy_stack_top(tokens, double));
+  roy_string_delete(token);
+  roy_stack_delete(tokens);
 }
 
 void
@@ -115,86 +111,96 @@ validNumber(const RoyString * token) {
 }
 
 bool
-validVariable(const RoyString * token) {
-  return (roy_map_find(unaryOperatorMap, roy_string_cstr(token)) == NULL) &&
-         (roy_map_find(binaryOperatorMap, roy_string_cstr(token)) == NULL) &&
-         roy_string_match(token, "[A-Za-z_]\\w*");
-}
-
-bool
-validUnaryOperator(const RoyStack  * tokenStack,
+validUnaryOperator(const RoyStack  * tokens,
                    const RoyString * token) {
-  return
-  (roy_map_find(unaryOperatorMap, roy_string_cstr(token)) != NULL) &&
-  !roy_stack_empty(tokenStack);
+  return unaryOperator(token) && !roy_stack_empty(tokens);
 }
 
 bool
-validBinaryOperator(const RoyStack  * tokenStack,
+validBinaryOperator(const RoyStack  * tokens,
                     const RoyString * token) {
-  return
-  (roy_map_find(binaryOperatorMap, roy_string_cstr(token)) != NULL) &&
-  (roy_stack_size(tokenStack) >= 2);
+  return binaryOperator(token) && (roy_stack_size(tokens) >= 2);
 }
 
 bool
-validOperatorButTokenNotEnough(const RoyStack  * tokenStack,
-                               const RoyString * token) {
-  return
-  ((roy_map_find(unaryOperatorMap, roy_string_cstr(token)) != NULL) &&
-  roy_stack_empty(tokenStack)) ||
-  ((roy_map_find(binaryOperatorMap, roy_string_cstr(token)) != NULL) &&
-  (roy_stack_size(tokenStack) < 2));
+validVariable(const RoyStack  * tokens,
+              const RoyString * token) {
+  return roy_string_match(token, "[A-Za-z_]\\w*") &&
+         !unaryOperator(token) &&
+         !binaryOperator(token);
+}
+
+bool
+tokenNotEnough(const RoyStack  * tokens,
+               const RoyString * token) {
+  return ( unaryOperator(token) && roy_stack_empty(tokens)) || 
+         (binaryOperator(token) && (roy_stack_size(tokens) < 2));
+}
+
+UnaryOperator
+unaryOperator(const RoyString * token) {
+  RoyPointer * pointer = roy_map_at(unaryOperatorMap,
+                                    RoyPointer,
+                                    roy_string_cstr(token));
+  return pointer ? roy_pointer_get(pointer) : NULL;
+}
+
+BinaryOperator
+binaryOperator(const RoyString * token) {
+  RoyPointer * pointer = roy_map_at(binaryOperatorMap,
+                                    RoyPointer,
+                                    roy_string_cstr(token));
+  return pointer ? roy_pointer_get(pointer) : NULL;
 }
 
 void
-doNumber(RoyStack        * tokenStack,
+doNumber(RoyStack        * tokens,
          const RoyString * token) {
   double value = atof(roy_string_cstr(token));
-  roy_stack_push(tokenStack, &value);
+  roy_stack_push(tokens, &value);
 }
 
 void
-doVariable(RoyStack        * tokenStack,
+doUnaryOperate(RoyStack        * tokens,
+               const RoyString * token) {
+  double operand = *roy_stack_top(tokens, double);
+  roy_stack_pop(tokens);
+  double result = unaryOperator(token)(operand);
+  roy_stack_push(tokens, &result);
+}
+
+void
+doBinaryOperate(RoyStack        * tokens,
+                const RoyString * token) {
+  double operand1 = *roy_stack_top(tokens, double);
+  roy_stack_pop(tokens);
+  double operand2 = *roy_stack_top(tokens, double);
+  roy_stack_pop(tokens);
+  double result = binaryOperator(token)(operand2, operand1);
+  roy_stack_push(tokens, &result);
+}
+
+void
+doVariable(RoyStack        * tokens,
            const RoyString * token) {
-             roy_string_println(token);
-  // double value;
-  // if (roy_map_find(variableMap, roy_string_cstr(token))) {
-  //   value = *roy_map_at(variableMap, double, roy_string_cstr(token));
-  // } else {
-  //   value = atof(roy_shell_ohistory_at(shell, -1));
-  //   roy_map_insert(variableMap, roy_string_cstr(token), &value);
-  // }
-  // roy_stack_push(tokenStack, &value);
+  double value;
+  if (roy_map_find(variableMap, roy_string_cstr(token))) {
+    value = *roy_map_at(variableMap, double, roy_string_cstr(token));
+  } else {
+    value = atof(roy_shell_ohistory_at(shell, -1));
+    roy_map_insert(variableMap, roy_string_cstr(token), &value);
+  }
+  roy_stack_push(tokens, &value);
+  printf("![%s]\n", roy_shell_ohistory_at(shell, -1));
 }
 
 void
-doUnaryOperate(RoyStack      * tokenStack,
-               UnaryOperator   operator_) {
-  double operand = *roy_stack_top(tokenStack, double);
-  roy_stack_pop(tokenStack);
-  double result = operator_(operand);
-  roy_stack_push(tokenStack, &result);
-}
-
-void
-doBinaryOperate(RoyStack       * tokenStack,
-                BinaryOperator   operator_) {
-  double operand1 = *roy_stack_top(tokenStack, double);
-  roy_stack_pop(tokenStack);
-  double operand2 = *roy_stack_top(tokenStack, double);
-  roy_stack_pop(tokenStack);
-  double result = operator_(operand2, operand1);
-  roy_stack_push(tokenStack, &result);
-}
-
-void
-doError(RoyStack   * tokenStack,
+doError(RoyStack   * tokens,
         RoyString  * token,
         const char * errInfo) {
   printf("Syntax error: %s\n", errInfo);
   roy_string_delete(token);
-  roy_stack_delete(tokenStack);
+  roy_stack_delete(tokens);
 }
 
 double plus(double operand1, double operand2) {
@@ -218,7 +224,7 @@ double modulo(double operand1, double operand2) {
 
 int main(void) {
   prepareMaps();
-  variableMap = roy_map_new(sizeof(char) * STACK_CAPACITY,
+  variableMap = roy_map_new(sizeof(char) * CAPACITY,
                             sizeof(double),
                             (RCompare)strcmp);
   shell = roy_shell_new();
