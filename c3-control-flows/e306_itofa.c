@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -9,50 +10,50 @@ enum {
 
 char * reverse(char * str);
 // Deprecated: use sprintf instead.
-char * llongToStrW(char * dest, long long number, size_t width);
+char * int64ToStrW(char * dest, int64_t number, size_t width);
 
 char * reverse(char * str) {
-  char * pstr_head = str;
-  char * pstr_tail = str + strlen(str) - 1;
-  while (pstr_tail > pstr_head) {
-    char temp = *pstr_head;
-    *pstr_head++ = *pstr_tail;
-    *pstr_tail-- = temp;
+  char * pHead = str;
+  char * pTail = str + strlen(str) - 1;
+  while (pTail > pHead) {
+    char temp = *pHead;
+    *pHead++ = *pTail;
+    *pTail-- = temp;
   }
   return str;
 }
 
-char * llongToStrW(char * dest, long long number, size_t width) {
-  bool pn = true, llong_min = false;
+char * int64ToStrW(char * dest, int64_t number, size_t width) {
+  bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
-    llong_min = true;
+    int64Min = true;
     number++;
   }
   if (number < 0) {
     pn = false;
     number = -number;
   }
-  char * pdest = dest;
+  char * pDest = dest;
   do {
-    *pdest++ = '0' + number % 10;
+    *pDest++ = '0' + number % 10;
   } while ((number /= 10) > 0);
   if (!pn) {
-    *pdest++ = '-';
+    *pDest++ = '-';
   }
-  if (llong_min) {
+  if (int64Min) {
     (*dest)++;
   }
-  size_t dest_width = pdest - dest;
-  while (width-- > dest_width) {
-    *pdest++ = ' ';
+  size_t destWidth = pDest - dest;
+  while (width-- > destWidth) {
+    *pDest++ = ' ';
   }
-  *pdest = '\0';
+  *pDest = '\0';
   return reverse(dest);
 }
 
 int main(void) {
   char buf[STRING_CAPACITY] = "\0";
-  long long number = -13579246810;
+  int64_t number = -13579246810;
   printf("%16lld\n", number);
-  puts(llongToStrW(buf, number, 16));
+  puts(int64ToStrW(buf, number, 16));
 }

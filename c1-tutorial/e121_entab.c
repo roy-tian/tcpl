@@ -5,40 +5,40 @@ enum {
   STRING_CAPACITY = 1023
 };
 
-char * replaceIndex(char * str, size_t old_sub_pos, size_t old_sub_len, const char * new_sub);
-char * entab(char * str, size_t tab_size);
+char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
+char * entab(char * str, size_t tabSize);
 
 char *
 replaceIndex(char       * str,
-             size_t       old_sub_pos,
-             size_t       old_sub_len,
-             const char * new_sub) {
-  char temp_str[STRING_CAPACITY + 1] = "\0";
-  strncpy(temp_str, str, old_sub_pos);
-  strcat(temp_str, new_sub);
-  strcat(temp_str, str + old_sub_pos + old_sub_len);
-  strcpy(str, temp_str);
+             size_t       oldSubPosition,
+             size_t       oldSubLength,
+             const char * newSub) {
+  char tempStr[STRING_CAPACITY + 1] = "\0";
+  strncpy(tempStr, str, oldSubPosition);
+  strcat(tempStr, newSub);
+  strcat(tempStr, str + oldSubPosition + oldSubLength);
+  strcpy(str, tempStr);
   return str;
 }
 
 char *
 entab(char   * str,
-      size_t   tab_size) {
-  char * pstr = str;
+      size_t   tabSize) {
+  char * pStr = str;
   size_t pos = 1;
-  while (*pstr != '\0') {
-    if (*pstr == ' ' && pos % tab_size == 0) {
-      char * pblank = pstr;
-      while (*pblank == ' ') {
-        pblank--;
+  while (*pStr != '\0') {
+    if (*pStr == ' ' && pos % tabSize == 0) {
+      char * pBlank = pStr;
+      while (*pBlank == ' ') {
+        pBlank--;
       }
-      replaceIndex(str, pblank - str + 1, pstr - pblank, "\t");
-      pos += pstr - pblank - 1;
+      replaceIndex(str, pBlank - str + 1, pStr - pBlank, "\t");
+      pos += pStr - pBlank - 1;
     }
-    if (*pstr == '\n') {
+    if (*pStr == '\n') {
       pos = 0;
     }
-    pstr++;
+    pStr++;
     pos++;
   }
   return str;

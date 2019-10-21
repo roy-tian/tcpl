@@ -9,9 +9,9 @@ enum {
 
 char *
 stringToLower(char * str) {
-  char * pstr = str;
-  while ((*pstr = tolower(*pstr)) != '\0') {
-    pstr++;
+  char * pStr = str;
+  while ((*pStr = tolower(*pStr)) != '\0') {
+    pStr++;
   }
   return str;
 }
@@ -22,7 +22,7 @@ countChar(const char * str,
   size_t count = 0;
   while (*str != '\0') {
     if (*str++ == ch) {
-      count ++;
+      count++;
     }
   }
   return count;
@@ -45,28 +45,28 @@ countSub(const char * str,
          const char * sub,
          bool         sensibility) {
   size_t count = 0;
-  const char * pstr;
-  const char * psub;
-  char lower_str[STRING_CAPACITY + 1] = "\0";
-  char lower_sub[STRING_CAPACITY + 1] = "\0";
+  const char * pStr;
+  const char * pSub;
+  char lowerStr[STRING_CAPACITY + 1] = "\0";
+  char lowerSub[STRING_CAPACITY + 1] = "\0";
 
   if (sensibility) {
-    pstr = str;
-    psub = sub;
+    pStr = str;
+    pSub = sub;
   } else {
-    strcpy(lower_str, str);
-    stringToLower(lower_str);
-    pstr = lower_str;
+    strcpy(lowerStr, str);
+    stringToLower(lowerStr);
+    pStr = lowerStr;
 
-    strcpy(lower_sub, sub);
-    stringToLower(lower_sub);
-    psub = lower_sub;
+    strcpy(lowerSub, sub);
+    stringToLower(lowerSub);
+    pSub = lowerSub;
   }
 
-  char * pmatch_begin;
-  while ((pmatch_begin = strstr(pstr, psub))) {
+  char * pMatchBegin;
+  while ((pMatchBegin = strstr(pStr, pSub))) {
     count++;
-    pstr = pmatch_begin + strlen(psub);
+    pStr = pMatchBegin + strlen(pSub);
   } 
   return count;
 }

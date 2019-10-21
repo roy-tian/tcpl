@@ -9,14 +9,14 @@ enum {
 
 char *
 replaceAllChar(char * str,
-               int    old_ch,
-               int    new_ch) {
-  char * pstr = str;
-  while (*pstr != '\0') {
-    if (*pstr == old_ch) {
-      *pstr = new_ch;
+               int    oldCh,
+               int    newCh) {
+  char * pStr = str;
+  while (*pStr != '\0') {
+    if (*pStr == oldCh) {
+      *pStr = newCh;
     }
-    pstr++;
+    pStr++;
   }
   return str;
 }
@@ -24,13 +24,13 @@ replaceAllChar(char * str,
 char *
 replaceAllCharIf(char * str,
                  int (* condition)(int),
-                 int    new_ch) {
-  char * pstr = str;
-  while (*pstr != '\0') {
-    if (condition(*pstr)) {
-      *pstr = new_ch;
+                 int    newCh) {
+  char * pStr = str;
+  while (*pStr != '\0') {
+    if (condition(*pStr)) {
+      *pStr = newCh;
     }
-    pstr++;
+    pStr++;
   }
   return str;
 }

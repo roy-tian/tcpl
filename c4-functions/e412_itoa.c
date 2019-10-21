@@ -14,7 +14,6 @@ void itoa_(int number, char * str, int radix) {
   str[index] = '\0';
 }
 
-
 int main(void) {
   int number = 31415926;
   char str[100] = "\0";

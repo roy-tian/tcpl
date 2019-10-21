@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -12,43 +13,43 @@ char * stringReverse(char * str);
 // The 'abs' strategy calculates |digit| several times,
 // so it is less efficient than this one.
 // Deprecated: sprintf is a better choice for its comprehensive format support.
-char * llongToString(char * dest, long long number);
+char * int64ToString(char * dest, int64_t number);
 
 char *
 stringReverse(char * str) {
-  char * pstr_head = str;
-  char * pstr_tail = str + strlen(str) - 1;
-  while (pstr_tail > pstr_head) {
-    char temp = *pstr_head;
-    *pstr_head++ = *pstr_tail;
-    *pstr_tail-- = temp;
+  char * pHead = str;
+  char * pTail = str + strlen(str) - 1;
+  while (pTail > pHead) {
+    char temp = *pHead;
+    *pHead++ = *pTail;
+    *pTail-- = temp;
   }
   return str;
 }
 
 char *
-llongToString(char      * dest,
-              long long   number) {
-  bool pn = true, llong_min = false;
+int64ToString(char    * dest,
+              int64_t   number) {
+  bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
-    llong_min = true;
+    int64Min = true;
     number++;
   }
   if (number < 0) {
     pn = false;
     number = -number;
   }
-  char * pdest = dest;
+  char * pDest = dest;
   do {
-    *pdest++ = '0' + number % 10;
+    *pDest++ = '0' + number % 10;
   } while ((number /= 10) > 0);
   if (!pn) {
-    *pdest++ = '-';
+    *pDest++ = '-';
   }
-  if (llong_min) {
+  if (int64Min) {
     (*dest)++;
   }
-  *pdest = '\0';
+  *pDest = '\0';
   return stringReverse(dest);
 }
 

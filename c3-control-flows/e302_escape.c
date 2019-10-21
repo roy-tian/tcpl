@@ -14,43 +14,45 @@ char * grab(char * dest, const char * src);
 char *
 escape(char       * dest,
        const char * src) {
-  char * pdest = dest;
+  char * pDest = dest;
   while (*src != '\0') {
     switch (*src) {
-    case '\n': *pdest++ = '\\'; *pdest++ = 'n';  break;
-    case '\t': *pdest++ = '\\'; *pdest++ = 't';  break;
-    case '\'': *pdest++ = '\\'; *pdest++ = '\''; break;
-    case '\"': *pdest++ = '\\'; *pdest++ = '\"'; break;
-    case '\\': *pdest++ = '\\'; *pdest++ = '\\'; break;
-    default:   *pdest++ = *src; break;
+    case '\n': *pDest++ = '\\'; *pDest++ = 'n';  break;
+    case '\t': *pDest++ = '\\'; *pDest++ = 't';  break;
+    case '\'': *pDest++ = '\\'; *pDest++ = '\''; break;
+    case '\"': *pDest++ = '\\'; *pDest++ = '\"'; break;
+    case '\\': *pDest++ = '\\'; *pDest++ = '\\'; break;
+    default:   *pDest++ = *src; break;
     }
     src++;
   }
-  *pdest = '\0';
+  *pDest = '\0';
   return dest;
 }
 
-char * grab(char * dest, const char * src) {
-  char * pdest = dest;
+char *
+grab(char       * dest,
+     const char * src) {
+  char * pDest = dest;
   while (*src != '\0') {
     if (*src == '\\') {
       switch (*(src + 1)) {
-      case 'n':  *pdest++ = '\n'; break;
-      case 't':  *pdest++ = '\t'; break;
-      case '\"': *pdest++ = '\"'; break;
-      case '\'': *pdest++ = '\''; break;
-      case '\\': *pdest++ = '\\'; break;
-      case '\0': *pdest = '\0';   return dest;
-      default:   *pdest++ = '\\';
-                 *pdest++ = *(src + 1);
+      case 'n':  *pDest++ = '\n'; break;
+      case 't':  *pDest++ = '\t'; break;
+      case '\"': *pDest++ = '\"'; break;
+      case '\'': *pDest++ = '\''; break;
+      case '\\': *pDest++ = '\\'; break;
+      case '\0': *pDest = '\0';   return dest;
+      default:   *pDest++ = '\\';
+                 *pDest++ = *(src + 1);
                  break;
       }
       src += 2;
     } else {
-      *pdest++ = *src++;
+      *pDest++ = *src++;
     }
   }
-  *pdest = '\0';
+  *pDest = '\0';
   return dest;
 }
 

@@ -8,9 +8,9 @@ enum {
 
 size_t countChar(const char * str, int ch);
 size_t countLine(const char * str);
-char * lineContent(char * line_content, const char * str, size_t line_number);
-char * foldLine(char * str, size_t line_width);
-char * fold(char * str, size_t line_width);
+char * lineContent(char * lineContent, const char * str, size_t lineNumber);
+char * foldLine(char * str, size_t lineWidth);
+char * fold(char * str, size_t lineWidth);
 
 size_t
 countChar(const char * str,
@@ -26,9 +26,9 @@ countChar(const char * str,
 
 size_t
 countLine(const char * str) {
-  size_t str_length = strlen(str);
+  size_t strLength = strlen(str);
   size_t count = countChar(str, '\n');
-  if (str_length != 0 && *(str + str_length - 1) != '\n') {
+  if (strLength != 0 && *(str + strLength - 1) != '\n') {
     // last char is not '\n', but that line still needs to be counted.
     count++;
   }
@@ -36,35 +36,35 @@ countLine(const char * str) {
 }
 
 char *
-lineContent(char       * line_content,
+lineContent(char       * lineContent,
             const char * str,
-            size_t       line_number) {
-  while ((line_number-- > 1) && strchr(str, '\n')) {
+            size_t       lineNumber) {
+  while ((lineNumber-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
-  const char * str_tail = strchr(str, '\n');
-  if (!str_tail) {
-    strcpy(line_content, str);
+  const char * strTail = strchr(str, '\n');
+  if (!strTail) {
+    strcpy(lineContent, str);
   } else {
-    strncpy(line_content, str, str_tail - str);
+    strncpy(lineContent, str, strTail - str);
   }
-  return line_content;
+  return lineContent;
 }
 
 char *
 foldLine(char   * str,
-         size_t   line_width) {
-  char * pstr = str;
-  while (strlen(pstr) > line_width) {    
-    pstr += line_width - 1;
-    if(isblank(*(pstr + 1))) {
-      while (isblank(*(pstr++ + 1))) {  }
-      *(pstr - 1) = '\n';
+         size_t   lineWidth) {
+  char * pStr = str;
+  while (strlen(pStr) > lineWidth) {    
+    pStr += lineWidth - 1;
+    if(isblank(*(pStr + 1))) {
+      while (isblank(*(pStr++ + 1))) {  }
+      *(pStr - 1) = '\n';
     } else {
-      if (!isblank(*pstr)) {
-        while (!isblank(*(pstr-- - 1))) {  }
+      if (!isblank(*pStr)) {
+        while (!isblank(*(pStr-- - 1))) {  }
       }
-      *pstr++ = '\n';
+      *pStr++ = '\n';
     }
   }
   return str;
@@ -72,17 +72,17 @@ foldLine(char   * str,
 
 char *
 fold(char   * str,
-     size_t   line_width) {
-  size_t str_length = strlen(str);
-  char temp_str[STRING_CAPACITY + 1] = "\0";
+     size_t   lineWidth) {
+  size_t strLength = strlen(str);
+  char tempStr[STRING_CAPACITY + 1] = "\0";
   for (size_t i = 1; i <= countLine(str); i++) {
-    char cur_line[STRING_CAPACITY + 1] = "\0";
-    lineContent(cur_line, str, i);
-    foldLine(cur_line, line_width);
-    strcat(temp_str, "\n");
-    strcat(temp_str, cur_line);
+    char currentLine[STRING_CAPACITY + 1] = "\0";
+    lineContent(currentLine, str, i);
+    foldLine(currentLine, lineWidth);
+    strcat(tempStr, "\n");
+    strcat(tempStr, currentLine);
   } 
-  strcpy(str, temp_str + 1);
+  strcpy(str, tempStr + 1);
   return str;
 }
 

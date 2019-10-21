@@ -4,9 +4,9 @@ enum {
   STRING_CAPACITY = 1023
 };
 
-int getLine(char * dest, int max_length) {
+int getLine(char * dest, int maxLength) {
   int i = 0, ch;
-  for (; i < max_length - 1 && (ch = getchar()) != '\n' && ch != EOF; i++) {
+  for (; i < maxLength - 1 && (ch = getchar()) != '\n' && ch != EOF; i++) {
     dest[i] = ch;
   }
   if (ch == '\n') {
@@ -17,9 +17,9 @@ int getLine(char * dest, int max_length) {
   return i;
 }
 
-int getLineWithoutAnd(char * dest, int max_length) {
+int getLineWithoutAnd(char * dest, int maxLength) {
   int i = 0, ch = getchar();
-  for (; (i < max_length - 1) + (ch != '\n') + (ch != EOF) == 3; i++) {
+  for (; (i < maxLength - 1) + (ch != '\n') + (ch != EOF) == 3; i++) {
     dest[i] = ch;
     ch = getchar();
   }
@@ -30,10 +30,10 @@ int getLineWithoutAnd(char * dest, int max_length) {
   return i;
 }
 
-int getLineWithoutFor(char * dest, int max_length) {
+int getLineWithoutFor(char * dest, int maxLength) {
   int count = 0, ch = getchar();
   while (ch != EOF) {
-    if (count >= max_length - 1) {
+    if (count >= maxLength - 1) {
       break;
     }
     if (ch == '\n') {

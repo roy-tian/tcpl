@@ -2,7 +2,7 @@
 #include <math.h>
 
 enum { 
-  STACK_CAPACITY = 128,
+  CAPACITY = 128,
   STRING_CAPACITY = 128
 };
 
@@ -147,7 +147,7 @@ void doError(const RoyString * arg) {
 }
 
 int main(int argc, char * argv[]) {
-  operands = roy_stack_new(STACK_CAPACITY, sizeof(double));
+  operands = roy_stack_new(CAPACITY, sizeof(double));
   args     = roy_deque_new(STRING_CAPACITY * sizeof(char));
   while (--argc) {
     roy_deque_push_back(args, *++argv);

@@ -9,20 +9,20 @@ enum {
 
 char *
 replaceAll(char       * str,
-           const char * old_sub,
-           const char * new_sub) {
-  char temp_str[STRING_CAPACITY + 1] = "\0";
-  char * ptemp_str = temp_str;
-  char * pstr;
-  pstr = str;
-  char * pmatch_begin;
-  while ((pmatch_begin = strstr(pstr, old_sub))) {
-    strncat(ptemp_str, pstr, pmatch_begin - pstr);
-    strcat(ptemp_str, new_sub);
-    pstr = pmatch_begin + strlen(old_sub);
+           const char * oldSub,
+           const char * newSub) {
+  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char * pTempStr = tempStr;
+  char * pStr;
+  pStr = str;
+  char * pMatchBegin;
+  while ((pMatchBegin = strstr(pStr, oldSub))) {
+    strncat(pTempStr, pStr, pMatchBegin - pStr);
+    strcat(pTempStr, newSub);
+    pStr = pMatchBegin + strlen(oldSub);
   }
-  strcat(temp_str, pstr);
-  strcpy(str, temp_str);
+  strcat(tempStr, pStr);
+  strcpy(str, tempStr);
   return str;
 }
 
