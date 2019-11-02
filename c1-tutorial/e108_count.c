@@ -7,15 +7,6 @@ enum {
   STRING_CAPACITY = 1023
 };
 
-char *
-stringToLower(char * str) {
-  char * pStr = str;
-  while ((*pStr = tolower(*pStr)) != '\0') {
-    pStr++;
-  }
-  return str;
-}
-
 size_t
 countChar(const char * str,
           int          ch) {
@@ -42,35 +33,46 @@ countCharIf(const char * str,
 
 size_t
 countSub(const char * str,
-         const char * sub,
-         bool         sensibility) {
+         const char * sub) {
   size_t count = 0;
-  const char * pStr;
-  const char * pSub;
-  char lowerStr[STRING_CAPACITY + 1] = "\0";
-  char lowerSub[STRING_CAPACITY + 1] = "\0";
-
-  if (sensibility) {
-    pStr = str;
-    pSub = sub;
-  } else {
-    strcpy(lowerStr, str);
-    stringToLower(lowerStr);
-    pStr = lowerStr;
-
-    strcpy(lowerSub, sub);
-    stringToLower(lowerSub);
-    pSub = lowerSub;
-  }
-
   char * pMatchBegin;
-  while ((pMatchBegin = strstr(pStr, pSub))) {
+  while ((pMatchBegin = strstr(str, sub))) {
     count++;
-    pStr = pMatchBegin + strlen(pSub);
+    str = pMatchBegin + strlen(sub);
   } 
   return count;
 }
 
+char *
+stringToLower(char * str) {
+  char * pStr = str;
+  while ((*pStr = tolower(*pStr)) != '\0') {
+    pStr++;
+  }
+  return str;
+}
+
+size_t
+countSubI(const char * str,
+          const char * sub) {
+  char lowerStr[STRING_CAPACITY + 1] = "\0";
+  strcpy(lowerStr, str);
+  stringToLower(lowerStr);
+  str = lowerStr;
+
+  char lowerSub[STRING_CAPACITY + 1] = "\0";
+  strcpy(lowerSub, sub);
+  stringToLower(lowerSub);
+  sub = lowerSub;
+
+  char * pMatchBegin;
+  size_t count = 0;
+  while ((pMatchBegin = strstr(str, sub))) {
+    count++;
+    str = pMatchBegin + strlen(sub);
+  } 
+  return count;
+}
 
 int main(void) {
   char str[STRING_CAPACITY + 1] =
@@ -80,11 +82,11 @@ int main(void) {
     "Or to take Arms against a Sea of troubles...";
 
   printf("ORIGINAL STRING:\n%s\n", str);
-  printf("\nNUMBER OF:\n");
+  printf("\nSTATS:\n");
   printf("  BLANKS: %zu\n", countChar(str, ' '));
   printf("    TABS: %zu\n", countChar(str, '\t'));
   printf("NEWLINES: %zu\n", countChar(str, '\n'));
   printf("  SPACES: %zu\n", countCharIf(str, isspace));
-  printf("   'to's: %zu\n", countSub(str, "to", true));
-  printf("'To/to's: %zu\n", countSub(str, "to", false));
+  printf("   'to's: %zu\n", countSub(str, "to"));
+  printf("'To/to's: %zu\n", countSubI(str, "to"));
 }
