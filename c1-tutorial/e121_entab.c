@@ -35,11 +35,7 @@ entab(char   * str,
       replaceIndex(str, pBlank - str + 1, pStr - pBlank, "\t");
       pos += pStr - pBlank - 1;
     }
-    if (*pStr == '\n') {
-      pos = 0;
-    }
-    pStr++;
-    pos++;
+    pos = (*++pStr == '\n' ? 0 : ++pos);
   }
   return str;
 }

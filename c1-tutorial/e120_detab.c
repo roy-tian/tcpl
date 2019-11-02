@@ -45,11 +45,8 @@ char * detab(char * str, size_t tabSize) {
       replaceIndex(str, pStr - str, 1, repeatStr);
       tabMarker += repeatCount - 1;
       pStr += repeatCount - 1;
-    } else if (*pStr == '\n') {
-      tabMarker = 0;
-      pStr++;
     } else {
-      tabMarker++;
+      tabMarker = (*pStr == '\n' ? 0 : ++tabMarker);
       pStr++;
     }
   }
