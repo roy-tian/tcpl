@@ -13,8 +13,7 @@ replaceAll(char       * str,
            const char * newSub) {
   char tempStr[STRING_CAPACITY + 1] = "\0";
   char * pTempStr = tempStr;
-  char * pStr;
-  pStr = str;
+  char * pStr = str;
   char * pMatchBegin;
   while ((pMatchBegin = strstr(pStr, oldSub))) {
     strncat(pTempStr, pStr, pMatchBegin - pStr);
