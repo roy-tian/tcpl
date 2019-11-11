@@ -93,7 +93,7 @@ rpc(RoyShell * shell) {
     doError(tokens, token, "parsing ends but stack error.");
     return;
   }
-  printf("%.16g\n", *roy_stack_top(tokens, double));
+  roy_shell_log_append(shell, "%.16g", *roy_stack_top(tokens, double));
   roy_string_delete(token);
   roy_stack_delete(tokens);
 }
@@ -191,14 +191,13 @@ doVariable(RoyStack        * tokens,
     roy_map_insert(variableMap, roy_string_cstr(token), &value);
   }
   roy_stack_push(tokens, &value);
-  printf("![%s]\n", roy_shell_ohistory_at(shell, -1));
 }
 
 void
 doError(RoyStack   * tokens,
         RoyString  * token,
         const char * errInfo) {
-  printf("Syntax error: %s\n", errInfo);
+  roy_shell_log_append(shell, "Syntax error: %s", errInfo);
   roy_string_delete(token);
   roy_stack_delete(tokens);
 }
