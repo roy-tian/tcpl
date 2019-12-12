@@ -1,23 +1,9 @@
-/* you will need roylib to compile this file, like this:
- * gcc *.c -L"PATH_TO_ROYLIB" -lroylib
- */
-
-#include "roy.h"
-
-void rpc(RoyShell *);
-void quit(RoyShell *);
-
-bool validNumber(const RoyString *);
-bool validOperator(const RoyString *);
-void doNumber(RoyStack *, const RoyString *);
-void doOperate(RoyStack *, const RoyString *);
-void doError(RoyStack *, RoyString *, const char *);
-double operate(double, double, int);
+#include "rpc.h"
 
 void rpc(RoyShell * shell) {
   enum { CAPACITY = 128 };
   RoyStack * tokens = roy_stack_new(CAPACITY, sizeof(double));
-  RoyString * token = roy_string_new();
+  RoyString * token = roy_string_new("");
   for (size_t i = 1; i != roy_shell_argument_count(shell); i++) {
     roy_string_assign(token, roy_shell_argument_at(shell, i));
     if (validNumber(token)) {
@@ -83,25 +69,4 @@ doError(RoyStack   * tokenStack,
   printf("Syntax error: %s\n", errInfo);
   roy_string_delete(token);
   roy_stack_delete(tokenStack);
-}
-
-double
-operate(double operand1,
-        double operand2,
-        int    operator_) {
-  switch (operator_) {
-  case '+': return operand1 + operand2;
-  case '-': return operand1 - operand2;
-  case '*': return operand1 * operand2;
-  case '/': return operand1 / operand2;
-  case '%': return (double)((int)operand1 % (int)operand2);
-  default : return 0.0;
-  } 
-}
-
-int main(void) {
-  RoyShell * shell = roy_shell_new();
-  roy_shell_default(shell, rpc);
-  roy_shell_add(shell, quit);
-  roy_shell_start(shell);
 }
