@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-int breakIndex(const char * str, const char * set) {
-  int pos = 0;
+size_t breakIndex(const char * str, const char * set) {
+  size_t pos = 0;
   while (*(str + pos) != '\0' && !strchr(set, *(str + pos))) {
     pos++;
   }

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-int64_t parseHexadecimal(const char * str) {
+int64_t parseHex(const char * str) {
   int64_t ret = 0;
   int64_t pn = 1;
   if (strchr(str, '-') == str) {
@@ -35,12 +35,8 @@ int main(void) {
   char * str2 = "fantasy";
   char * str3 = "-123afCdE  ";
   char * str4 = "0x   ";
-  printf("%12s | %16llX | %10lld\n",
-         str1, parseHexadecimal(str1), parseHexadecimal(str1));
-  printf("%12s | %16llX | %10lld\n",
-         str2, parseHexadecimal(str2), parseHexadecimal(str2));
-  printf("%12s | %16llX | %10lld\n",
-         str3, parseHexadecimal(str3), parseHexadecimal(str3));
-  printf("%12s | %16llX | %10lld\n",
-         str4, parseHexadecimal(str4), parseHexadecimal(str4));
+  printf("%12s | %16llX | %10lld\n", str1, parseHex(str1), parseHex(str1));
+  printf("%12s | %16llX | %10lld\n", str2, parseHex(str2), parseHex(str2));
+  printf("%12s | %16llX | %10lld\n", str3, parseHex(str3), parseHex(str3));
+  printf("%12s | %16llX | %10lld\n", str4, parseHex(str4), parseHex(str4));
 }

@@ -12,13 +12,13 @@ enum {
   QWORD = 64
 };
 
-char * uint64ToBinaryString(char * dest, uint64_t number, size_t width);
+char * uint64ToBinStr(char * dest, uint64_t number, size_t width);
 // Behavior is undefined if 'position' and 'count' is invalid.
 uint64_t uint64SetBits(uint64_t *dest, int position, size_t count, uint64_t src);
 void printClearly(const char * binary);
 
 char *
-uint64ToBinaryString(char     * dest,
+uint64ToBinStr(char     * dest,
                      uint64_t   number,
                      size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
@@ -60,8 +60,8 @@ int main(void) {
   char str[STRING_CAPACITY + 1] = "\0";
   uint64_t num1 = UINT_MAX;
   uint64_t num2 = 6552144;
-  printClearly(uint64ToBinaryString(str, num1, DWORD));
-  printClearly(uint64ToBinaryString(str, num2, DWORD));
+  printClearly(uint64ToBinStr(str, num1, DWORD));
+  printClearly(uint64ToBinStr(str, num2, DWORD));
   uint64SetBits(&num1, 9, 10, num2);  
-  printClearly(uint64ToBinaryString(str, num1, DWORD));
+  printClearly(uint64ToBinStr(str, num1, DWORD));
 }

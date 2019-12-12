@@ -11,7 +11,7 @@ enum {
 };
 
 size_t uint64CountBit(uint64_t number);
-char * uint64ToBinaryString(char * dest, uint64_t number, size_t length);
+char * uint64ToBinStr(char * dest, uint64_t number, size_t length);
 void printClearly(char * binary);
 
 size_t
@@ -25,7 +25,7 @@ uint64CountBit(uint64_t number) {
 }
 
 char *
-uint64ToBinaryString(char     * dest,
+uint64ToBinStr(char     * dest,
                      uint64_t   number,
                      size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
@@ -57,6 +57,6 @@ printClearly(char * binary) {
 int main(void) {
   char buf[STRING_CAPACITY + 1] = "\0";
   uint64_t num = 555666888;
-  printClearly(uint64ToBinaryString(buf, num, DWORD));
+  printClearly(uint64ToBinStr(buf, num, DWORD));
   printf("Number of 1: %zu", uint64CountBit(num));
 }
