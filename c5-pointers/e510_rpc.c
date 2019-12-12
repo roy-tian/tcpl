@@ -35,9 +35,9 @@ void doError(const RoyString * arg);
 void rpc(void) {
   UnaryOperator unyOp;
   BinaryOperator binOp;
-  RoyString * arg = roy_string_new();
+  RoyString * arg = roy_string_new("");
   for (size_t i = 0; i != roy_deque_size(args); i++) {
-    roy_string_assign(arg, roy_deque_at(args, char, i));
+    roy_string_assign(arg, roy_deque_at(args, i, char));
     if (validNumber(arg)) {
       doNumber(arg);
     } else
