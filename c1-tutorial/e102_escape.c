@@ -25,18 +25,16 @@ const struct EscapeSequence {
  * how structs organize there data.
  */
 
-void printTable(void) {
-  puts("VALUE FORM DESCRIPTION");
-  puts("------------------------------------");
+int main(void) {
+  puts("------+------+------------------------------");
+  puts("VALUE | FORM | DESCRIPTION");
+  puts("------+------+------------------------------");
   size_t length = sizeof(sequences) / sizeof(struct EscapeSequence) - 1;  
   for (int i = 0; i != length; i++) {
-    printf("%2d  %4s   %s\n", 
+    printf("   %2d | %4s | %s\n", 
            sequences[i].sequenceNumber,
            sequences[i].sequenceString,
            sequences[i].description);
   }
-}
-
-int main(void) {
-  printTable();
+  puts("------+------+------------------------------");
 }
