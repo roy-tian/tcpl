@@ -2,16 +2,12 @@
 #include <stdbool.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 char *
 unique(char * str,
        int    ch) {
   // tempStr: a temporary-stored string.
   // Undefined behaviors would occur if str grows out of its capacity.
-  char tempStr[strlen(str)];
+  char tempStr[strlen(str) + 1];
   *tempStr = '\0';
   // a pointer to the real tempStr.
   char * pTempStr = tempStr;
@@ -37,12 +33,14 @@ unique(char * str,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  char str[] =
     "Winning that ticket, Rose, was the best thing that ever happened to me...\n"
     "it brought me to you.     And I'm thankful for that, Rose. I'm thankful.\n"
     "You must do me this      honor.      You must promise me you'll survive.\n"
     "That you won't give up,  no matter what happens, no matter how hopeless.\n"
     "Promise me now,          Rose,         and never let go of that promise.\n";
-  printf("ORIGINAL STRING:\n%s\n", str);
-  printf("RESULT STRING:\n%s\n", unique(str, ' '));
+  puts("ORIGINAL STRING:");
+  puts(str);
+  puts("RESULT STRING:");
+  puts(unique(str, ' '));
 }

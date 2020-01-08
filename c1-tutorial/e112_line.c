@@ -3,10 +3,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 char *
 replaceAllChar(char * str,
                int    oldCh,
@@ -36,13 +32,15 @@ replaceAllCharIf(char * str,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] = "Red Orange Yellow Green Blue Indigo Violet";
-  printf("ORIGINAL STRING:\n%s\n", str);
-  printf("\n'Roy G. Biv' STANDS FOR:\n%s\n",
-         replaceAllChar(str, ' ', '\n'));
+  char str1[] = "Red Orange Yellow Green Blue Indigo Violet";
+  puts("ORIGINAL STRING:");
+  puts(str1);
+  puts("'Roy G. Biv' STANDS FOR:");
+  puts(replaceAllChar(str1, ' ', '\n'));
 
-  strcpy(str, "Red,Orange.Yellow;Green|Blue:Indigo!Violet?");
-  printf("\nORIGINAL STRING:\n%s\n", str);
-  printf("\n'Roy G. Biv' STANDS FOR:\n%s\n",
-         replaceAllCharIf(str, ispunct, '\n'));
+  char str2[] = "Red,Orange.Yellow;Green|Blue:Indigo!Violet";
+  puts("\nORIGINAL STRING:");
+  puts(str2);
+  puts("'Roy G. Biv' STANDS FOR:");
+  puts(replaceAllCharIf(str2, ispunct, '\n'));
 }

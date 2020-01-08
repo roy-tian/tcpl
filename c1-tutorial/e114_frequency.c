@@ -1,7 +1,7 @@
 /**
  * This file should be saved with encoding 'gbk'
  * and run on cmd of Windows,
- * in order to print histogram correctly.
+ * or the histogram  correctly.
  */
 
 #include <stdio.h>
@@ -28,31 +28,31 @@ charStats(const char * str) {
 
 void
 histogram(void) {
-  const char blocks[STRING_CAPACITY + 1] = "¨x¨y¨z¨{¨|¨}¨~¨€";
+  const char blocks[] = "¨x¨y¨z¨{¨|¨}¨~¨€";
   size_t nonZeroLength = 0;
-  size_t maxCount = 0;
+  size_t maxLength = 0;
 
   for (int i = 0; i != MAX_CHAR; i++) {  
     if (statVec[i] > 0) {
       nonZeroLength++;
     }
-    if (statVec[i] > maxCount) {
-      maxCount = statVec[i];
+    if (statVec[i] > maxLength) {
+      maxLength = statVec[i];
     }
   }
 
-  for (size_t i = maxCount / 8 + 1; i > 0; i--) {
+  for (size_t i = maxLength / 8 + 1; i > 0; i--) {
     for (size_t j = 0; j != MAX_CHAR; j++) {
-      size_t currentCount = statVec[j];
-      if (currentCount > 0) {
-        if (currentCount / 8 + 1 > i ||
-            currentCount / 8 + 1 == i && currentCount % 8 == 0) {
+      size_t currentLength = statVec[j];
+      if (currentLength > 0) {
+        if (currentLength / 8 + 1 > i ||
+            currentLength / 8 + 1 == i && currentLength % 8 == 0) {
           putchar(blocks[14]);
           putchar(blocks[15]);
           putchar(' ');
-        } else if (currentCount / 8 + 1 == i && currentCount % 8 != 0) {
-          putchar(blocks[currentCount % 8 * 2 - 2]);
-          putchar(blocks[currentCount % 8 * 2 - 1]);
+        } else if (currentLength / 8 + 1 == i && currentLength % 8 != 0) {
+          putchar(blocks[currentLength % 8 * 2 - 2]);
+          putchar(blocks[currentLength % 8 * 2 - 1]);
           putchar(' ');
         } else {
           putchar(' ');

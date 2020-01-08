@@ -3,10 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 size_t
 countChar(const char * str,
           int          ch) {
@@ -55,12 +51,12 @@ stringToLower(char * str) {
 size_t
 countSubI(const char * str,
           const char * sub) {
-  char lowerStr[STRING_CAPACITY + 1] = "\0";
+  char lowerStr[strlen(str) + 1];
   strcpy(lowerStr, str);
   stringToLower(lowerStr);
   str = lowerStr;
 
-  char lowerSub[STRING_CAPACITY + 1] = "\0";
+  char lowerSub[strlen(sub) + 1];
   strcpy(lowerSub, sub);
   stringToLower(lowerSub);
   sub = lowerSub;
@@ -75,7 +71,7 @@ countSubI(const char * str,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  const char str[] =
     "\tTo be, or not to be, that is the question:\n"
     "Whether 'tis nobler in the mind to suffer\n"
     "the slings and arrows of outrageous fortune,\n"

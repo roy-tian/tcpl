@@ -1,14 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 size_t countChar(const char * str, int ch);
 size_t countLine(const char * str);
 size_t lineLength(const char * str, size_t lineNumber);
-char * lineContent(char * lineContent, const char * str, size_t lineNumber);
+char * lineContent(char * dest, const char * str, size_t lineNumber);
 
 size_t
 countChar(const char * str,
@@ -48,23 +44,19 @@ lineLength(const char * str,
 }
 
 char *
-lineContent(char       * lineContent,
+lineContent(char       * dest,
             const char * str,
             size_t       lineNumber) {
   while ((lineNumber-- > 1) && strchr(str, '\n')) {
     str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
   }
-  const char * strTail = strchr(str, '\n');
-  if (!strTail) {
-    strcpy(lineContent, str);
-  } else {
-    strncpy(lineContent, str, strTail - str);
-  }
-  return lineContent;
+  const char * strTail = strchr(str, '\n') ;
+  strncpy(dest, str, strTail - str);
+  return dest;
 }
 
 int main(void) {
-  const char str[STRING_CAPACITY + 1] =
+  const char str[] =
     "I have a cat,\n"
     "Its name is Tit;\n"
     "And by this fire\n"
@@ -92,7 +84,7 @@ int main(void) {
     }
     printf("WORDS OF LINE %2d: %2d\n", i, currentLength);
   }
-  char longest[STRING_CAPACITY + 1] = "\0";
+  char longest[maxLength + 1];
   printf("\nLONGEST LINE [%d]: ", maxLine);
   printf("%s\n", lineContent(longest, str, maxLine));
   printf("   ITS LENGTH IS: %2d\n", maxLength);

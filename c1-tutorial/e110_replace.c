@@ -3,40 +3,40 @@
 #include <string.h>
 #include <ctype.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 char *
 replaceAll(char       * str,
            const char * oldSub,
            const char * newSub) {
-  char tempStr[STRING_CAPACITY + 1] = "\0";
-  char * pTempStr = tempStr;
+  char buf[strlen(str) * 2]; // the length of 'buf' is a trade-off.
+  memset(buf, '\0', strlen(buf));
+  char * pBuf = buf;
   char * pStr = str;
-  char * pMatchBegin;
-  while ((pMatchBegin = strstr(pStr, oldSub))) {
-    strncat(pTempStr, pStr, pMatchBegin - pStr);
-    strcat(pTempStr, newSub);
-    pStr = pMatchBegin + strlen(oldSub);
+  char * pMatch;
+  while ((pMatch = strstr(pStr, oldSub))) {
+    strncat(pBuf, pStr, pMatch - pStr);
+    strcat(pBuf, newSub);
+    pStr = pMatch + strlen(oldSub);
   }
-  strcat(tempStr, pStr);
-  strcpy(str, tempStr);
+  strcat(buf, pStr);
+  strcpy(str, buf);
   return str;
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  char str[] =
     "Let freedom ring from the mighty mountains of New York.\n"
     "Let	freedom	ring	from	the	heightening	Alleghenies	of	Pennsylvania.\n"
     "Let freedom ring from the snow-capped Rockies of Colorado.\n"
     "Let freedom ring from the curvaceous slopes of California.\n";
 
-  printf("ORIGINAL STRING:\n%s\n", str);
+  puts("ORIGINAL STRING:");
+  puts(str);
   replaceAll(str, "	", "\\t");
   replaceAll(str, "\n", "\\n\n");
-  printf("RESULT STRING:\n%s\n", str);
+  puts("RESULT STRING:");
+  puts(str);
   replaceAll(str, "\\n\n", "\n");
   replaceAll(str, "\\t", "	");
-  printf("REPLACE REVERSELY:\n%s\n", str);
+  puts("REPLACE REVERSELY:");
+  puts(str);
 }

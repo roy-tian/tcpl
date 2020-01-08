@@ -2,15 +2,15 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-enum {
-  STRING_CAPACITY = 1023,
-  MAX_LENGTH = 45
-};
-
+enum { MAX_LENGTH = 45 };   
 size_t statVec[MAX_LENGTH] = {0};
 
+void stat(const char * str);
+void histogram(void);
+void vectogram(void);
+
 void
-lengthStats(const char * str) {
+stat(const char * str) {
   bool flag = false;
   size_t currentLength = 0;
   do {
@@ -29,64 +29,64 @@ lengthStats(const char * str) {
 }
 
 void
-histogramHorizontal(void) {
+histogram(void) {
   for (int i = 1; i != MAX_LENGTH; i++) {
-    size_t currentCount = statVec[i];
-    if (currentCount) {
-      printf("%2d CHAR: %2d |", i, currentCount);
-      for (int i = 0; i != currentCount; i++) {
+    size_t currentLength = statVec[i];
+    if (currentLength) {
+      printf("%2d CHAR: %2d |", i, currentLength);
+      for (int i = 0; i != currentLength; i++) {
         printf(" *");
       }
-      printf("\n");
+      putchar('\n');
     }
   }
-  printf("\n");
+  putchar('\n');
 }
 
 void
-histogramVertical(void) {
-  size_t nonZeroLength = 0;
-  size_t maxCount = 0;
+vectogram(void) {
+  size_t nonZeroCount = 0;
+  size_t maxLength = 0;
 
   for (int i = 0; i != MAX_LENGTH; i++) {  
     if (statVec[i] > 0) {
-      nonZeroLength++;
+      nonZeroCount++;
     }
-    if (statVec[i] > maxCount) {
-      maxCount = statVec[i];
+    if (statVec[i] > maxLength) {
+      maxLength = statVec[i];
     }
   }
 
-  for (size_t i = maxCount; i > 0; i--) {
+  for (size_t i = maxLength; i > 0; i--) {
     for (size_t j = 0; j != MAX_LENGTH; j++) {
-      size_t currentCount = statVec[j];
-      if (currentCount >= i) {
+      size_t currentLength = statVec[j];
+      if (currentLength >= i) {
         printf("*  ");
-      } else if (currentCount > 0 && currentCount < i) {
+      } else if (currentLength > 0 && currentLength < i) {
         printf("   ");
       }
     }
-    printf("\n");
+    putchar('\n');
   }
-  for (int i = 0; i != nonZeroLength * 3; i++) {
-    printf("-");
+  for (int i = 0; i != nonZeroCount * 3; i++) {
+    putchar('-');
   }
-  printf("\n");
+  putchar('\n');
   for (size_t i = 0; i != MAX_LENGTH; i++) {
-    size_t currentCount = statVec[i];
-    if (currentCount != 0) {
+    size_t currentLength = statVec[i];
+    if (currentLength != 0) {
       printf("%-3zu", i);
     } 
   }
 }
 
 int main(void) {
-  const char str[STRING_CAPACITY + 1] =
+  const char str[] =
     "Telecommunication is the transmission of signs, signals, messages, words, "
     "writings, images and sounds or information of any nature by wire, radio, "
     "optical or other electromagnetic systems.";
     
-  lengthStats(str);
-  histogramHorizontal();
-  histogramVertical();
+  stat(str);
+  histogram();
+  vectogram();
 }
