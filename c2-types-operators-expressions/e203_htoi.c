@@ -30,13 +30,15 @@ int64_t parseHex(const char * str) {
   return ret * pn;
 }
 
+void
+test(const char * str) {
+  int64_t hex = parseHex(str);
+  printf("%12s | %10llX | %10lld\n", str, hex, hex);
+}
+
 int main(void) {
-  char * str1 = "0x1234123f";
-  char * str2 = "fantasy";
-  char * str3 = "-123afCdE  ";
-  char * str4 = "0x   ";
-  printf("%12s | %16llX | %10lld\n", str1, parseHex(str1), parseHex(str1));
-  printf("%12s | %16llX | %10lld\n", str2, parseHex(str2), parseHex(str2));
-  printf("%12s | %16llX | %10lld\n", str3, parseHex(str3), parseHex(str3));
-  printf("%12s | %16llX | %10lld\n", str4, parseHex(str4), parseHex(str4));
+  test("0x1234123f");
+  test("fantasy");
+  test("123afCdE  ");
+  test("0x   ");
 }

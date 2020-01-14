@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 char * squeeze(char * str, const char * set) {
   int i = 0, j = 0;
   while (*(str + i) != '\0') {
@@ -19,7 +15,7 @@ char * squeeze(char * str, const char * set) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] = 
+  char str[] = 
     "THIS IS THE NEW SHIT\n"
     "Everything has been said before,\n"
     "There's nothing left to say anymore;\n"
@@ -38,9 +34,10 @@ int main(void) {
     "Do we want it? \"Yeah!\"\n"
     "This is the new shit\n"
     "Stand up and admit.\n";
-  printf("ORIGNAL LYRIC:\n==============\n");
-  printf("%s", str);
 
-  printf("\nLYRIC WITHOUT PUNCUATION:\n========================\n");
-  printf("%s", squeeze(str, "\"'.,?!;"));
+  puts("ORIGNAL LYRIC:\n==============");
+  puts(str);
+
+  puts("LYRIC WITHOUT PUNCUATION:\n========================");
+  puts(squeeze(str, "\"'.,?!;"));
 }

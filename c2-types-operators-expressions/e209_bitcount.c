@@ -2,17 +2,9 @@
 #include <stdint.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 127,
-  BYTE = 8,
-  WORD = 16,
-  DWORD = 32,
-  QWORD = 64
-};
-
 size_t uint64CountBit(uint64_t number);
 char * uint64ToBinStr(char * dest, uint64_t number, size_t length);
-void printClearly(char * binary);
+void printClearly(const char * binary);
 
 size_t
 uint64CountBit(uint64_t number) {
@@ -26,8 +18,8 @@ uint64CountBit(uint64_t number) {
 
 char *
 uint64ToBinStr(char     * dest,
-                     uint64_t   number,
-                     size_t     width) {
+               uint64_t   number,
+               size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
@@ -41,8 +33,8 @@ uint64ToBinStr(char     * dest,
 }
 
 void
-printClearly(char * binary) {
-  char * pBinary = binary;
+printClearly(const char * binary) {
+  const char * pBinary = binary;
   while (*pBinary != '\0') {
     putchar(*pBinary);
     if ((pBinary - binary + 1) % 4 == 0) {
@@ -55,8 +47,13 @@ printClearly(char * binary) {
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY + 1] = "\0";
-  uint64_t num = 555666888;
+  enum {
+    BUFFER_SIZE = 1024,
+    DWORD       = 32
+  };
+  char buf[BUFFER_SIZE + 1] = "\0";
+  uint64_t num = 555666888ULL;
+
   printClearly(uint64ToBinStr(buf, num, DWORD));
-  printf("Number of 1: %zu", uint64CountBit(num));
+  printf("Number of 1: %zu\n", uint64CountBit(num));
 }

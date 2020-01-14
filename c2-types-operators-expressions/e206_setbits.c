@@ -4,13 +4,6 @@
 #include <limits.h>
 #include <math.h>
 
-enum {
-  STRING_CAPACITY = 127,
-  BYTE = 8,
-  WORD = 16,
-  DWORD = 32,
-  QWORD = 64
-};
 
 char * uint64ToBinStr(char * dest, uint64_t number, size_t width);
 // Behavior is undefined if 'position' and 'count' is invalid.
@@ -19,8 +12,8 @@ void printClearly(const char * binary);
 
 char *
 uint64ToBinStr(char     * dest,
-                     uint64_t   number,
-                     size_t     width) {
+               uint64_t   number,
+               size_t     width) {
   if (number > ~(0ULL << (width - 1))) {
     strcpy(dest, "overflow");
   } else {
@@ -57,9 +50,15 @@ printClearly(const char * binary) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] = "\0";
+  enum {
+    BUFFER_SIZE = 128,
+    DWORD       = 32
+  };
+
+  char str[BUFFER_SIZE] = "\0";
   uint64_t num1 = UINT_MAX;
-  uint64_t num2 = 6552144;
+  uint64_t num2 = 6552144ULL;
+
   printClearly(uint64ToBinStr(str, num1, DWORD));
   printClearly(uint64ToBinStr(str, num2, DWORD));
   uint64SetBits(&num1, 9, 10, num2);  
