@@ -53,10 +53,10 @@ int main(void) {
     "    if retries < 0:\n"
     "        raise\tValueError('invalid user response')\n"
     "    print(reminder)";
-  FILE * fp = fopen("e121.txt", "w+");
-  fputs("ORIGINAL CODE:\n=============\n", fp);
+  FILE * fp = fopen("e121.py", "w+");
+  fputs("#ORIGINAL CODE:\n", fp);
   fputs(str, fp);
-  fputs("\n\nAFTER ENTAB:\n=============\n", fp);
+  fputs("\n\n#AFTER ENTAB:\n", fp);
   fputs(entab(str, 4), fp);
   fclose(fp);
 }

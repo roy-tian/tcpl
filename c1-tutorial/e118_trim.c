@@ -78,7 +78,7 @@ trim(char * str) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  char str[] =
     "#include <iostream>    \n"
     "\n"
     "int main(int argc, char * argv[]) { \t          \n"

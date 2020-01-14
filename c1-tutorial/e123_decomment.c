@@ -49,7 +49,7 @@ replaceBetween(char       * str,
 
 char * decomment(char * str) {
   replaceBetween(str, "/*", "*/", "");
-  replaceBetween(str, "//", "\n", "\n");
+  replaceBetween(str, "//", "\n", "");
   return str;
 }
 

@@ -1,11 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 
-enum {
-  STRING_CAPACITY = 2047,
-  WIDTH = 80
-};
-
 size_t countChar(const char * str, int ch);
 size_t countLine(const char * str);
 size_t lineLength(const char * str, size_t lineNumber);
@@ -64,7 +59,7 @@ char * lineContent(char       * lineContent,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  const char str[] =
     "The C language also exhibits the following characteristics:\n"
     "There is a small, fixed number of keywords, including a full set of control flow primitives: for, if/else, while, switch, and do/while. User-defined names are not distinguished from keywords by any kind of sigil.\n"
     "There are a large number of arithmetical and logical operators, such as +, +=, ++, &, ~, etc.\n"
@@ -76,10 +71,16 @@ int main(void) {
     "Low-level access to computer memory is possible by converting machine addresses to typed pointers.\n"
     "Procedures are a special case of function, with an untyped return type void.";
 
-    for (int i = 1; i < countLine(str); i++) {
-      if (lineLength(str, i) > WIDTH) {
-        char curLine[STRING_CAPACITY + 1] = "\0";
-        printf("[%d] %s\n", i, lineContent(curLine, str, i));
-      }
+  enum {
+    BUFFER_SIZE = 512,
+    WIDTH = 80
+  };
+
+  for (int i = 1; i < countLine(str); i++) {
+    if (lineLength(str, i) > WIDTH) {
+      char curLine[BUFFER_SIZE] = "\0";
+      lineContent(curLine, str, i);
+      printf("[LINE NO %d | LENGTH %zu]\n\t%s\n", i, strlen(curLine), curLine);
     }
+  }
 }

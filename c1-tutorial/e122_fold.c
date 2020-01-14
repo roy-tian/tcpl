@@ -58,11 +58,11 @@ foldLine(char   * str,
   while (strlen(pStr) > lineWidth) {    
     pStr += lineWidth - 1;
     if(isblank(*(pStr + 1))) {
-      while (isblank(*(pStr++ + 1))) {  }
+      while ( isblank(*(pStr++ + 1)) );
       *(pStr - 1) = '\n';
     } else {
       if (!isblank(*pStr)) {
-        while (!isblank(*(pStr-- - 1))) {  }
+        while ( !isblank(*(pStr-- - 1)) );
       }
       *pStr++ = '\n';
     }
@@ -93,9 +93,9 @@ int main() {
   "Beyond his military accomplishments, Genghis Khan also advanced the Mongol \t\tEmpire in other ways. He decreed the adoption of the Uyghur script as the Mongol Empire's writing system. He also practiced meritocracy and encouraged religious tolerance in the Mongol Empire, and unified the nomadic tribes of Northeast Asia. Present-day Mongolians regard him as the founding father of Mongolia.\n\n"
   "Genghis Khan was known for the brutality of his campaigns, and is considered\t   \t by many to have been a genocidal ruler. However, he is also credited with bringing the Silk Road under one cohesive political environment. This brought relatively easy communication and trade between Northeast Asia, Muslim Southwest Asia, and Christian Europe, expanding the cultural horizons of all three areas.";
   FILE * fp = fopen("e122.txt", "w+");
-  fputs("ORIGINAL STRING\n================\n", fp);
+  fputs("ORIGINAL STRING:\n----------------\n", fp);
   fputs(str, fp);
-  fputs("\n\nFOLDED STRING\n=============\n", fp);
+  fputs("\n\nFOLDED STRING:\n-------------\n", fp);
   fputs(fold(str, 80), fp);
   fclose(fp);
 }

@@ -62,9 +62,9 @@ int main(void) {
     "   \tRound and round,\n"
     "Let \tyour\t kite fly high.";
   FILE * fp = fopen("e120.txt", "w+");
-  fputs("ORIGINAL STRING\n=============\n", fp);
+  fputs("ORIGINAL STRING:\n----------------\n", fp);
   fputs(str, fp);
-  fputs("\n\nDETABED STRING\n============\n", fp);
+  fputs("\n\nDETABED STRING:\n---------------\n", fp);
   fputs(detab(str, 8), fp);
   fclose(fp);
 }
