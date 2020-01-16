@@ -4,10 +4,6 @@
 #include <limits.h>
 #include <stdbool.h>
 
-enum {
-  STRING_CAPACITY = 127
-};
-
 char * reverse(char * str);
 // Deprecated: use sprintf instead.
 char * int64ToStrW(char * dest, int64_t number, size_t width);
@@ -52,7 +48,8 @@ char * int64ToStrW(char * dest, int64_t number, size_t width) {
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY] = "\0";
+  enum { BUFFER_SIZE = 128 };
+  char buf[BUFFER_SIZE] = "\0";
   int64_t number = -13579246810;
   printf("%16lld\n", number);
   puts(int64ToStrW(buf, number, 16));

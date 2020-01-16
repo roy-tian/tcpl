@@ -2,15 +2,12 @@
 #include <string.h>
 #include <ctype.h>
 
-enum {
-  STRING_CAPACITY = 127
-};
+enum { BUFFER_SIZE = 128 };
 
 // Makes a sequence from 'front_ch' to 'back'
 char * sequence(char * dest, int frontCh, int backCh);
 char * fillSequence(char * dest, const char * pattern);
-// An algorithm far more effective than mine,
-// invented by Axel-Tobias Schreiner, 
+// An algorithm far more effective than mine, invented by Axel-Tobias Schreiner, 
 // when he was a CS Professor at University of Osnabrück.
 // I think 'a--' is an incorrect input and should return a nil string,
 // but this function will return 'a--' itself, 
@@ -41,7 +38,7 @@ fillSequence(char       * dest,
     } else if (flag == MIDDLE && *pattern == '-') {
       flag = RIGHT;
     } else if (flag == RIGHT && isprint(*pattern)) {
-      char buf[STRING_CAPACITY + 1] = "\0";
+      char buf[BUFFER_SIZE] = "\0";
       strcat(dest, sequence(buf, *(pattern - 2), *pattern));
       pDest += strlen(buf);
       flag = LEFT;
@@ -79,7 +76,7 @@ asFillSequence(char       * dest,
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY + 1] = "\0";
+  char buf[BUFFER_SIZE] = "\0";
   puts(fillSequence(buf, "-a----z0-9-"));
   puts(asFillSequence(buf, "-a----z0-9-"));
 }

@@ -4,10 +4,6 @@
 #include <limits.h>
 #include <stdbool.h>
 
-enum {
-  STRING_CAPACITY = 127
-};
-
 char * stringReverse(char * str);
 
 // The 'abs' strategy calculates |digit| several times,
@@ -54,8 +50,9 @@ int64ToString(char    * dest,
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY + 1] = "\0";
-  long long number = 1133557799;
+  enum { BUFFER_SIZE = 128 };
+  char buf[BUFFER_SIZE] = "\0";
+  int64_t number = 1133557799LL;
   printf("%lld\n", number);
   puts(llongToString(buf, number));
   printf("%lld\n", LLONG_MIN);

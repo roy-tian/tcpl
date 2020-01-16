@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
 // Reveals all characters that 'iscntrl' .
 // this function does the same things of 'replaceAll', yet faster.
 // The behavior is undefined if the capacity of 'dest' is insufficient.
@@ -57,16 +53,17 @@ grab(char       * dest,
 }
 
 int main(void) {
-  const char src[STRING_CAPACITY + 1] = 
+  enum { BUFFER_SIZE = 1023 };
+  const char src[BUFFER_SIZE + 1] = 
     "During the late 1940s and through the 1950s, UFOs were often referred to "
     "popularly as \"flying saucers\" or \'flying discs\'. \n"
     "The term\tUFO\tbecame more widespread during the 1950s, "
     "at first in technical literature, but later in popular use. \n\t\n";
   puts("ORIGINAL STRING\n===============");
   puts(src);
-  char dest[STRING_CAPACITY + 1] = "\0";
+  char dest[BUFFER_SIZE + 1] = "\0";
   puts("ESCAPED STRING\n==============");
   puts(escape(dest, src));
-  puts("RECOVERED STRING\n==============");
+  puts("RECOVERED STRING\n================");
   puts(grab(dest, src));
 }

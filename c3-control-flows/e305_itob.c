@@ -4,8 +4,7 @@
 #include <limits.h>
 #include <stdbool.h>
 
-enum {
-  STRING_CAPACITY = 127,
+enum Number {
   BINARY = 2,
   OCTONARY = 8,
   DECIMAL = 10,
@@ -55,7 +54,8 @@ char * int64ToStringBase(char * dest, int64_t number, int base) {
 }
 
 int main(void) {
-  char buf[STRING_CAPACITY + 1] = "\0";
+  enum { BUFFER_SIZE = 128 };
+  char buf[BUFFER_SIZE] = "\0";
   int64_t number = 224466881010;
   printf("%llX\n", number);
   puts(int64ToStringBase(buf, number, HEXDECIMAL));
