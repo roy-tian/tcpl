@@ -37,7 +37,7 @@ char * stringIgnoreFirstIf(char * str, const char * set) {
 
 // Why #define, not inline function?
 
-// Deprecated: 'atof' is better.
+// Deprecated: 'strtod' is more effective.
 double parseDouble(const char * str) {
   str += strspn(str, " \t");
   double result = 0.0;

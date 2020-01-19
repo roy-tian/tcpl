@@ -3,30 +3,31 @@
 
 // Deprecated: the std version of 'strstr' is magically O(1), 
 // so there is no reason to make any alternatives.
-int stringSubIndex(const char * str, 
-                   const char * sub) {
+int
+findSub(const char * str, 
+        const char * sub) {
   int iStr = 0;
   int iSub;
   int iCurrent;
-  while (*(str + iStr) != '\0') {                  // 遍历字符串 str 中所有的字符
-    iCurrent = iStr;                               // 指向 str 的第 i 位
-    iSub = 0;                                      // 指向 sub 的第 i 位
-    while (*(sub + iSub) != '\0' &&                // 在需要匹配的字符串 sub 内
-           *(str + iCurrent) == *(sub + iSub)) {   // 只要 sub 中当前位与 str 当前位的字符匹配
-      iCurrent++;                                  // 就看下一位
-      iSub++;                                      // 就看下一位
+  while (*(str + iStr) != '\0') {                  // Traverses all chars in 'str'
+    iCurrent = iStr;                               // point to the i-th char of str
+    iSub = 0;
+    while (*(sub + iSub) != '\0' &&                // if the current char in 'sub' matches 'str'in 'sub'
+           *(str + iCurrent) == *(sub + iSub)) {   
+      iCurrent++;                                  // go next
+      iSub++;                                      // go next
     }
-    if (iSub != 0 && *(sub + iSub) == '\0') {      // 如果匹配有效
-      return iStr;                                 // 返回 str 中的位置
+    if (iSub != 0 && *(sub + iSub) == '\0') {      // if matched
+      return iStr;                                 // returns the postion
     }
     iStr++;
   }
-  return -1;                                       // 完成循环但是没有匹配到
+  return -1;                                       // The loop finished but nothing matched
 }
 
 int
-stringSubReverseIndex(const char * str,
-                      const char * sub) {
+findSubR(const char * str,
+         const char * sub) {
   int riStr = strlen(str) - strlen(sub);
   int riSub;
   int riCurrent;
@@ -48,6 +49,6 @@ stringSubReverseIndex(const char * str,
 int main(void) {
   const char * str = "The bookkeeper keeps the books from being broke.";
   const char * sub = "keep";
-  printf(" INDEX: %d\n", stringSubIndex(str, sub));
-  printf("RINDEX: %d\n", stringSubReverseIndex(str, sub));
+  printf(" INDEX: %d\n", findSub(str, sub));
+  printf("RINDEX: %d\n", findSubR(str, sub));
 }
