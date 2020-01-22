@@ -37,7 +37,7 @@ char * stringIgnoreFirstIf(char * str, const char * set) {
 
 // Why #define, not inline function?
 
-// Deprecated: 'strtod' is more effective.
+// Deprecated: 'atof' / 'strtod' are more effective.
 double parseDouble(const char * str) {
   str += strspn(str, " \t");
   double result = 0.0;
@@ -45,21 +45,22 @@ double parseDouble(const char * str) {
   STR_INC("+-", str)
   STR_TO_INT(result, str)
   STR_INC(".", str)
-  const char * pStr = str;
+  const char * pstr = str;
   double expo = 1.0;
   STR_TO_INT(result, str)
-  expo /= pow(10, str - pStr);
+  expo /= pow(10, str - pstr);
   STR_INC("eE", str)
   int pnExpo = (*str == '-' ? -1 : 1);
   STR_INC("+-", str)
-  double expo = 0.0;
-  STR_TO_INT(expo, str)
-  expo *= pow(10.0, expo * pnExpo);
+  double nexpo = 0.0;
+  STR_TO_INT(nexpo, str)
+  expo *= pow(10.0, pnExpo * nexpo);
   return pn * result * expo;
 }
 
 int main(void) {
   const char buf[] = "  1234.5678e-09";
   printf("%.10g\n", atof(buf));
+  printf("%.10g\n", strtod(buf, NULL));
   printf("%.10g\n", parseDouble(buf));
 }
