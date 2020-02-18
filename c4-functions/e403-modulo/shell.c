@@ -1,6 +1,7 @@
 #include "rpc.h"
 
-void rpc(RoyShell * shell) {
+void
+rpc(RoyShell * shell) {
   RoyStack * tokens = roy_stack_new(R_BUF_SIZE, (ROperate)roy_string_delete);
   for (size_t i = 1; i != roy_shell_argc(shell); i++) {
     RoyString * current = roy_shell_argv_at(shell, i);
@@ -30,7 +31,8 @@ void rpc(RoyShell * shell) {
   roy_stack_delete(tokens);
 }
 
-void quit(RoyShell * shell) {
+void
+quit(RoyShell * shell) {
   roy_shell_delete(shell);
   exit(EXIT_SUCCESS);
 }

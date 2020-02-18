@@ -5,15 +5,15 @@
 
 typedef RoyString * (* Binary)(RoyString *, const RoyString *, const RoyString *);
 
-RoyString * add   (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-RoyString * minus (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-RoyString * times (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-RoyString * divide(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-RoyString * modulo(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-void pairDelete(RoyPair * pair);
-int  pairCompare(const RoyPair * lhs, const RoyPair * rhs);
+static RoyString * add   (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
+static RoyString * minus (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
+static RoyString * times (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
+static RoyString * divide(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
+static RoyString * modulo(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
+static void pairDelete(RoyPair * pair);
+static int  pairCompare(const RoyPair * lhs, const RoyPair * rhs);
 
-RoyMap * binaryOperators = NULL;
+static RoyMap * binaryOperators = NULL;
 
 bool
 validNumber(const RoyString * string) {
@@ -50,7 +50,7 @@ binary(      RoyString * dest,
 
 /* PRIVATE FUNCTIONS */
 
-RoyString *
+static RoyString *
 add(      RoyString * dest,
     const RoyString * lhs,
     const RoyString * rhs) {
@@ -59,7 +59,7 @@ add(      RoyString * dest,
   return roy_string_assign_double(dest, vlhs + vrhs);
 }
 
-RoyString *
+static RoyString *
 minus(      RoyString * dest,
       const RoyString * lhs,
       const RoyString * rhs) {
@@ -68,7 +68,7 @@ minus(      RoyString * dest,
   return roy_string_assign_double(dest, vlhs - vrhs);
 }
 
-RoyString *
+static RoyString *
 times(      RoyString * dest,
       const RoyString * lhs,
       const RoyString * rhs) {
@@ -77,7 +77,7 @@ times(      RoyString * dest,
   return roy_string_assign_double(dest, vlhs * vrhs);
 }
 
-RoyString *
+static RoyString *
 divide(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs) {
@@ -88,7 +88,7 @@ divide(      RoyString * dest,
          roy_string_assign_double(dest, vlhs / vrhs));
 }
 
-RoyString *
+static RoyString *
 modulo(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs) {
@@ -99,13 +99,13 @@ modulo(      RoyString * dest,
          roy_string_assign_double(dest, vlhs % vrhs));
 }
 
-void
+static void
 pairDelete(RoyPair * pair) {
   roy_string_delete(pair->key);
   free(pair);
 }
 
-int
+static int
 pairCompare(const RoyPair * lhs,
              const RoyPair * rhs) {
   return roy_string_compare(lhs->key, rhs->key);
