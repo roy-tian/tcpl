@@ -1,5 +1,5 @@
-#ifndef E403_CALC_H
-#define E403_CALC_H
+#ifndef E403_MODULO
+#define E403_MODULO
 
 #include "roy.h"
 
@@ -11,4 +11,4 @@ RoyString * binary(RoyString * dest, const RoyString * lhs, const RoyString * rh
 void rpc (RoyShell * shell);
 void quit(RoyShell * shell);
 
-#endif // E403_CALC_H
+#endif // E403_MODULO

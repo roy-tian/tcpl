@@ -32,7 +32,7 @@ void populateBinaryOperators(void) {
   roy_map_insert(binaryOperators, roy_string_new("-"), minus);
   roy_map_insert(binaryOperators, roy_string_new("*"), times);
   roy_map_insert(binaryOperators, roy_string_new("/"), divide);
-  roy_map_insert(binaryOperators, roy_string_new("%%"), modulo);
+  roy_map_insert(binaryOperators, roy_string_new("%"), modulo);
 }
 
 RoyString *
@@ -107,6 +107,6 @@ pairDelete(RoyPair * pair) {
 
 static int
 pairCompare(const RoyPair * lhs,
-             const RoyPair * rhs) {
+            const RoyPair * rhs) {
   return roy_string_compare(lhs->key, rhs->key);
 }

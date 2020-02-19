@@ -9,11 +9,27 @@ rpc(RoyShell * shell) {
       roy_stack_push(tokens, roy_string_copy(current));
     } else if (validBinaryOperator(current) && roy_stack_size(tokens) >= 2) {
       RoyString * rhs = roy_string_copy(roy_stack_top(tokens, RoyString));
+      if (!validNumber(rhs)) {
+        printf("Parse error at token - \'%s\'.\n", roy_string_cstr(rhs, 0));
+        return; 
+      }
       roy_stack_pop(tokens);
       RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));
+      if (!validNumber(lhs)) {
+        printf("Parse error at token - \'%s\'.\n", roy_string_cstr(lhs, 0));
+        return; 
+      }
       roy_stack_pop(tokens);
       RoyString * result = roy_string_new("");
       binary(result, lhs, rhs, current);
+      if (!validNumber(result)) {
+        printf("Calculate error at %s %s %s = %s.\n",
+               roy_string_cstr(lhs, 0),
+               roy_string_cstr(current, 0),
+               roy_string_cstr(rhs, 0),
+               roy_string_cstr(result, 0));
+        return; 
+      }
       roy_stack_push(tokens, result);
       roy_string_delete(rhs);
       roy_string_delete(lhs);
@@ -23,8 +39,7 @@ rpc(RoyShell * shell) {
     }
   }
   if (roy_stack_size(tokens) > 1) {
-    printf("Parsing ends with %d token(s) remains.\n",
-            roy_stack_size(tokens));
+    printf("Parsing ends with %zu token(s) remains.\n", roy_stack_size(tokens));
   }
   roy_string_println(roy_stack_top(tokens, RoyString));
   roy_shell_log(shell, roy_stack_top(tokens, RoyString));
