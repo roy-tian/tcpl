@@ -1,5 +1,7 @@
 #include "rpc.h"
 
+static bool doBinaryOperator(RoyStack * tokens, RoyString * current);
+
 void
 rpc(RoyShell * shell) {
   RoyStack * tokens = roy_stack_new(R_BUF_SIZE, (ROperate)roy_string_delete);
@@ -8,33 +10,11 @@ rpc(RoyShell * shell) {
     if (validNumber(current)) {
       roy_stack_push(tokens, roy_string_copy(current));
     } else if (validBinaryOperator(current) && roy_stack_size(tokens) >= 2) {
-      RoyString * rhs = roy_string_copy(roy_stack_top(tokens, RoyString));
-      if (!validNumber(rhs)) {
-        printf("Parse error at token - \'%s\'.\n", roy_string_cstr(rhs, 0));
-        return; 
+      if(!doBinaryOperator(tokens, current)) {
+        return;
       }
-      roy_stack_pop(tokens);
-      RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));
-      if (!validNumber(lhs)) {
-        printf("Parse error at token - \'%s\'.\n", roy_string_cstr(lhs, 0));
-        return; 
-      }
-      roy_stack_pop(tokens);
-      RoyString * result = roy_string_new("");
-      binary(result, lhs, rhs, current);
-      if (!validNumber(result)) {
-        printf("Calculate error at %s %s %s = %s.\n",
-               roy_string_cstr(lhs, 0),
-               roy_string_cstr(current, 0),
-               roy_string_cstr(rhs, 0),
-               roy_string_cstr(result, 0));
-        return; 
-      }
-      roy_stack_push(tokens, result);
-      roy_string_delete(rhs);
-      roy_string_delete(lhs);
     } else {
-      printf("Parse error at token - \'%s\'.\n", roy_string_cstr(current, 0));
+      printf("Unrecgonized token: %s\n", roy_string_cstr(current, 0));
       return; 
     }
   }
@@ -50,4 +30,29 @@ void
 quit(RoyShell * shell) {
   roy_shell_delete(shell);
   exit(EXIT_SUCCESS);
+}
+
+/* PRIVATE FUNCTIONS */
+
+static bool
+doBinaryOperator(RoyStack  * tokens,
+                 RoyString * current) {
+  RoyString * rhs = roy_string_copy(roy_stack_top(tokens, RoyString));
+  roy_stack_pop(tokens);
+  RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));
+  roy_stack_pop(tokens);
+  RoyString * result = roy_string_new("");
+  bool success = binary(result, lhs, rhs, current);
+  if (!success) {
+    printf("Calculate error: %s %s %s = %s\n",
+            roy_string_cstr(lhs, 0),
+            roy_string_cstr(current, 0),
+            roy_string_cstr(rhs, 0),
+            roy_string_cstr(result, 0));
+  } else {
+    roy_stack_push(tokens, result);
+  }
+  roy_string_delete(rhs);
+  roy_string_delete(lhs);
+  return success;
 }

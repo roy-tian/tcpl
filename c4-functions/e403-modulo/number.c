@@ -1,15 +1,15 @@
 #include "rpc.h"
+#include <fenv.h>
+#include <math.h>
 
-#define ERR_DIV_0      "#DIV/0"
-#define ERR_OP_UNKNOWN "#NAME!"
+typedef double (* Binary)(double, double);
 
-typedef RoyString * (* Binary)(RoyString *, const RoyString *, const RoyString *);
+static double add   (double lhs, double rhs);
+static double minus (double lhs, double rhs);
+static double times (double lhs, double rhs);
+static double divide(double lhs, double rhs);
+static double modulo(double lhs, double rhs);
 
-static RoyString * add   (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-static RoyString * minus (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-static RoyString * times (RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-static RoyString * divide(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
-static RoyString * modulo(RoyString * dest, const RoyString * lhs, const RoyString * rhs);
 static void pairDelete(RoyPair * pair);
 static int  pairCompare(const RoyPair * lhs, const RoyPair * rhs);
 
@@ -35,78 +35,63 @@ void populateBinaryOperators(void) {
   roy_map_insert(binaryOperators, roy_string_new("%"), modulo);
 }
 
-RoyString *
+bool
 binary(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs,
-             RoyString * op) {
-  Binary func = roy_map_find(binaryOperators, op);
+             RoyString * oper) {
+  Binary func = roy_map_find(binaryOperators, oper);
   if (!func) {
-    return roy_string_assign(dest, ERR_OP_UNKNOWN);
+    /* Since 'rpc' call this function only if 'oper' is a valid binary operator,
+       'func' would always be found in the map, (!func) would never happen. */
+    return false;
   }
-  func(dest, lhs, rhs);
-  return dest;
+  feclearexcept(FE_ALL_EXCEPT);
+  double result = func(roy_string_to_double(lhs), roy_string_to_double(rhs));
+  roy_string_assign_double(dest, result);
+  return fetestexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW | FE_UNDERFLOW) == 0;
 }
 
 /* PRIVATE FUNCTIONS */
 
-static RoyString *
-add(      RoyString * dest,
-    const RoyString * lhs,
-    const RoyString * rhs) {
-  double vlhs = roy_string_to_double(lhs);
-  double vrhs = roy_string_to_double(rhs);
-  return roy_string_assign_double(dest, vlhs + vrhs);
+static double add(double lhs, double rhs) {
+  return lhs + rhs;
 }
 
-static RoyString *
-minus(      RoyString * dest,
-      const RoyString * lhs,
-      const RoyString * rhs) {
-  double vlhs = roy_string_to_double(lhs);
-  double vrhs = roy_string_to_double(rhs);
-  return roy_string_assign_double(dest, vlhs - vrhs);
+static double minus(double lhs, double rhs) {
+  return lhs - rhs;
 }
 
-static RoyString *
-times(      RoyString * dest,
-      const RoyString * lhs,
-      const RoyString * rhs) {
-  double vlhs = roy_string_to_double(lhs);
-  double vrhs = roy_string_to_double(rhs);
-  return roy_string_assign_double(dest, vlhs * vrhs);
+static double times (double lhs, double rhs) {
+  return lhs * rhs;
 }
 
-static RoyString *
-divide(      RoyString * dest,
-       const RoyString * lhs,
-       const RoyString * rhs) {
-  double vlhs = roy_string_to_double(lhs);
-  double vrhs = roy_string_to_double(rhs);
-  return ((vrhs == 0.0) ? 
-         roy_string_assign(dest, ERR_DIV_0) :
-         roy_string_assign_double(dest, vlhs / vrhs));
+static double divide(double lhs, double rhs) {
+  if (rhs == 0.0) {
+    (lhs == 0.0) ? feraiseexcept(FE_INVALID) : feraiseexcept(FE_DIVBYZERO);
+  }
+  return lhs / rhs;
 }
 
-static RoyString *
-modulo(      RoyString * dest,
-       const RoyString * lhs,
-       const RoyString * rhs) {
-  int64_t vlhs = roy_string_to_int(lhs);
-  int64_t vrhs = roy_string_to_int(rhs);
-  return ((vrhs == 0LL) ?
-         roy_string_assign(dest, ERR_DIV_0) :
-         roy_string_assign_double(dest, vlhs % vrhs));
+static double modulo(double lhs, double rhs) {
+  if (rhs == 0.0) {
+    if (lhs == 0.0) {
+      feraiseexcept(FE_INVALID);
+      return NAN;
+    } else {
+      feraiseexcept(FE_DIVBYZERO);
+      return INFINITY;
+    }
+  }
+  return (int)lhs % (int)rhs; 
 }
 
-static void
-pairDelete(RoyPair * pair) {
+static void pairDelete(RoyPair * pair) {
   roy_string_delete(pair->key);
   free(pair);
 }
 
-static int
-pairCompare(const RoyPair * lhs,
+static int pairCompare(const RoyPair * lhs,
             const RoyPair * rhs) {
   return roy_string_compare(lhs->key, rhs->key);
 }
