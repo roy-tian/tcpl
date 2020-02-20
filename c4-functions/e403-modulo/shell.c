@@ -2,14 +2,19 @@
 
 static bool doBinaryOperator(RoyStack * tokens, RoyString * current);
 
-void
-rpc(RoyShell * shell) {
-  RoyStack * tokens = roy_stack_new(R_BUF_SIZE, (ROperate)roy_string_delete);
+static RoyStack * tokens = NULL;
+
+void rpc(RoyShell * shell) {
+  if (!tokens) {
+    tokens = roy_stack_new(R_BUF_SIZE, (ROperate)roy_string_delete);
+  } else {
+    roy_stack_clear(tokens);
+  }
   for (size_t i = 1; i != roy_shell_argc(shell); i++) {
     RoyString * current = roy_shell_argv_at(shell, i);
     if (validNumber(current)) {
       roy_stack_push(tokens, roy_string_copy(current));
-    } else if (validBinaryOperator(current) && roy_stack_size(tokens) >= 2) {
+    } else if (validBinary(current) && roy_stack_size(tokens) >= 2) {
       if(!doBinaryOperator(tokens, current)) {
         return;
       }
@@ -19,16 +24,15 @@ rpc(RoyShell * shell) {
     }
   }
   if (roy_stack_size(tokens) > 1) {
-    printf("Parsing ends with %zu token(s) remains.\n", roy_stack_size(tokens));
+    printf("Parsing ends with %zu tokens remain.\n", roy_stack_size(tokens));
   }
   roy_string_println(roy_stack_top(tokens, RoyString));
   roy_shell_log(shell, roy_stack_top(tokens, RoyString));
-  roy_stack_delete(tokens);
 }
 
-void
-quit(RoyShell * shell) {
+void quit(RoyShell * shell) {
   roy_shell_delete(shell);
+  roy_stack_delete(tokens);
   exit(EXIT_SUCCESS);
 }
 
@@ -49,6 +53,7 @@ doBinaryOperator(RoyStack  * tokens,
             roy_string_cstr(current, 0),
             roy_string_cstr(rhs, 0),
             roy_string_cstr(result, 0));
+    roy_string_delete(result);
   } else {
     roy_stack_push(tokens, result);
   }

@@ -3,9 +3,9 @@
 
 #include "roy.h"
 
-bool validNumber(const RoyString * string);
-bool validBinaryOperator(const RoyString * string);
-void populateBinaryOperators(void);
+void populateOperators(void);
+bool validNumber(const RoyString * token);
+bool validBinary(const RoyString * token);
 bool binary(RoyString * dest, const RoyString * lhs, const RoyString * rhs, RoyString * oper);
 
 void rpc (RoyShell * shell);
