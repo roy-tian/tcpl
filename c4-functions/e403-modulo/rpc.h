@@ -3,10 +3,12 @@
 
 #include "roy.h"
 
+extern RoyMap * operators;
+
 void populateOperators(void);
 bool validNumber(const RoyString * token);
 bool validBinary(const RoyString * token);
-bool binary(RoyString * dest, const RoyString * lhs, const RoyString * rhs, RoyString * oper);
+bool binary(RoyString * dest, const RoyString * lhs, const RoyString * rhs, RoyString * operator_);
 
 void rpc (RoyShell * shell);
 void quit(RoyShell * shell);

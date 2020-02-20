@@ -1,6 +1,6 @@
 #include "rpc.h"
 
-static bool doBinaryOperator(RoyStack * tokens, RoyString * current);
+static bool doBinary(RoyStack * tokens, RoyString * current);
 
 static RoyStack * tokens = NULL;
 
@@ -15,7 +15,7 @@ void rpc(RoyShell * shell) {
     if (validNumber(current)) {
       roy_stack_push(tokens, roy_string_copy(current));
     } else if (validBinary(current) && roy_stack_size(tokens) >= 2) {
-      if(!doBinaryOperator(tokens, current)) {
+      if(!doBinary(tokens, current)) {
         return;
       }
     } else {
@@ -33,14 +33,15 @@ void rpc(RoyShell * shell) {
 void quit(RoyShell * shell) {
   roy_shell_delete(shell);
   roy_stack_delete(tokens);
+  roy_map_delete(operators);
   exit(EXIT_SUCCESS);
 }
 
 /* PRIVATE FUNCTIONS */
 
 static bool
-doBinaryOperator(RoyStack  * tokens,
-                 RoyString * current) {
+doBinary(RoyStack  * tokens,
+         RoyString * current) {
   RoyString * rhs = roy_string_copy(roy_stack_top(tokens, RoyString));
   roy_stack_pop(tokens);
   RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));

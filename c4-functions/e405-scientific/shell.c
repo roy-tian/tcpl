@@ -1,7 +1,7 @@
 #include "rpc.h"
 
-static bool doBinaryOperator(RoyStack * tokens, RoyString * current);
-static bool doUnaryOperator(RoyStack * tokens, RoyString * current);
+static bool doBinary(RoyStack * tokens, RoyString * current);
+static bool doUnary(RoyStack * tokens, RoyString * current);
 
 static RoyStack * tokens = NULL;
 
@@ -17,11 +17,11 @@ rpc(RoyShell * shell) {
     if (validNumber(current)) {
       roy_stack_push(tokens, roy_string_copy(current));
     } else if (validBinary(current) && roy_stack_size(tokens) >= 2) {
-      if(!doBinaryOperator(tokens, current)) {
+      if(!doBinary(tokens, current)) {
         return;
       }
     } else if (validUnary(current) && !roy_stack_empty(tokens)) {
-      if(!doUnaryOperator(tokens, current)) {
+      if(!doUnary(tokens, current)) {
         return;
       }
     } else {
@@ -40,14 +40,15 @@ void
 quit(RoyShell * shell) {
   roy_shell_delete(shell);
   roy_stack_delete(tokens);
+  roy_map_delete(operators);
   exit(EXIT_SUCCESS);
 }
 
 /* PRIVATE FUNCTIONS */
 
 static bool
-doBinaryOperator(RoyStack  * tokens,
-                 RoyString * current) {
+doBinary(RoyStack  * tokens,
+         RoyString * current) {
   RoyString * rhs = roy_string_copy(roy_stack_top(tokens, RoyString));
   roy_stack_pop(tokens);
   RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));
@@ -70,8 +71,8 @@ doBinaryOperator(RoyStack  * tokens,
 }
 
 static bool
-doUnaryOperator(RoyStack  * tokens,
-                RoyString * current) {
+doUnary(RoyStack  * tokens,
+        RoyString * current) {
   RoyString * operand = roy_string_copy(roy_stack_top(tokens, RoyString));
   roy_stack_pop(tokens);
   RoyString * result = roy_string_new("");

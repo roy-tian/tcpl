@@ -13,7 +13,7 @@ static double modulo(double lhs, double rhs);
 static void pairDelete(RoyPair * pair);
 static int  pairCompare(const RoyPair * lhs, const RoyPair * rhs);
 
-static RoyMap * operators = NULL;
+RoyMap * operators = NULL;
 
 void populateOperators(void) {
   operators = roy_map_new((RCompare)pairCompare, (ROperate)pairDelete);
@@ -37,8 +37,8 @@ bool
 binary(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs,
-             RoyString * oper) {
-  Binary func = roy_map_find(operators, oper);
+             RoyString * operator_) {
+  Binary func = roy_map_find(operators, operator_);
   if (!func) {
     /* Since 'rpc' call this function only if 'oper' is a valid binary operator,
        'func' would always be found in the map, (!func) would never happen. */
@@ -60,7 +60,7 @@ static double minus(double lhs, double rhs) {
   return lhs - rhs;
 }
 
-static double times (double lhs, double rhs) {
+static double times(double lhs, double rhs) {
   return lhs * rhs;
 }
 
