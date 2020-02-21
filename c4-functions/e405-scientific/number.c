@@ -33,6 +33,7 @@ void populateOperators(void) {
   roy_map_insert(operators, roy_string_new("acos"),  acos);
   roy_map_insert(operators, roy_string_new("atan"),  atan);
   roy_map_insert(operators, roy_string_new("exp"),   exp);
+  roy_map_insert(operators, roy_string_new("exp2"),  exp2);
   roy_map_insert(operators, roy_string_new("log"),   log);
   roy_map_insert(operators, roy_string_new("log2"),  log2);
   roy_map_insert(operators, roy_string_new("log10"), log10);
@@ -48,7 +49,7 @@ bool validBinary(const RoyString * token) {
 }
 
 bool validUnary(const RoyString * token) {
-  return roy_string_match(token, "a?sin|a?cos|a?tan|(sq|cb)rt|exp|log(2|10)?");
+  return roy_string_match(token, "a?sin|a?cos|a?tan|(sq|cb)rt|exp2?|log(2|10)?");
 }
 
 bool

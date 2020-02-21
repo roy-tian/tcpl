@@ -1,6 +1,6 @@
 #include "roy.h"
 
-RoyStack * stack;
+static RoyStack * stack;
 
 void push(RoyShell * shell) {
   for (size_t i = 1; i != roy_shell_argc(shell); i++) {
