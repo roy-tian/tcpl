@@ -54,16 +54,17 @@ doBinary(RoyStack  * tokens,
   RoyString * lhs = roy_string_copy(roy_stack_top(tokens, RoyString));
   roy_stack_pop(tokens);
   RoyString * result = roy_string_new("");
-  bool success = binary(result, lhs, rhs, current);
-  if (!success) {
-    printf("Calculate error: %s %s %s = %s\n",
-            roy_string_cstr(lhs, 0),
-            roy_string_cstr(current, 0),
-            roy_string_cstr(rhs, 0),
-            roy_string_cstr(result, 0));
-    roy_string_delete(result);
-  } else {
+  binary(result, lhs, rhs, current);
+  bool success = validNumber(result);
+  if (success) {
     roy_stack_push(tokens, result);
+  } else {
+    printf("Calculate error: %s %s %s = %s\n",
+        roy_string_cstr(lhs, 0),
+        roy_string_cstr(current, 0),
+        roy_string_cstr(rhs, 0),
+        roy_string_cstr(result, 0));
+    roy_string_delete(result);
   }
   roy_string_delete(rhs);
   roy_string_delete(lhs);
@@ -76,15 +77,16 @@ doUnary(RoyStack  * tokens,
   RoyString * operand = roy_string_copy(roy_stack_top(tokens, RoyString));
   roy_stack_pop(tokens);
   RoyString * result = roy_string_new("");
-  bool success = unary(result, operand, current);
-  if (!success) {
+  unary(result, operand, current);
+  bool success = validNumber(result);
+  if (success) {
+    roy_stack_push(tokens, result);
+  } else {
     printf("Calculate error: %s(%s) = %s\n",
             roy_string_cstr(current, 0),
             roy_string_cstr(operand, 0),
             roy_string_cstr(result, 0));
     roy_string_delete(result);
-  } else {
-    roy_stack_push(tokens, result);
   }
   roy_string_delete(operand);
   return success;

@@ -1,6 +1,5 @@
 #include "rpc.h"
 #include <math.h>
-#include <errno.h>
 
 typedef double (* Binary)(double, double);
 typedef double (* Unary)(double);
@@ -52,7 +51,7 @@ bool validUnary(const RoyString * token) {
   return roy_string_match(token, "a?sin|a?cos|a?tan|(sq|cb)rt|exp2?|log(2|10)?");
 }
 
-bool
+void
 binary(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs,
@@ -61,27 +60,23 @@ binary(      RoyString * dest,
   if (!func) {
     /* Since 'rpc' call this function only if 'oper' is a valid binary operator,
        'func' would always be found in the map, (!func) would never happen. */
-    return false;
+    roy_string_assign_double(dest, NAN);
   }
-  errno = 0;
   double result = func(roy_string_to_double(lhs), roy_string_to_double(rhs));
   roy_string_assign_double(dest, result);
-  return !errno;
 }
 
-bool
+void
 unary(      RoyString * dest,
       const RoyString * operand,
             RoyString * operator_) {
   Unary func = roy_map_find(operators, operator_);
   if (!func) {
     /* ditto */
-    return false;
+    roy_string_assign_double(dest, NAN);
   }
-  errno = 0;
   double result = func(roy_string_to_double(operand));
   roy_string_assign_double(dest, result);
-  return !errno;
 }
 
 /* PRIVATE FUNCTIONS */
@@ -99,9 +94,6 @@ static double times(double lhs, double rhs) {
 }
 
 static double divide(double lhs, double rhs) {
-  if (rhs == 0.0) {
-    errno = (lhs == 0.0 ? EDOM : ERANGE);
-  }
   return lhs / rhs;
 }
 
@@ -110,7 +102,6 @@ static void pairDelete(RoyPair * pair) {
   free(pair);
 }
 
-static int pairCompare(const RoyPair * lhs,
-            const RoyPair * rhs) {
+static int pairCompare(const RoyPair * lhs, const RoyPair * rhs) {
   return roy_string_compare(lhs->key, rhs->key);
 }

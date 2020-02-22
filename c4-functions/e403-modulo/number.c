@@ -1,6 +1,5 @@
 #include "rpc.h"
 #include <math.h>
-#include <errno.h>
 
 typedef double (* Binary)(double, double);
 
@@ -21,7 +20,7 @@ void populateOperators(void) {
   roy_map_insert(operators, roy_string_new("-"), minus);
   roy_map_insert(operators, roy_string_new("*"), times);
   roy_map_insert(operators, roy_string_new("/"), divide);
-  roy_map_insert(operators, roy_string_new("%"), modulo);
+  roy_map_insert(operators, roy_string_new("%"), fmod);
 }
 
 bool validNumber(const RoyString * token) {
@@ -33,7 +32,7 @@ bool validBinary(const RoyString * token) {
   return roy_string_match(token, "[\\+\\-\\*/%%]");
 }
 
-bool
+void
 binary(      RoyString * dest,
        const RoyString * lhs,
        const RoyString * rhs,
@@ -42,12 +41,10 @@ binary(      RoyString * dest,
   if (!func) {
     /* Since 'rpc' call this function only if 'oper' is a valid binary operator,
        'func' would always be found in the map, (!func) would never happen. */
-    return false;
+    roy_string_assign_double(dest, NAN);
   }
-  errno = 0;
   double result = func(roy_string_to_double(lhs), roy_string_to_double(rhs));
   roy_string_assign_double(dest, result);
-  return !errno;
 }
 
 /* PRIVATE FUNCTIONS */
@@ -65,23 +62,7 @@ static double times(double lhs, double rhs) {
 }
 
 static double divide(double lhs, double rhs) {
-  if (rhs == 0.0) {
-    errno = (lhs == 0.0 ? EDOM : ERANGE);
-  }
   return lhs / rhs;
-}
-
-static double modulo(double lhs, double rhs) {
-  if (rhs == 0.0) {
-    if (lhs == 0.0) {
-      errno = EDOM;
-      return NAN;
-    } else {
-      errno = ERANGE;
-      return INFINITY;
-    }
-  }
-  return (int)lhs % (int)rhs; 
 }
 
 static void pairDelete(RoyPair * pair) {
