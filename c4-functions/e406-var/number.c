@@ -1,13 +1,24 @@
 #include "rpc.h"
 #include <math.h>
 
+typedef double (* Binary)(double, double);
+typedef double (* Unary)(double);
+
 bool validNumber(const RoyString * token) {
   return 
   roy_string_match(token, "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?");
 }
 
 bool validBinary(const RoyString * token) {
-  return roy_string_match(token, "[\\+\\-\\*/%%]");
+  return roy_string_match(token, "[\\+\\-\\*/%%\\^]");
+}
+
+bool validUnary(const RoyString * token) {
+  return roy_string_match(token, "a?sin|a?cos|a?tan|(sq|cb)rt|exp2?|log(2|10)?");
+}
+
+bool validVariable(const RoyString * token) {
+  return roy_string_match(token, "[A-Za-z_]\\w*") && !validUnary(token);
 }
 
 void
@@ -22,5 +33,18 @@ binary(      RoyString * dest,
     roy_string_assign_double(dest, NAN);
   }
   double result = func(roy_string_to_double(lhs), roy_string_to_double(rhs));
+  roy_string_assign_double(dest, result);
+}
+
+void
+unary(      RoyString * dest,
+      const RoyString * operand,
+      const RoyString * operator_) {
+  Unary func = roy_map_find(operators, operator_);
+  if (!func) {
+    /* ditto */
+    roy_string_assign_double(dest, NAN);
+  }
+  double result = func(roy_string_to_double(operand));
   roy_string_assign_double(dest, result);
 }

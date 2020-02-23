@@ -5,12 +5,16 @@
 
 extern RoyMap * operators;
 
+typedef double (* Binary)(double, double);
+typedef double (* Unary)(double);
+
+void populate(void);
+
 bool validNumber(const RoyString * token);
 bool validBinary(const RoyString * token);
 bool validUnary(const RoyString * token);
-void populateOperators(void);
-void binary(RoyString * dest, const RoyString * lhs, const RoyString * rhs, RoyString * operator_);
-void unary(RoyString * dest, const RoyString * operand, RoyString * operator_);
+void binary(RoyString * dest, const RoyString * lhs, const RoyString * rhs, const RoyString * operator_);
+void unary(RoyString * dest, const RoyString * operand, const RoyString * operator_);
 
 void rpc (RoyShell * shell);
 void quit(RoyShell * shell);
