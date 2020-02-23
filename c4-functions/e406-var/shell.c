@@ -44,6 +44,7 @@ quit(RoyShell * shell) {
   roy_shell_delete(shell);
   roy_stack_delete(tokens);
   roy_map_delete(operators);
+  roy_map_delete(variables);
   exit(EXIT_SUCCESS);
 }
 
@@ -101,13 +102,13 @@ doVariable(RoyShell  * shell,
            RoyString * current) {
   double * value = malloc(sizeof(double));
   if (roy_map_find(variables, current)) {
-    puts("shiab");
     *value = *roy_map_at(variables, current, double);
   } else {
-    *value = ( roy_shell_rounds(shell) > 0 ?
-    roy_string_to_double(roy_shell_out_at(shell, roy_shell_rounds(shell) - 1)) :
-    0.0 );
-    roy_map_insert(variables, current, value);
+    size_t rounds = roy_shell_rounds(shell);
+    *value = ( rounds ?
+               roy_string_to_double(roy_shell_out_at(shell, rounds - 1)) :
+               0.0 );
+    roy_map_insert(variables, roy_string_copy(current), value);
     printf("New variable added: %s = %.16g\n",
            roy_string_cstr(current, 0), *value);
   }

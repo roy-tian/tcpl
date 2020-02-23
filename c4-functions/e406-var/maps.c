@@ -40,21 +40,13 @@ void populate(void) {
 
 /* PRIVATE FUNCTIONS */
 
-static double add(double lhs, double rhs) {
-  return lhs + rhs;
-}
+static double add   (double lhs, double rhs) { return lhs + rhs; }
 
-static double minus(double lhs, double rhs) {
-  return lhs - rhs;
-}
+static double minus (double lhs, double rhs) { return lhs - rhs; }
 
-static double times(double lhs, double rhs) {
-  return lhs * rhs;
-}
+static double times (double lhs, double rhs) { return lhs * rhs; }
 
-static double divide(double lhs, double rhs) {
-  return lhs / rhs;
-}
+static double divide(double lhs, double rhs) { return lhs / rhs; }
 
 static void pairDelete(RoyPair * pair) {
   roy_string_delete(pair->key);
