@@ -4,23 +4,15 @@
 
 enum { BUFFER_SIZE = 128 };
 
-// Makes a sequence from 'front_ch' to 'back'
-char * sequence(char * dest, int frontCh, int backCh);
-char * fillSequence(char * dest, const char * pattern);
-// An algorithm far more effective than mine, invented by Axel-Tobias Schreiner, 
-// when he was a CS Professor at University of Osnabrück.
-// I think 'a--' is an incorrect input and should return a nil string,
-// but this function will return 'a--' itself, 
-// which, to my opinion, is a behavior not unified.
-char * asFillSequence(char * dest, const char * pattern);
-
+/* Makes a sequence from 'front' to 'back'.
+   e.g. front=a, back=g, sequence=abcefg */
 char *
 sequence(char * dest,
-         int    frontCh,
-         int    backCh) {
+         int    front,
+         int    back) {
   char * pdest = dest;
-  while (frontCh <= backCh) {
-    *pdest++ = frontCh++;
+  while (front <= back) {
+    *pdest++ = front++;
   }
   *pdest = '\0';
   return dest;
@@ -54,9 +46,12 @@ fillSequence(char       * dest,
   return dest;
 }
 
-
+/* An algorithm far more effective than mine, invented by Axel-Tobias Schreiner, 
+   when he was a CS Professor at University of Osnabrück.
+   I think 'a--' is an incorrect input and should return a nil string,
+   but this function returns 'a--' itself, which, to my opinion, is negotiable. */
 char *
-asFillSequence(char       * dest,
+fillSequenceAS(char       * dest,
                const char * pattern) {
   int iPattern = 0;
   int iDest = 0;
@@ -77,6 +72,6 @@ asFillSequence(char       * dest,
 
 int main(void) {
   char buf[BUFFER_SIZE] = "\0";
-  puts(fillSequence(buf, "-a----z0-9-"));
-  puts(asFillSequence(buf, "-a----z0-9-"));
+  puts(fillSequence  (buf, "-a----z0-9-"));
+  puts(fillSequenceAS(buf, "-a----z0-9-"));
 }

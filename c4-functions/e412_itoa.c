@@ -1,6 +1,10 @@
 #include <stdio.h>
 
-// Bad idea: non-recuresive version is easier to read and understand.
+enum { BUFFER_SIZE = 128 };
+
+/* Deprecated: non-recuresive version is easier to read and understand,
+   yet 'itoa' is Windows-specified, 
+   'sprintf' will bring more functionality and portability. */
 void itoa_(int number, char * str, int radix) {
   static int index;
   if (number < 0) {
@@ -15,8 +19,8 @@ void itoa_(int number, char * str, int radix) {
 }
 
 int main(void) {
+  char str[BUFFER_SIZE] = "\0";
   int number = 31415926;
-  char str[100] = "\0";
   itoa_(number, str, 10);
   puts(str);
 }

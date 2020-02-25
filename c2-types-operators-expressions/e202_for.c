@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+enum { BUFFER_SIZE = 1024 };
+
 int getLine(char * dest, int maxLength) {
   int i = 0, ch;
   for (; i < maxLength - 1 && (ch = getchar()) != '\n' && ch != EOF; i++) {
@@ -44,7 +46,6 @@ int getLineWithoutFor(char * dest, int maxLength) {
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 1024 };
   char str[BUFFER_SIZE] = "\0";
   int len = getLineWithoutFor(str, 80);
   printf("%d\n%s", len, str);

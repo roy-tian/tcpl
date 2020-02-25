@@ -8,7 +8,7 @@ extern RoyVector * elements;
 
 enum {
   VECTOR_START_CAPACITY = 10,
-  STRING_CAPACITY = 255,
+  BUFFER_SIZE = 256,
   SORT_PAGE = 1,
   SORT_SECTION = 1 << 1,
   SORT_INDEX = 1 << 2,

@@ -6,7 +6,7 @@ RoyVector * elements;
 int main(void) {
   shell = roy_shell_new();
   elements = roy_vector_new(VECTOR_START_CAPACITY,
-                            sizeof(char) * (STRING_CAPACITY + 1));
+                            sizeof(char) * (BUFFER_SIZE));
   roy_shell_add(shell, insert);
   roy_shell_add(shell, read);
   roy_shell_add(shell, select);

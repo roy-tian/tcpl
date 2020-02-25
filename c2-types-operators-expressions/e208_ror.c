@@ -4,13 +4,13 @@
 #include <limits.h>
 #include <stdbool.h>
 
-char * stringReverse(char * str);
-char * uint64ToBinStr(char * dest, uint64_t number, size_t base, size_t width, bool fillZero);
-uint64_t uint64RoR(uint64_t * number, int steps, size_t width);
-void printClearly(const char * binary);
+enum {
+  BUFFER_SIZE = 0x100,
+  DWORD       = 0x20
+};
 
 char *
-stringReverse(char * str) {
+reverse(char * str) {
   char * pHead = str;
   char * pTail = str + strlen(str) - 1;
   while (pTail > pHead) {
@@ -37,7 +37,7 @@ uint64ToBinStr(char     * dest,
     *pDest++ = fillZero ? '0' : ' ';
   }
   *pDest = '\0';
-  return stringReverse(dest);
+  return reverse(dest);
 }
 
 uint64_t
@@ -49,7 +49,6 @@ uint64RoR(uint64_t * number,
   *number |= right;
   return *number;
 }
-
 
 void
 printClearly(const char * binary) {
@@ -65,16 +64,17 @@ printClearly(const char * binary) {
   putchar('\n');
 }
 
+void
+printBin(uint64_t number) {
+  char buf[BUFFER_SIZE] = "\0";
+  printClearly(uint64ToBinStr(buf, number, 2, DWORD, true));
+}
+
 int main(void) {
-  enum {
-    BUFFER_SIZE = 1024,
-    DWORD       = 32
-  };
-  char buf[BUFFER_SIZE + 1] = "\0";
   uint64_t num = 7654321ULL;
 
   for (int i = 0; i != 20; i++) {
-    printClearly(uint64ToBinStr(buf, num, 2, DWORD, true));
+    printBin(num);
     uint64RoR(&num, 1, DWORD);  
   }
 }

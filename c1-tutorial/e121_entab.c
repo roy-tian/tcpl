@@ -1,19 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
-char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
-char * entab(char * str, size_t tabSize);
+enum { BUFFER_SIZE = 1024 };
 
 char *
 replaceIndex(char       * str,
              size_t       oldSubPosition,
              size_t       oldSubLength,
              const char * newSub) {
-  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char tempStr[BUFFER_SIZE] = "\0";
   strncpy(tempStr, str, oldSubPosition);
   strcat(tempStr, newSub);
   strcat(tempStr, str + oldSubPosition + oldSubLength);
@@ -41,7 +36,7 @@ entab(char   * str,
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  char str[] =
     "def ask_ok(prompt, retries = 4, reminder = 'Please try again!'):\n"
     "while True:\n"
     "    ok = input(prompt)\n"

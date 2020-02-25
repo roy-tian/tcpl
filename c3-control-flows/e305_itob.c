@@ -4,20 +4,15 @@
 #include <limits.h>
 #include <stdbool.h>
 
-enum Number {
-  BINARY = 2,
-  OCTONARY = 8,
-  DECIMAL = 10,
-  HEXDECIMAL = 16
+enum {
+  BINARY      = 0b10,
+  OCTONARY    =  010,
+  DECIMAL     =   10,
+  HEXDECIMAL  = 0x10,
+  BUFFER_SIZE = 0x80
 };
 
-char * stringReverse(char * str);
-// Deprecated:
-// if decimal, octonary, or hexdecimal numbers are needed, use sprintf instead.
-// Only use this for other rare condition.
-char * int64ToStringBase(char * dest, int64_t number, int base);
-
-char * stringReverse(char * str) {
+char * reverse(char * str) {
   char * pHead = str;
   char * pTail = str + strlen(str) - 1;
   while (pTail > pHead) {
@@ -28,7 +23,9 @@ char * stringReverse(char * str) {
   return str;
 }
 
-char * int64ToStringBase(char * dest, int64_t number, int base) {
+/* Deprecated: if decimal, octonary, or hexdecimal numbers are needed, use sprintf instead.
+   Only use this for other rare condition. */
+char * int64ToStrB(char * dest, int64_t number, int base) {
   bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
     int64Min = true;
@@ -50,18 +47,17 @@ char * int64ToStringBase(char * dest, int64_t number, int base) {
     (*dest)++;
   }
   *pdest = '\0';
-  return stringReverse(dest);
+  return reverse(dest);
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 128 };
   char buf[BUFFER_SIZE] = "\0";
-  int64_t number = 224466881010;
+  int64_t number = 224466881010LL;
   printf("%llX\n", number);
-  puts(int64ToStringBase(buf, number, HEXDECIMAL));
+  puts(int64ToStrB(buf, number, HEXDECIMAL));
   printf("%lld\n", number);
-  puts(int64ToStringBase(buf, number, DECIMAL));
+  puts(int64ToStrB(buf, number, DECIMAL));
   printf("%llO\n", number);
-  puts(int64ToStringBase(buf, number, OCTONARY));
-  puts(int64ToStringBase(buf, number, BINARY));
+  puts(int64ToStrB(buf, number, OCTONARY));
+  puts(int64ToStrB(buf, number, BINARY));
 }

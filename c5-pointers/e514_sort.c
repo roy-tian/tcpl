@@ -5,7 +5,7 @@ RoyVector * elements;
 
 enum {
   VECTOR_START_CAPACITY = 10,
-  STRING_CAPACITY = 255
+  BUFFER_SIZE = 256
 };
 
 void insert(RoyShell * shell);
@@ -28,7 +28,7 @@ void insert(RoyShell * shell) {
 
 void read(RoyShell * shell) {
   FILE * fp = fopen(roy_shell_argument_at(shell, 1), "r");
-  ROY_STR(buf, STRING_CAPACITY)
+  ROY_STR(buf, BUFFER_SIZE)
   while (fgets(buf, sizeof buf, fp)) {
     if (*(buf + strlen(buf) - 1) == '\n') {
       *(buf + strlen(buf) - 1) = '\0';
@@ -61,7 +61,7 @@ void sort(RoyShell * shell) {
   }
   qsort(elements->data,
         roy_vector_size(elements),
-        sizeof(char) * (STRING_CAPACITY + 1),
+        sizeof(char) * (BUFFER_SIZE),
         comp);
 }
 
@@ -96,7 +96,7 @@ int strcmpr(const char * str1, const char * str2) {
 int main(void) {
   shell = roy_shell_new();
   elements = roy_vector_new(VECTOR_START_CAPACITY,
-                            sizeof(char ) * (STRING_CAPACITY + 1));
+                            sizeof(char ) * (BUFFER_SIZE));
   roy_shell_add(shell, insert);
   roy_shell_add(shell, read);
   roy_shell_add(shell, select);

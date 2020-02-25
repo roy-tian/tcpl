@@ -1,13 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-enum {
-  STRING_CAPACITY = 1023,
-};
-
-char * fillChar(char * dest, int ch, size_t count);
-char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
-char * detab(char * str, size_t tabSize);
+enum { BUFFER_SIZE = 1024, };
 
 char *
 fillChar(char * dest,
@@ -26,7 +20,7 @@ replaceIndex(char       * str,
              size_t       oldSubPosition,
              size_t       oldSubLength,
              const char * newSub) {
-  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char tempStr[BUFFER_SIZE] = "\0";
   strncpy(tempStr, str, oldSubPosition);
   strcat(tempStr, newSub);
   strcat(tempStr, str + oldSubPosition + oldSubLength);
@@ -39,7 +33,7 @@ char * detab(char * str, size_t tabSize) {
   size_t tabMarker = 0;
   while (*pStr != '\0') {
     if (*pStr == '\t') {
-      char repeatStr[STRING_CAPACITY + 1] = "\0";
+      char repeatStr[BUFFER_SIZE] = "\0";
       size_t repeatCount = tabSize - tabMarker % tabSize;
       fillChar(repeatStr, ' ', repeatCount);
       replaceIndex(str, pStr - str, 1, repeatStr);
@@ -54,7 +48,7 @@ char * detab(char * str, size_t tabSize) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] = 
+  char str[] = 
     "Fly,\tfly,\tfly\tyour\tkite,\n"
     "High  \t  in   \tthe\t sky;\t\n"
     "\t  \t \t\n"

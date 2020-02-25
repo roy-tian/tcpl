@@ -4,15 +4,10 @@
 #include <limits.h>
 #include <stdbool.h>
 
-char * stringReverse(char * str);
-
-// The 'abs' strategy calculates |digit| several times,
-// so it is less efficient than this one.
-// Deprecated: sprintf is a better choice for its comprehensive format support.
-char * int64ToString(char * dest, int64_t number);
+enum { BUFFER_SIZE = 128 };
 
 char *
-stringReverse(char * str) {
+reverse(char * str) {
   char * pHead = str;
   char * pTail = str + strlen(str) - 1;
   while (pTail > pHead) {
@@ -23,9 +18,11 @@ stringReverse(char * str) {
   return str;
 }
 
+/* The 'abs' strategy calculates |digit| several times, so it is less efficient than this one.
+   still deprecated: sprintf is a better choice with comprehensive format support. */
 char *
-int64ToString(char    * dest,
-              int64_t   number) {
+int64ToStr(char    * dest,
+           int64_t   number) {
   bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
     int64Min = true;
@@ -46,15 +43,14 @@ int64ToString(char    * dest,
     (*dest)++;
   }
   *pDest = '\0';
-  return stringReverse(dest);
+  return reverse(dest);
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 128 };
   char buf[BUFFER_SIZE] = "\0";
   int64_t number = 1133557799LL;
   printf("%lld\n", number);
-  puts(llongToString(buf, number));
+  puts(int64ToStr(buf, number));
   printf("%lld\n", LLONG_MIN);
-  puts(llongToString(buf, LLONG_MIN));
+  puts(int64ToStr(buf, LLONG_MIN));
 }

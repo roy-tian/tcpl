@@ -1,10 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 
-void swap(char * str, int iter1, int iter2);
-void doReverse(char * str, int left, int right);
-void reverse(char * str);
-
 void swap(char * str, int iter1, int iter2) {
   int ch     = str[iter1];
   str[iter1] = str[iter2];

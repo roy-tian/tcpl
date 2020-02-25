@@ -2,15 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-enum {
-  STRING_CAPACITY = 4095,
-};
-
-size_t countChar(const char * str, int ch);
-size_t countLine(const char * str);
-char * lineContent(char * lineContent, const char * str, size_t lineNumber);
-char * foldLine(char * str, size_t lineWidth);
-char * fold(char * str, size_t lineWidth);
+enum { BUFFER_SIZE = 4096, };
 
 size_t
 countChar(const char * str,
@@ -74,9 +66,9 @@ char *
 fold(char   * str,
      size_t   lineWidth) {
   size_t strLength = strlen(str);
-  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char tempStr[BUFFER_SIZE] = "\0";
   for (size_t i = 1; i <= countLine(str); i++) {
-    char currentLine[STRING_CAPACITY + 1] = "\0";
+    char currentLine[BUFFER_SIZE] = "\0";
     lineContent(currentLine, str, i);
     foldLine(currentLine, lineWidth);
     strcat(tempStr, "\n");
@@ -87,7 +79,7 @@ fold(char   * str,
 }
 
 int main() {
-  char str[STRING_CAPACITY + 1] =
+  char str[] =
   "Genghis Khan was the founder and first Great Khan of the Mongol Empire, which became the largest contiguous empire in history after his death. He came to power by uniting many of the nomadic tribes of Northeast Asia. After founding the Empire and being proclaimed \"Genghis Khan\", he launched the Mongol invasions that conquered most of Eurasia. Campaigns initiated in his lifetime include those against the Qara Khitai, Caucasus, and Khwarazmian, Western Xia and Jin dynasties. These campaigns were often accompanied by large-scale massacres of the civilian populations - especially in the Khwarazmian and Western Xia controlled lands. By the end of his life, the Mongol Empire occupied a substantial portion of Central Asia and China.\n\n"
   "Before Genghis Khan died he assigned Ögedei Khan as his successor. Later his        grandsons split his empire into khanates. Genghis Khan died in 1227 after defeating the Western Xia. By his request, his body was buried in an unmarked grave somewhere in Mongolia. His descendants extended the Mongol Empire across most of Eurasia by conquering or creating vassal states in all of modern-day China, Korea, the Caucasus, Central Asia, and substantial portions of Eastern Europe and Southwest Asia. Many of these invasions repeated the earlier large-scale slaughters of local populations. As a result, Genghis Khan and his empire have a fearsome reputation in local histories.\n\n"
   "Beyond his military accomplishments, Genghis Khan also advanced the Mongol \t\tEmpire in other ways. He decreed the adoption of the Uyghur script as the Mongol Empire's writing system. He also practiced meritocracy and encouraged religious tolerance in the Mongol Empire, and unified the nomadic tribes of Northeast Asia. Present-day Mongolians regard him as the founding father of Mongolia.\n\n"

@@ -6,13 +6,13 @@
 #define swap(t, x, y) { t temp = x; x = y; y = temp; }
 
 enum {
-  STRING_CAPACITY = 127
+  BUFFER_SIZE = 128
 };
 
 typedef struct Animal {
-  char name[STRING_CAPACITY + 1];
-  char say[STRING_CAPACITY + 1];
-  char can[STRING_CAPACITY + 1];
+  char name[BUFFER_SIZE];
+  char say[BUFFER_SIZE];
+  char can[BUFFER_SIZE];
 } Animal;
 
 Animal animalMake(const char * name, const char * say, const char * can);

@@ -2,15 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-enum {
-  STRING_CAPACITY = 1023
-};
-
-size_t countChar(const char * str, int ch);
-size_t countLine(const char * str);
-char * lineContent(char * lineContent, const char * str, size_t lineNumber);
-char * trimLine(char * str);
-char * trim(char * str);
+enum { BUFFER_SIZE = 1024 };
 
 size_t
 countChar(const char * str,
@@ -63,9 +55,9 @@ trimLine(char * str) {
 
 char *
 trim(char * str) {
-  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char tempStr[BUFFER_SIZE] = "\0";
   for (int i = 1; i <= countLine(str); i++) {
-    char curLine[STRING_CAPACITY + 1] = "\0";
+    char curLine[BUFFER_SIZE] = "\0";
     lineContent(curLine, str, i);
     trimLine(curLine);
     if (strlen(curLine) != 0) { 

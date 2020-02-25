@@ -1,11 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 
-size_t countChar(const char * str, int ch);
-size_t countLine(const char * str);
-size_t lineLength(const char * str, size_t lineNumber);
-char * lineContent(char * lineContent, const char * str, size_t lineNumber);
-
 size_t
 countChar(const char * str,
           int          ch) {

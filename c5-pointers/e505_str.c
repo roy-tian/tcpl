@@ -24,13 +24,13 @@ int strncmp_(const char * str1, const char * str2, size_t count) {
 }
 
 int main(void) {
-  enum { STRING_CAPACITY = 256 };
-  char str1[STRING_CAPACITY] = "I'm gonna make him ";
-  char str2[STRING_CAPACITY] = "an offer he can\'t refuse.";
-  char str3[STRING_CAPACITY];
-  puts(strncat_(str1, str2, STRING_CAPACITY));
-  puts(strncpy_(str3, str1, STRING_CAPACITY));
+  enum { BUFFER_SIZE = 256 };
+  char str1[BUFFER_SIZE] = "I'm gonna make him ";
+  char str2[BUFFER_SIZE] = "an offer he can\'t refuse.";
+  char str3[BUFFER_SIZE];
+  puts(strncat_(str1, str2, BUFFER_SIZE));
+  puts(strncpy_(str3, str1, BUFFER_SIZE));
   puts(strncpy_(str3, str1, 19));
-  printf("%d ", strncmp_(str1, str3, STRING_CAPACITY));
+  printf("%d ", strncmp_(str1, str3, BUFFER_SIZE));
   printf("%d", strncmp_(str1, str3, 18));
 }

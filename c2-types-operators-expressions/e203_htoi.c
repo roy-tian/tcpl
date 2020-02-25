@@ -6,13 +6,13 @@
 int64_t parseHex(const char * str) {
   int64_t ret = 0;
   int64_t pn = 1;
-  if (strchr(str, '-') == str) {
+  if (strncmp(str, "-", 1) == 0) {
     str += 1;
     pn = -1;
-  } else if (strchr(str, '+') == str) {
+  } else if (strncmp(str, "+", 1) == 0) {
     str += 1;
   }
-  if (strstr(str, "0X") == str || strstr(str, "0x") == str) {
+  if (strncmp(str, "0X", 2) == 0 || strncmp(str, "0x", 2) == 0) {
     str += 2;
   }
   size_t length = strspn(str, "0123456789ABCDEFabcdef");

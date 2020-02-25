@@ -14,7 +14,7 @@ void read(RoyShell * shell) {
     printf("File '%s' open error.\n", roy_shell_argument_at(shell, 1));
     return;
   }
-  ROY_STR(buf, STRING_CAPACITY)
+  ROY_STR(buf, BUFFER_SIZE)
   while (fgets(buf, sizeof buf, fp)) {
     if (*(buf + strlen(buf) - 1) == '\n') {
       *(buf + strlen(buf) - 1) = '\0';
@@ -82,7 +82,7 @@ void sort(RoyShell * shell) {
   }
   qsort(elements->data,
         roy_vector_size(elements),
-        sizeof(char) * (STRING_CAPACITY + 1),
+        sizeof(char) * (BUFFER_SIZE),
         comp);
 }
 

@@ -4,11 +4,10 @@
 #include <limits.h>
 #include <math.h>
 
-
-char * uint64ToBinStr(char * dest, uint64_t number, size_t width);
-// Behavior is undefined if 'position' and 'count' is invalid.
-uint64_t uint64SetBits(uint64_t *dest, int position, size_t count, uint64_t src);
-void printClearly(const char * binary);
+enum {
+  BUFFER_SIZE = 0x100,
+  DWORD       = 0x20
+};
 
 char *
 uint64ToBinStr(char     * dest,
@@ -49,18 +48,18 @@ printClearly(const char * binary) {
   putchar('\n');
 }
 
-int main(void) {
-  enum {
-    BUFFER_SIZE = 128,
-    DWORD       = 32
-  };
+void
+printBin(uint64_t number) {
+  char buf[BUFFER_SIZE] = "\0";
+  printClearly(uint64ToBinStr(buf, number, DWORD));
+}
 
-  char str[BUFFER_SIZE] = "\0";
+int main(void) {
   uint64_t num1 = UINT_MAX;
   uint64_t num2 = 6552144ULL;
 
-  printClearly(uint64ToBinStr(str, num1, DWORD));
-  printClearly(uint64ToBinStr(str, num2, DWORD));
+  printBin(num1);
+  printBin(num2);
   uint64SetBits(&num1, 9, 10, num2);  
-  printClearly(uint64ToBinStr(str, num1, DWORD));
+  printBin(num1);
 }

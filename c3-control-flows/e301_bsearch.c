@@ -3,11 +3,10 @@
 #include <limits.h>
 #include <time.h>
 
-const void * bsearch_(const void * key, const void * ptr, size_t count, size_t size, int (* comp)(const void *, const void *));
-int intComp(const void * var1, const void * var2);
-int nextRandom(int min, int max);
-void populateArray(int * arr, size_t size, int min, int max);
-void printArray(const int * arr, size_t size);
+enum {
+  ARRAY_SIZE = 500,
+  MAX        = 9999
+};
 
 const void *
 bsearch_(const void * key,
@@ -41,10 +40,14 @@ intComp(const void * var1,
 int
 nextRandom(int min,
            int max) {
-  if (RAND_MAX == INT_MAX) {
-    return min + rand() / ((RAND_MAX + 1U) / max);
+  if (max < min) {
+    return max;
   }
-  return min + rand() % max;
+  int ret = max + 1;
+  while (ret > max) {
+    ret = rand() / ( (RAND_MAX + 1U) / max ) + min;
+  }
+  return ret;
 }
 
 void
@@ -61,7 +64,7 @@ void
 printArray(const int * arr,
            size_t      size) {
   for (int i = 0; i != size; i++) {
-    printf("%5d", *(arr + i));
+    printf("%6d", *(arr + i));
     if ((i + 1) % 10 == 0) {
       printf("\n");
     }
@@ -69,25 +72,20 @@ printArray(const int * arr,
 }
 
 int main(void) {
-  enum {ARRAY_SIZE = 200, MAX = 9999};
   srand(time(NULL));
   int array[ARRAY_SIZE];
   populateArray(array, ARRAY_SIZE, 0, MAX);
   int key = array[ARRAY_SIZE / 2];
+
   printArray(array, ARRAY_SIZE);
-  qsort(array, sizeof array / sizeof *array, sizeof *array, intComp);
-  printf("\n");
+  qsort(array, ARRAY_SIZE, sizeof(int), intComp);
+  putchar('\n');
   printArray(array, ARRAY_SIZE);
-  printf("\n   STD METHOD: %d\n",
-         *(const int *)bsearch (&key,
-                                array,
-                                sizeof array / sizeof *array,
-                                sizeof *array,
-                                intComp));
-  printf("CUSTOM METHOD: %d\n",
-         *(const int *)bsearch_(&key,
-                                array,
-                                sizeof array / sizeof *array,
-                                sizeof *array,
-                                intComp));
+
+  const int * found = bsearch(&key, array, ARRAY_SIZE, sizeof(int), intComp);
+  printf("\n   STD METHOD FOUND %d AT POSITION %d.", key, found - array);
+
+  found = bsearch_(&key, array, ARRAY_SIZE, sizeof(int), intComp);
+  printf("\nCUSTOM METHOD FOUND %d AT POSITION %d.\n", key, found - array);
+
 }

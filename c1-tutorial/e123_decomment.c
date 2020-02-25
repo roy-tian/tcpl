@@ -2,22 +2,14 @@
 #include <string.h>
 #include <stdbool.h>
 
-enum {
-  STRING_CAPACITY = 4095
-};
-
-char * replaceIndex(char * str, size_t oldSubPosition, size_t oldSubLength, const char * newSub);
-char * replaceBetween(char * str, const char * patternHead, const char * patternTail, const char * newSub);
-char * readFromFile(char * dest, const char * path);
-int    appendToFile(const char * src, const char * path);
-char * decomment(char * str);
+enum { BUFFER_SIZE = 4096 };
 
 char *
 replaceIndex(char       * str,
              size_t       oldSubPosition,
              size_t       oldSubLength,
              const char * newSub) {
-  char tempStr[STRING_CAPACITY + 1] = "\0";
+  char tempStr[BUFFER_SIZE] = "\0";
   strncpy(tempStr, str, oldSubPosition);
   strcat(tempStr, newSub);
   strcat(tempStr, str + oldSubPosition + oldSubLength);
@@ -74,7 +66,7 @@ int appendToFile(const char * src, const char * path) {
 }
 
 int main() {
-  char str[STRING_CAPACITY + 1] = "\0";
+  char str[BUFFER_SIZE] = "\0";
   readFromFile(str, "e123.java");
   decomment(str);
   appendToFile(str, "e123dc.java");

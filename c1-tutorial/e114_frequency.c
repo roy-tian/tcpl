@@ -1,18 +1,15 @@
-/**
- * This file should be saved with encoding 'gbk'
- * and run on cmd of Windows,
- * or the histogram  correctly.
- */
+/* This file should be saved with encoding 'gbk' and run on cmd of Windows,
+   or the histogram won't show up correctly. */
 
 #include <stdio.h>
 #include <ctype.h>
 
 enum {
-  STRING_CAPACITY = 1023,
+  BUFFER_SIZE = 1024,
   MAX_CHAR = 26
 };
 
-size_t statVec[MAX_CHAR] = {0};
+static size_t statVec[MAX_CHAR];
 
 void
 charStats(const char * str) {
@@ -28,7 +25,7 @@ charStats(const char * str) {
 
 void
 histogram(void) {
-  const char blocks[] = "¨x¨y¨z¨{¨|¨}¨~¨€";
+  const char blocks[] = "ï¿½xï¿½yï¿½zï¿½{ï¿½|ï¿½}ï¿½~ï¿½ï¿½";
   size_t nonZeroLength = 0;
   size_t maxLength = 0;
 
@@ -78,7 +75,7 @@ histogram(void) {
 }
 
 int main(void) {
-  char str[STRING_CAPACITY + 1] =
+  char str[BUFFER_SIZE] =
     "In the year 2633, the evil Red Falcon Organization have set a base on the "
     "Galuga archipelago near New Zealand in a plot to conquer the world. "
     "Two commandos, Bill Rizer and Lance Bean of the Contra unit "

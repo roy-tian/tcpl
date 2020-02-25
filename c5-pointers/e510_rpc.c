@@ -3,7 +3,7 @@
 
 enum { 
   CAPACITY = 128,
-  STRING_CAPACITY = 128
+  BUFFER_SIZE = 128
 };
 
 RoyStack * operands;
@@ -148,7 +148,7 @@ void doError(const RoyString * arg) {
 
 int main(int argc, char * argv[]) {
   operands = roy_stack_new(CAPACITY, sizeof(double));
-  args     = roy_deque_new(STRING_CAPACITY * sizeof(char));
+  args     = roy_deque_new(BUFFER_SIZE * sizeof(char));
   while (--argc) {
     roy_deque_push_back(args, *++argv);
   }

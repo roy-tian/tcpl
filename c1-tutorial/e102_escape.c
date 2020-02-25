@@ -37,4 +37,5 @@ int main(void) {
            sequences[i].description);
   }
   puts("------+------+------------------------------");
+  // printf("\c");    // complie warning: unknown escape sequence. (undefined behavior)
 }

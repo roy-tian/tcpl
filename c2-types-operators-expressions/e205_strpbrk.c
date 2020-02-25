@@ -10,6 +10,6 @@ size_t breakIndex(const char * str, const char * set) {
 }
 
 int main(void) {
-  char * str = "Le français est la plus belle langue du monde.";
+  char str[] = "Le français est la plus belle langue du monde.";
   printf("%s %zu", str, breakIndex(str, "le"));
 }

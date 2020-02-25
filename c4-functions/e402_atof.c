@@ -5,25 +5,6 @@
 #include <stdbool.h>
 #include <math.h>
 
-int stringToInteger(const char * str);
-char * stringIgnoreFirstIf(char * str, const char * set);
-
-int stringToInteger(const char * str) {
-  int ret = 0;
-  while (isdigit(*str)) {
-    ret *= 10;
-    ret += *str++ - '0';
-  }
-  return ret;
-}
-
-char * stringIgnoreFirstIf(char * str, const char * set) {
-  if (strchr(set, *str)) {
-    str++;
-  }
-  return str;
-}
-
 #define STR_TO_INT(num, str)      \
         while (isdigit(*str)) {   \
           num *= 10.0;            \

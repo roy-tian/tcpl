@@ -3,11 +3,7 @@
 #include <ctype.h>
 
 enum { MAX_LENGTH = 45 };   
-size_t statVec[MAX_LENGTH] = {0};
-
-void stat(const char * str);
-void histogram(void);
-void vectogram(void);
+static size_t statVec[MAX_LENGTH];
 
 void
 stat(const char * str) {
@@ -29,7 +25,7 @@ stat(const char * str) {
 }
 
 void
-histogram(void) {
+histogramH(void) {
   for (int i = 1; i != MAX_LENGTH; i++) {
     size_t currentLength = statVec[i];
     if (currentLength) {
@@ -44,7 +40,7 @@ histogram(void) {
 }
 
 void
-vectogram(void) {
+histogramV(void) {
   size_t nonZeroCount = 0;
   size_t maxLength = 0;
 
@@ -87,6 +83,6 @@ int main(void) {
     "optical or other electromagnetic systems.";
     
   stat(str);
-  histogram();
-  vectogram();
+  histogramH();
+  histogramV();
 }

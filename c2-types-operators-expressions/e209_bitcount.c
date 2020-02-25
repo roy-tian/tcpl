@@ -2,10 +2,10 @@
 #include <stdint.h>
 #include <string.h>
 
-size_t uint64CountBit(uint64_t number);
-char * uint64ToBinStr(char * dest, uint64_t number, size_t length);
-void printClearly(const char * binary);
-
+enum {
+  BUFFER_SIZE = 0x100,
+  DWORD       = 0x20
+};
 size_t
 uint64CountBit(uint64_t number) {
   size_t count = 0;
@@ -46,14 +46,15 @@ printClearly(const char * binary) {
   putchar('\n');
 }
 
+void
+printBin(uint64_t number) {
+  char buf[BUFFER_SIZE] = "\0";
+  printClearly(uint64ToBinStr(buf, number, DWORD));
+}
+
 int main(void) {
-  enum {
-    BUFFER_SIZE = 1024,
-    DWORD       = 32
-  };
-  char buf[BUFFER_SIZE + 1] = "\0";
   uint64_t num = 555666888ULL;
 
-  printClearly(uint64ToBinStr(buf, num, DWORD));
+  printBin(num);
   printf("Number of 1: %zu\n", uint64CountBit(num));
 }

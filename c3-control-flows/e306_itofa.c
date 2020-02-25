@@ -4,9 +4,7 @@
 #include <limits.h>
 #include <stdbool.h>
 
-char * reverse(char * str);
-// Deprecated: use sprintf instead.
-char * int64ToStrW(char * dest, int64_t number, size_t width);
+enum { BUFFER_SIZE = 128 };
 
 char * reverse(char * str) {
   char * pHead = str;
@@ -19,6 +17,7 @@ char * reverse(char * str) {
   return str;
 }
 
+// Deprecated: use sprintf instead.
 char * int64ToStrW(char * dest, int64_t number, size_t width) {
   bool pn = true, int64Min = false;
   if (number == LLONG_MIN) {
@@ -48,9 +47,8 @@ char * int64ToStrW(char * dest, int64_t number, size_t width) {
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 128 };
   char buf[BUFFER_SIZE] = "\0";
-  int64_t number = -13579246810;
+  int64_t number = -13579246810LL;
   printf("%16lld\n", number);
   puts(int64ToStrW(buf, number, 16));
 }

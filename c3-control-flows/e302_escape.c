@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-// Reveals all characters that 'iscntrl' .
-// this function does the same things of 'replaceAll', yet faster.
-// The behavior is undefined if the capacity of 'dest' is insufficient.
-char * escape(char * dest, const char * src);
-char * grab(char * dest, const char * src);
+enum { BUFFER_SIZE = 1024 };
 
+/* Reveals all characters that 'iscntrl' .
+   this function does the same things of 'replaceAll' (e110), yet faster.
+   The behavior is undefined if the capacity of 'dest' is insufficient. */
 char *
 escape(char       * dest,
        const char * src) {
@@ -26,6 +25,7 @@ escape(char       * dest,
   return dest;
 }
 
+// Do the opposite things of escape.
 char *
 grab(char       * dest,
      const char * src) {
@@ -53,15 +53,14 @@ grab(char       * dest,
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 1023 };
-  const char src[BUFFER_SIZE + 1] = 
+  const char src[] = 
     "During the late 1940s and through the 1950s, UFOs were often referred to "
     "popularly as \"flying saucers\" or \'flying discs\'. \n"
     "The term\tUFO\tbecame more widespread during the 1950s, "
     "at first in technical literature, but later in popular use. \n\t\n";
   puts("ORIGINAL STRING\n===============");
   puts(src);
-  char dest[BUFFER_SIZE + 1] = "\0";
+  char dest[BUFFER_SIZE] = "\0";
   puts("ESCAPED STRING\n==============");
   puts(escape(dest, src));
   puts("RECOVERED STRING\n================");

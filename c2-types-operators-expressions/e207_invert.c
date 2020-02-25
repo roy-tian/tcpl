@@ -3,10 +3,10 @@
 #include <string.h>
 #include <limits.h>
 
-char * uint64ToBinStr(char * dest, uint64_t number, size_t width);
-// Behavior is undefined if 'position' and 'count' is invalid.
-uint64_t uint64Invert(uint64_t * number, int position, size_t count);
-void printClearly(const char * binary);
+enum {
+  BUFFER_SIZE = 0x100,
+  DWORD       = 0x20
+};
 
 char *
 uint64ToBinStr(char     * dest,
@@ -24,6 +24,7 @@ uint64ToBinStr(char     * dest,
   return dest;
 }
 
+// Behavior is undefined if 'position' and 'count' is invalid.
 uint64_t
 uint64Invert(uint64_t * number,
              int        position,
@@ -45,16 +46,16 @@ printClearly(const char * binary) {
   putchar('\n');
 }
 
-int main(void) {
-  enum {
-    BUFFER_SIZE = 1024,
-    DWORD       = 32
-  };
+void
+printBin(uint64_t number) {
+  char buf[BUFFER_SIZE] = "\0";
+  printClearly(uint64ToBinStr(buf, number, DWORD));
+}
 
-  char str[BUFFER_SIZE + 1] = "\0";
+int main(void) {
   uint64_t num = UINT_MAX;
 
-  printClearly(uint64ToBinStr(str, num, DWORD));
+  printBin(num);
   uint64Invert(&num, 10, 7);  
-  printClearly(uint64ToBinStr(str, num, DWORD));
+  printBin(num);
 }
