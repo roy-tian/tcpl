@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-enum { BUFFER_SIZE = 1024, };
+enum { BUFFER_SIZE = 1024 };
 
 char *
 fillChar(char * dest,

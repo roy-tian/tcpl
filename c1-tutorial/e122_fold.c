@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-enum { BUFFER_SIZE = 4096, };
+enum { BUFFER_SIZE = 4096 };
 
 size_t
 countChar(const char * str,

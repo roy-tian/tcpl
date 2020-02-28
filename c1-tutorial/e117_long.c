@@ -1,6 +1,11 @@
 #include <string.h>
 #include <stdio.h>
 
+enum {
+  BUFFER_SIZE = 512,
+  WIDTH = 80
+};
+
 size_t
 countChar(const char * str,
           int          ch) {
@@ -65,11 +70,6 @@ int main(void) {
     "User-defined (typedef) and compound types are possible.\n"
     "Low-level access to computer memory is possible by converting machine addresses to typed pointers.\n"
     "Procedures are a special case of function, with an untyped return type void.";
-
-  enum {
-    BUFFER_SIZE = 512,
-    WIDTH = 80
-  };
 
   for (int i = 1; i < countLine(str); i++) {
     if (lineLength(str, i) > WIDTH) {
