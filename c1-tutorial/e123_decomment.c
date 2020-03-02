@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 enum { BUFFER_SIZE = 4096 };
 
@@ -47,6 +48,11 @@ char * decomment(char * str) {
 
 char * readFromFile(char * dest, const char * path) {
   FILE * fp = fopen(path, "r");
+
+  if (!fp) {
+    perror(path);
+    exit(EXIT_FAILURE);
+  }
 
   fseek(fp, 0, SEEK_END);
   size_t size = ftell(fp);
