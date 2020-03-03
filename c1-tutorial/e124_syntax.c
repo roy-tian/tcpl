@@ -80,15 +80,45 @@ void parentheses(Type * shadow, const RoyString * content);
 void brackets(Type * shadow, const RoyString * content);
 void braces(Type * shadow, const RoyString * content);
 
-void printc(const Type * shadow, const RoyString * content) {
-  Type prev = 0;
-  for (int i = 0; i != roy_string_length(content); i++) {
-    int ch = roy_string_at(content, i);
-
+void printw(const Type * shadow, const RoyString * content, const char * path) {
+  FILE * fp = fopen(path, "w+");
+  if (!fp) {
+    perror(path);
+    exit(EXIT_FAILURE);
   }
-      printf("\e[33m");
-    puts(content->str);
-    printf("\e[0m");
+  fprintf(fp,
+    "<!DOCTYPE html><html><head><title>e124.cpp</title>"
+    "<style>.normal{color:black;} .comment{color:forestgreen;}</style>"
+    "</head><body><code>");
+  Type prev = shadow[0];
+  switch(prev) {
+  case NORMAL  : fprintf(fp, "<span class=\"normal\">"); break;
+  case COMMENT : fprintf(fp, "<span class=\"comment\">"); break;
+  default: break;
+  } 
+  for (int i = 0; i != roy_string_length(content); i++) {
+    if (i != 0 && shadow[i] != prev) {
+      switch(shadow[i]) {
+      case NORMAL : fprintf(fp, "</span><span class=\"normal\">"); break;
+      case COMMENT : fprintf(fp, "</span><span class=\"comment\">"); break;
+      default: break;
+      }
+    }
+    prev = shadow[i];
+    int prevCh = roy_string_at(content, i - 1);
+    int currCh = roy_string_at(content, i);
+    switch (currCh) {
+    case '<'  : fprintf(fp, "&lt;"); break;
+    case '>'  : fprintf(fp, "&gt;"); break;
+    case '\n' : fprintf(fp, "<br>"); break;
+    case ' '  :
+      isspace(prevCh) ? fprintf(fp, "&nbsp;") : fprintf(fp, " ");
+      break;
+    default : fprintf(fp, "%c", currCh); break;
+    }
+  }
+  fprintf(fp, "</span></code></body></html>");
+  fclose(fp);
 }
 
 int main(int argc, char ** argv) {
@@ -97,6 +127,9 @@ int main(int argc, char ** argv) {
   if (size) {
     Type * shadow = calloc(size, sizeof(Type));
     comments(shadow, content);
-    printc(shadow, content);
+    char out[BUFFER_SIZE] = "\0";
+    strcpy(out, argv[1]);
+    strcat(out, ".html");
+    printw(shadow, content, out);
   }
 }
