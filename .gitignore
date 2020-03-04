@@ -1,6 +1,7 @@
 *.exe
 *.out
 *.plist
+*.html
 e*.txt
 .DS_Store
 /.idea

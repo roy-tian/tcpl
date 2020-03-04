@@ -10,8 +10,7 @@ void deleteStack(Type * stack) {
 
 Type push(Type * stack) {
   stack[stack[0] + 1] = BRACKET_1 + stack[0] % 3;
-  stack[0]++;
-  return stack[stack[0]];
+  return stack[++stack[0]];
 }
 
 Type pop(Type * stack) {
