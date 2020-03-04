@@ -34,18 +34,26 @@ void write(const Type * shadow, const RoyString * content, const char * path) {
     ".comment{color:forestgreen;}"
     ".text{color:chocolate;}"
     ".escape{color:cyan}"
+    ".bracket1{color:lightgreen}"
+    ".bracket2{color:lightpink}"
+    ".bracket3{color:lightskyblue}"
+    ".error{color:red}"
     "</style></head><body><code>");
   Type prevType = shadow[0];
-  for (int i = 0; i != roy_string_length(content) - 2; i++) {
+  for (int i = 0; i != roy_string_length(content); i++) {
     if (shadow[i] != prevType || i == 0) {
       if (i != 0) {
         fprintf(fp, "</span>");
       }
       switch(shadow[i]) {
-      case NORMAL  : fprintf(fp, "<span class=\"normal\">"); break;
-      case COMMENT : fprintf(fp, "<span class=\"comment\">"); break;
-      case TEXT    : fprintf(fp, "<span class=\"text\">"); break;
-      case ESCAPE  : fprintf(fp, "<span class=\"escape\">"); break;
+      case NORMAL    : fprintf(fp, "<span class=\"normal\">");   break;
+      case COMMENT   : fprintf(fp, "<span class=\"comment\">");  break;
+      case TEXT      : fprintf(fp, "<span class=\"text\">");     break;
+      case ESCAPE    : fprintf(fp, "<span class=\"escape\">");   break;
+      case BRACKET_1 : fprintf(fp, "<span class=\"bracket1\">"); break;
+      case BRACKET_2 : fprintf(fp, "<span class=\"bracket2\">"); break;
+      case BRACKET_3 : fprintf(fp, "<span class=\"bracket3\">"); break;
+      case ERROR     : fprintf(fp, "<span class=\"error\">");    break;
       default: break;
       }
       prevType = shadow[i];

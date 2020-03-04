@@ -22,6 +22,11 @@ bool testType     (const Type * shadow, size_t position, Type type);
 bool testTypeRange(const Type * shadow, size_t from, size_t to, Type type);
 int  findType     (const Type * shadow, size_t from, size_t to, Type type);
 
+Type * newStack(void);
+void deleteStack(Type * stack);
+Type push(Type * stack);
+Type pop(Type * stack);
+
 void tokenize(Type * shadow, const RoyString * content);
 
 size_t read(RoyString * dest, const char * path);

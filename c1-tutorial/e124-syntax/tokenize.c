@@ -3,17 +3,15 @@
 static void comments   (Type * shadow, const RoyString * content);
 static void text       (Type * shadow, const RoyString * content);
 static void escapes    (Type * shadow, const RoyString * content);
-static void parentheses(Type * shadow, const RoyString * content);
-static void brackets   (Type * shadow, const RoyString * content);
-static void braces     (Type * shadow, const RoyString * content);
+static void brackets   (Type * shadow, const RoyString * content, const char * pair);
 
 void tokenize(Type * shadow, const RoyString * content) {
-  comments   (shadow, content);
-  text       (shadow, content);
-  escapes    (shadow, content);
-  parentheses(shadow, content);
-  brackets   (shadow, content);
-  braces     (shadow, content);
+  comments(shadow, content);
+  text    (shadow, content);
+  escapes (shadow, content);
+  brackets(shadow, content, "()");
+  brackets(shadow, content, "[]");
+  brackets(shadow, content, "{}");
 }
 
 static void comments(Type * shadow, const RoyString * content) {
@@ -50,12 +48,17 @@ static void escapes(Type * shadow, const RoyString * content) {
   roy_deque_delete(deque);
 }
 
-static void parentheses(Type * shadow, const RoyString * content) {
-
-}
-static void brackets(Type * shadow, const RoyString * content) {
-
-}
-static void braces(Type * shadow, const RoyString * content) {
-  
+static void
+brackets(Type * shadow, const RoyString * content, const char * pair) {
+  Type * stack = newStack();
+  for (int i = 0; i != roy_string_length(content); i++) {
+    if (testType(shadow, i, NORMAL)) {
+      int ch = roy_string_at(content, i);
+      if (ch == pair[0]) {
+        setType(shadow, i, push(stack));
+      } else if (ch == pair[1]) {
+        setType(shadow, i, pop(stack));
+      }
+    }
+  }
 }
