@@ -6,7 +6,7 @@ static unsigned daytab[2][13] = {
 };
 
 int leap_year(int year) {
-  return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
 // Returns day of year [1-366] according to month & day,
@@ -27,7 +27,7 @@ unsigned day_of_year(int year, unsigned month, unsigned day) {
 
 int month_day(int year, unsigned _day_of_year, int * pmonth, int * pday) {
   int leap = leap_year(year);
-  if (leap && _day_of_year > 366 || !leap && _day_of_year > 365) {
+  if ((leap && _day_of_year > 366) || (!leap && _day_of_year > 365)) {
     return 0;
   }
   int i = 1;
