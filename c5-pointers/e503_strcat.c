@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+enum { BUFFER_SIZE = 128 };
+
 // Deprecated: this version won't be more effective than the std one.
 char * strcat_(char * dest, const char * src) {
   char * ptail = dest;
@@ -39,7 +41,6 @@ char * strcat_m(char ** dest, const char * src) {
 }
 
 int main(void) {
-  enum { BUFFER_SIZE = 128 };
   char str1[BUFFER_SIZE] = "Chinese is ";
   char str2[BUFFER_SIZE] = "the most beautiful language in the world.";
 

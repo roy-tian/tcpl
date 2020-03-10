@@ -6,7 +6,7 @@ static unsigned daytab[2][13] = {
 };
 
 int leap_year(int year) {
-  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0) ? 1 : 0;
 }
 
 // Returns day of year [1-366] according to month & day,
@@ -25,17 +25,19 @@ unsigned day_of_year(int year, unsigned month, unsigned day) {
   return day;
 }
 
-int month_day(int year, unsigned _day_of_year, int * pmonth, int * pday) {
+// Sets month/day according to 'year' and 'yearday'(the day of year),
+// returns whether the operation is successful or not.
+int month_day(int year, unsigned yearday, int * pmonth, int * pday) {
   int leap = leap_year(year);
-  if ((leap && _day_of_year > 366) || (!leap && _day_of_year > 365)) {
+  if ((leap && yearday > 366) || (!leap && yearday > 365)) {
     return 0;
   }
   int i = 1;
-  for (; _day_of_year > daytab[leap][i]; i++) {
-    _day_of_year -= daytab[leap][i];
+  for (; yearday > daytab[leap][i]; i++) {
+    yearday -= daytab[leap][i];
   }
   *pmonth = i;
-  *pday = _day_of_year;
+  *pday = yearday;
   return 1;
 }
 
@@ -44,7 +46,7 @@ int main(void) {
     for (int j = 1; j != 32; j++) {
       printf("%3d ", day_of_year(2016, i, j));
     }
-    puts("");
+    putchar('\n');
   }
   for (int i = 1; i != 400; i++) {
     int year = 2019, month, day;
@@ -52,7 +54,7 @@ int main(void) {
       printf("%d-%02d-%02d ", year, month, day);
     }
     if (i % 10 == 0) {
-      puts("");
+      putchar('\n');
     }
   }
 }
