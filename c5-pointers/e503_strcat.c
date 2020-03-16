@@ -4,7 +4,7 @@
 enum { BUFFER_SIZE = 128 };
 
 // Deprecated: this version won't be more effective than the std one.
-char * strcat_(char * dest, const char * src) {
+char * strcat_(char * restrict dest, const char * restrict src) {
   char * ptail = dest;
   while (*ptail != '\0') { ptail++; }
   while ((*ptail++ = *src++) != '\0') { }
@@ -25,7 +25,7 @@ char * stralloc_(const char * src) {
 }
 
 // This version won't be bothered with undefined behavior.
-char * strcat_m(char ** dest, const char * src) {
+char * strcat_m(char ** restrict dest, const char * restrict src) {
   char * temp = stralloc_(*dest);
   char * ptemp = temp;
   *dest = realloc(*dest, strlen_(*dest) + strlen_(src) + 1);

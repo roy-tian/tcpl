@@ -84,4 +84,5 @@ int main(void) {
   test("0100", 0);
   test("100", 0);
   test("0x100",0);
+  test("1e10", 0);
 }
