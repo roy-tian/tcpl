@@ -8,7 +8,7 @@ enum {
   MAX        = 9999
 };
 
-const void *
+void *
 bsearch_(const void * key,
          const void * ptr,
          size_t       count, 
@@ -26,7 +26,7 @@ bsearch_(const void * key,
     }
     mid = ptr + (count - 1) / 2 * size;
   }
-  return (comp(key, mid) == 0) ? mid : NULL;
+  return (comp(key, mid) == 0) ? (void *)mid : NULL;
 }
 
 int
