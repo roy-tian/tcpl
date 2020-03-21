@@ -31,9 +31,9 @@ void rpc(RoyShell * shell) {
 }
 
 void quit(RoyShell * shell) {
-  roy_shell_delete(shell);
-  roy_stack_delete(tokens);
-  roy_map_delete(operators);
+  roy_shell_delete(shell, NULL);
+  roy_stack_delete(tokens, NULL);
+  roy_map_delete(operators, NULL);
   exit(EXIT_SUCCESS);
 }
 
@@ -57,9 +57,9 @@ doBinary(RoyStack  * tokens,
             roy_string_cstr(current, 0),
             roy_string_cstr(rhs, 0),
             roy_string_cstr(result, 0));
-    roy_string_delete(result);
+    roy_string_delete(result, NULL);
   }
-  roy_string_delete(rhs);
-  roy_string_delete(lhs);
+  roy_string_delete(rhs, NULL);
+  roy_string_delete(lhs, NULL);
   return success;
 }

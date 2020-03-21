@@ -11,6 +11,7 @@ int main(int argc, char ** argv) {
     strcpy(out, argv[1]);
     strcat(out, ".html");
     write(shadow, content, out);
+    free(shadow);
   }
-
+  roy_string_delete(content, NULL);
 }

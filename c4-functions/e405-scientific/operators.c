@@ -8,7 +8,7 @@ static double minus (double lhs, double rhs);
 static double times (double lhs, double rhs);
 static double divide(double lhs, double rhs);
 
-static void pairDelete(RoyPair * pair);
+static void pairDelete(RoyPair * pair, void * user_data);
 static int  pairCompare(const RoyPair * lhs, const RoyPair * rhs);
 
 void populate(void) {
@@ -45,8 +45,9 @@ static double times (double lhs, double rhs) { return lhs * rhs; }
 
 static double divide(double lhs, double rhs) { return lhs / rhs; }
 
-static void pairDelete(RoyPair * pair) {
-  roy_string_delete(pair->key);
+static void pairDelete(RoyPair * pair,
+                       void    * user_data) {
+  roy_string_delete(pair->key, user_data);
   free(pair);
 }
 

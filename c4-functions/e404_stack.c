@@ -57,8 +57,8 @@ void clear(RoyShell * shell) {
 }
 
 void quit(RoyShell * shell) {
-  roy_stack_delete(stack);
-  roy_shell_delete(shell);
+  roy_stack_delete(stack, NULL);
+  roy_shell_delete(shell, NULL);
   exit(EXIT_SUCCESS);
 }
 

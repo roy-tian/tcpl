@@ -1,9 +1,9 @@
 #include "syntax.h"
 
-static void comments   (Type * shadow, const RoyString * content);
-static void text       (Type * shadow, const RoyString * content);
-static void escapes    (Type * shadow, const RoyString * content);
-static void brackets   (Type * shadow, const RoyString * content, const char * pair);
+static void comments(Type * shadow, const RoyString * content);
+static void text    (Type * shadow, const RoyString * content);
+static void escapes (Type * shadow, const RoyString * content);
+static void brackets(Type * shadow, const RoyString * content, const char * pair);
 
 void tokenize(Type * shadow, const RoyString * content) {
   comments(shadow, content);
@@ -21,7 +21,7 @@ static void comments(Type * shadow, const RoyString * content) {
     RMatch match = *roy_deque_at(deque, i, RMatch);
     setTypeRange(shadow, match.begin, match.end, COMMENT);
   }
-  roy_deque_delete(deque);
+  roy_deque_delete(deque, NULL);
 }
 
 static void text(Type * shadow, const RoyString * content) {
@@ -33,7 +33,7 @@ static void text(Type * shadow, const RoyString * content) {
       setTypeRange(shadow, match.begin, match.end, TEXT);
     }
   }
-  roy_deque_delete(deque);
+  roy_deque_delete(deque, NULL);
 }
 
 static void escapes(Type * shadow, const RoyString * content) {
@@ -45,7 +45,7 @@ static void escapes(Type * shadow, const RoyString * content) {
       setTypeRange(shadow, match.begin, match.end, ESCAPE);
     }
   }
-  roy_deque_delete(deque);
+  roy_deque_delete(deque, NULL);
 }
 
 static void
@@ -61,4 +61,5 @@ brackets(Type * shadow, const RoyString * content, const char * pair) {
       }
     }
   }
+  deleteStack(stack);
 }

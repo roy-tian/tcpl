@@ -1,99 +1,41 @@
+#include "roy.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-
-char * readFromFile(const char * filePath);
-size_t strCountLine(const char * str);
-char * strTail(char * str, int index);
-const char * parseFilePath(int argc, char * argv[]);
-int parseLine(int argc, char * argv[]);
-
-
-// string must be freed when it's done.
-char * readFromFile(const char * filePath) {
-  FILE * fp = fopen(filePath, "r");
-
-  if (!fp) {
-    printf("File not found: %s\n", filePath);
-    exit(EXIT_FAILURE);
+const char * fileName(int argc, char ** argv) {
+  if (argc == 2 && *argv[1] != '-') {
+    return (const char *)argv[1];
   }
-
-  fseek(fp, 0, SEEK_END);
-  size_t size = ftell(fp);
-  fseek(fp, 0, SEEK_SET);
-
-  char * ret = calloc(size + 1, sizeof(char));
-  fread(ret, sizeof(char), size, fp);
-  fclose(fp);
-  return ret;
-}
-
-size_t strCountLine(const char * str) {
-  size_t count = 0;
-  while (*str != '\0') {
-    if (*str++ == '\n') {
-      count++;
+  if (argc == 3) {
+    if (*argv[1] == '-' && *argv[2] != '-') {
+      return (const char*)argv[2];
+    }
+    if (*argv[1] != '-' && *argv[2] == '-') {
+      return (const char*)argv[1];
     }
   }
-  if (*--str != '\n') {
-    // When last char is not '\n', that line still needs to be counted.
-    count++;
-  }
-  return count;
+  return NULL;
 }
 
-char * strTail(char * str, int index) {
-  if (index < 1 || index > strCountLine(str)) {
-    printf("Invalid line number detected.\n",
-           strCountLine(str),
-           index);
-    exit(EXIT_FAILURE);
+int ntail(int argc, char ** argv) {
+  if (argc == 2 && *argv[1] != '-') {
+    return 10;
   }
-  while ((index-- > 1) && strchr(str, '\n')) {    
-    str = strchr(str, '\n') + 1; // excludes the '\n' right before the line.
-  }
-  if (index >= 1 && !strchr(str, '\n')) { // index exceeds, returns nothing.
-    return NULL;
-  }
-  return str;
-}
-
-const char * parseFilePath(int argc, char * argv[]) {
-  while (--argc) {
-    *argv++;
-    if (**argv != '-') {
-      return *argv;
+  if (argc == 3) {
+    if (*argv[1] == '-') {
+      return (int)strtol(argv[1] + 1, NULL, 0);
+    }
+    if (*argv[2] == '-') {
+      return (int)strtol(argv[2] + 1, NULL, 0);
     }
   }
-  printf("File name parsing failed.\n");
-  exit(EXIT_FAILURE);
+  return 0;
 }
 
-int parseLine(int argc, char * argv[]) {
-  while (--argc) {
-    *argv++;
-    if (**argv == '-') {
-      return atoi(*argv + 1);
-    }
+int main(int argc, char ** argv) {
+  RoyString * str = roy_string_read_file(fileName(argc, argv));
+  RoyDeque * deque = roy_deque_new((ROperate)roy_string_delete);
+  roy_string_split(deque, str, "\n");
+  size_t lineCount = roy_deque_size(deque);
+  for (int i = lineCount - ntail(argc, argv); i != lineCount; i++) {
+    roy_string_println(roy_deque_at(deque, i, RoyString));
   }
-  // line number starts from 1, 0 indecates line is not given.
-  printf("Line number parsing failed.\n");
-  exit(EXIT_FAILURE);
-}
-
-int main(int argc, char * argv[]) {
-  int index;
-  char * str = readFromFile(parseFilePath(argc, argv));
-  if (argc == 2 && parseFilePath(argc, argv)) {
-    index = 1;
-  } else if (argc == 3) {
-    index = strCountLine(str) - parseLine(argc, argv) + 1;
-  } else {
-    printf("Unrecognised command.\nPossible usage: tail -n \"file_name\"\n");
-    exit(EXIT_FAILURE);
-  }
-  puts(strTail(str, index)); 
-  free(str);
 }
