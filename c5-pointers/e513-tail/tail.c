@@ -47,4 +47,5 @@ int main(int argc, char ** argv) {
   for (int i = lineCount - ntail; i != lineCount; i++) {
     roy_string_println(roy_deque_at(deque, i, RoyString));
   }
+  roy_deque_delete(deque, NULL);
 }

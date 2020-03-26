@@ -73,7 +73,7 @@ int appendToFile(const char * src, const char * path) {
 
 int main() {
   char str[BUFFER_SIZE] = "\0";
-  readFromFile(str, "e123.java");
+  readFromFile(str, "fib.java");
   decomment(str);
-  appendToFile(str, "e123dc.java");
+  appendToFile(str, "fibdc.java");
 }
