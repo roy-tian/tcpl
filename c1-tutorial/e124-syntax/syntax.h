@@ -1,33 +1,39 @@
 #include "roy.h"
 
-typedef enum {
-  NORMAL,
-  COMMENT,
-  TEXT,
-  ESCAPE,
-  BRACKET_1,
-  BRACKET_2,
-  BRACKET_3,
-  ERROR
-} Type;
+extern RoyString * content;
+extern RoyDeque * matches;
+extern int * shadow;
 
-enum {
-  BUFFER_SIZE = 0x100
-};
+#define NORMAL        0
+#define COMMENT       1
+#define PREPROCESSOR  2
+#define TEXT          3
+#define KEYWORD       4
+#define TYPE          5
+#define VARIABLE      6
+#define NUMBER        7
+#define BRACKET       8
 
-void setType      (      Type * shadow, size_t position, Type type);
-void setTypeRange (      Type * shadow, size_t from, size_t to, Type type);
-Type getType      (const Type * shadow, size_t position);
-bool testType     (const Type * shadow, size_t position, Type type);
-bool testTypeRange(const Type * shadow, size_t from, size_t to, Type type);
-int  findType     (const Type * shadow, size_t from, size_t to, Type type);
+#define ESCAPE        9
+#define ERROR        10
+#define BRACKET_1    11
+#define BRACKET_2    12
+#define BRACKET_3    13
 
-Type * newStack(void);
-void deleteStack(Type * stack);
-Type push(Type * stack);
-Type pop(Type * stack);
+#define RE_COMMENT      "(?<!:)\\/\\/.*|\\/\\*(\\s|.)*?\\*\\/"
+#define RE_PREPROCESSOR "\\#include\\s+[\\\"\\<].+[\\\"\\>]|#(if|ifdef|ifndef|else|elif|endif|define|undef|include|error).*"
+#define RE_TEXT         "\"(?!\\\\\").*\"|\'\\\\?\\w\'"
+#define RE_KEYWORD      "\\b(auto|break|case|const|continue|default|do|else|extern|for|goto|if|inline|register|restrict|return|sizeof|static|switch|typedef|volatile|while)\\b"
+#define RE_TYPE         "\\b(char|double|enum|float|int|long|short|signed|struct|union|unsigned|void)\\b"
+#define RE_VARIABLE     "[A-Za-z_][0-9A-Za-z_]*"
+#define RE_NUMBER       "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?"
+#define RE_BRACKET      "[\\{\\[\\(\\)\\]\\}]"
 
-void tokenize(Type * shadow, const RoyString * content);
+void map(void);
 
-size_t read(RoyString * dest, const char * path);
-void write(const Type * shadow, const RoyString * content, const char * path);
+void colorize(const char * fileName);
+
+int * newStack(void);
+void deleteStack(int * stack);
+int push(int * stack);
+int pop(int * stack);

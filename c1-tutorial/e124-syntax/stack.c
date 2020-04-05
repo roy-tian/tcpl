@@ -1,21 +1,18 @@
 #include "syntax.h"
 
-Type * newStack(void) {
-  return calloc(BUFFER_SIZE, sizeof(Type));
+int * newStack(void) {
+  return calloc(R_BUF_SIZE, sizeof(int));
 }
 
-void deleteStack(Type * stack) {
+void deleteStack(int * stack) {
   free(stack);
 }
 
-Type push(Type * stack) {
+int push(int * stack) {
   stack[stack[0] + 1] = BRACKET_1 + stack[0] % 3;
   return stack[++stack[0]];
 }
 
-Type pop(Type * stack) {
-  if (stack[0] <= 0) {
-    return ERROR;
-  }
+int pop(int * stack) {
   return stack[stack[0]--];
 }
