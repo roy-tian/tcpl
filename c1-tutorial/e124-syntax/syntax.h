@@ -3,6 +3,9 @@
 extern RoyString * content;
 extern RoyDeque * matches;
 extern int * shadow;
+extern int * parentheses;
+extern int * brackets;
+extern int * braces;
 
 #define NORMAL        0
 #define COMMENT       1
@@ -22,14 +25,14 @@ extern int * shadow;
 
 #define RE_COMMENT      "(?<!:)\\/\\/.*|\\/\\*(\\s|.)*?\\*\\/"
 #define RE_PREPROCESSOR "\\#include\\s+[\\\"\\<].+[\\\"\\>]|#(if|ifdef|ifndef|else|elif|endif|define|undef|include|error).*"
-#define RE_TEXT         "\"(?!\\\\\").*\"|\'\\\\?\\w\'"
+#define RE_TEXT         "\'.\'|\'\\\\[\'\"\\?\\\\abfnrtv0]\'|\"(?!\\\\\").*\""
 #define RE_KEYWORD      "\\b(auto|break|case|const|continue|default|do|else|extern|for|goto|if|inline|register|restrict|return|sizeof|static|switch|typedef|volatile|while)\\b"
 #define RE_TYPE         "\\b(char|double|enum|float|int|long|short|signed|struct|union|unsigned|void)\\b"
-#define RE_VARIABLE     "[A-Za-z_][0-9A-Za-z_]*"
+#define RE_VARIABLE     "[A-Za-z_]\\w*"
 #define RE_NUMBER       "[+-]?(\\d+\\.?\\d*|\\d*\\.?\\d+)([Ee][+-]?\\d+)?"
 #define RE_BRACKET      "[\\{\\[\\(\\)\\]\\}]"
 
-void map(void);
+void lightup(const RoyMatch * match);
 
 void colorize(const char * fileName);
 

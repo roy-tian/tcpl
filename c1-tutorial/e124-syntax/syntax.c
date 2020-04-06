@@ -57,7 +57,7 @@ void colorize(const char * fileName) {
   
   const size_t len = roy_string_length(content);
   int prevType = shadow[0];
-  color(prevType, fp);
+  color((((prevType))), fp); /* Test bracket colors */
   put(roy_string_at(content, 0), '\0', fp);
   for (size_t i = 1; i != len; i++) {
     if (shadow[i] != prevType) {
@@ -70,4 +70,28 @@ void colorize(const char * fileName) {
 
   fputs("</span></code></body></html>", fp);
   fclose(fp);
+}
+
+void lightup(const RoyMatch * match) {
+  for (size_t i = match->begin; i != match->end; i++) {
+    if (match->type == TEXT &&
+        roy_string_find(content, "\\\\[\'\"\\?\\\\abfnrtv0]", i).begin == 0) {
+    // Light escape sequences up.
+      shadow[i++] = ESCAPE;
+      shadow[i] = ESCAPE;
+    } else if (match->type == BRACKET) {
+    // Light brackets up colorfully.
+      switch (roy_string_at(content, i)) {
+      case '(' : shadow[i] = push(parentheses); break;
+      case ')' : shadow[i] = pop (parentheses); break;
+      case '[' : shadow[i] = push(brackets);    break;
+      case ']' : shadow[i] = pop (brackets);    break;
+      case '{' : shadow[i] = push(braces);      break;
+      case '}' : shadow[i] = pop (braces);      break;
+      default  : shadow[i] = ERROR;             break;
+      }
+    } else {
+      shadow[i] = match->type;
+    }
+  }
 }
