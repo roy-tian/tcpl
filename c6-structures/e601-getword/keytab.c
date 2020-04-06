@@ -10,7 +10,6 @@ RoyMap * populateKeytab(void) {
   RoyDeque * keyDeque = roy_deque_new((ROperate)roy_string_delete);
   roy_string_split(keyDeque, content, "\n");
   roy_deque_for_each(keyDeque, (ROperate)pairInsert, ret);
-
   roy_string_delete(content, NULL);
   roy_deque_delete(keyDeque, NULL);
   return ret;
