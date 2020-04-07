@@ -3,8 +3,8 @@
 RoyDeque * populateWordtab(void) {
   RoyDeque * ret = roy_deque_new((ROperate)roy_match_delete);
 
-  roy_string_tokenize( ret, content,
-    4, RE_COMMENT, RE_PREPROCESSOR, RE_TEXT, "[A-Za-z_][0-9A-Za-z_]*" );
+  roy_string_tokenize( ret, content, 4,
+    RE_COMMENT, RE_PREPROCESSOR, RE_TEXT, RE_VARIABLE );
   return ret;
 }
 
