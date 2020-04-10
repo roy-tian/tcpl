@@ -12,7 +12,7 @@ int main(int argc, char ** argv) {
       roy_deque_push_back(args, roy_string_new(argv[i]));
     }
     rpc(args);
-    roy_deque_delete(args);
-    roy_map_delete(operators);
+    roy_deque_delete(args, NULL);
+    roy_map_delete(operators, NULL);
   }
 }
