@@ -1,5 +1,7 @@
 #include "roy.h"
 
+#define DEFAULT_NLINE 10
+
 int tail(const char * arg) {
   if (*arg != '-') {
     return -1;
@@ -15,28 +17,29 @@ int tail(const char * arg) {
 bool parseArgs(int argc, char ** argv, const char ** fileName, int * ntail) {
   if (argc == 2 && argv[1][0] != '-') {
     *fileName = argv[1];
-    *ntail = 10;
+    *ntail = DEFAULT_NLINE;
+    return true;
   }
-  int ret = 0;
-  if (argc == 3 && (ret = tail(argv[1])) != -1) {
+  if (argc == 3 && (*ntail = tail(argv[1])) != -1) {
     *fileName = argv[2];
-    *ntail = ret;
+    return true;
   }
-  if (argc == 3 && (ret = tail(argv[2])) != -1) {
+  if (argc == 3 && (*ntail = tail(argv[2])) != -1) {
     *fileName = argv[1];
-    *ntail = ret;
+    return true;
   }
-  return *fileName;
+  return false;
 }
 
 int main(int argc, char ** argv) {
-  const char * fileName = NULL;
+  const char * fileName;
   int ntail = 0;
-  if ( !parseArgs(argc, argv, &fileName, &ntail) ) {
-    perror(fileName);
+  RoyString * str;
+  if ( !parseArgs(argc, argv, &fileName, &ntail) ||
+       !(str = roy_string_read_file(fileName)) ) {
+    perror("Error");
     exit(EXIT_FAILURE);
   }
-  RoyString * str = roy_string_read_file(fileName);
   RoyDeque * deque = roy_deque_new((ROperate)roy_string_delete);
   roy_string_split(deque, str, "\n");
 
