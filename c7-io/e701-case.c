@@ -18,17 +18,16 @@ void str_tolower(char * str) {
   }
 }
 
+
 int main(int argc, char ** argv) {
+  void (*func)(char * str) = NULL;
   if (strstr(argv[0], "upper")) {
-    for (int i = 1; i < argc; i++) {
-      str_toupper(argv[i]);
-    }
+    func = str_toupper;
   } else if (strstr(argv[0], "lower")) {
-    for (int i = 1; i < argc; i++) {
-      str_tolower(argv[i]);
-    }
+    func = str_tolower;
   }
   for (int i = 1; i < argc; i++) {
+    func ? func(argv[i]) : NULL;
     puts(argv[i]);
   }
 }
