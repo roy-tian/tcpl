@@ -32,13 +32,13 @@ filecmp(FILE * restrict lfile,
 
 int main(int argc, char ** argv) {
   if (argc != 3) {
-    perror("Bad command");
+    fputs("Bad command.\n", stderr);
     return EXIT_FAILURE;
   }
   FILE * lfile = fopen(argv[1], "rb");
   FILE * rfile = fopen(argv[2], "rb");
   if (!lfile || !rfile) {
-    perror("File opening failed");
+    fputs("File opening failed.\n", stderr);
     return EXIT_FAILURE;
   }
   char lline[BUFFER_SIZE] = { '\0' };
