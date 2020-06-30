@@ -13,6 +13,7 @@ typedef struct Stream {
   struct Stream * (*ointw)(struct Stream * this_, int width, int64_t value);
   struct Stream * (*odbl )(struct Stream * this_, double value);
   struct Stream * (*odblw)(struct Stream * this_, int width, double value);
+  void            (*destruct)(struct Stream * this_);
 } Stream;
 
 Stream * stream_new(void);

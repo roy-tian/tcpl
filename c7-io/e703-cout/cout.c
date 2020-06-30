@@ -36,6 +36,13 @@ odblw(Stream * this_, int width, double value) {
   return this_;
 }
 
+void
+destruct(Stream * this_) {
+  free(this_);
+  this_ = NULL;
+}
+
+
 Stream * stream_new(void) {
   Stream * ret = malloc(sizeof(Stream));
   ret->ostr  = ostr;
@@ -44,5 +51,6 @@ Stream * stream_new(void) {
   ret->ointw = ointw;
   ret->odbl  = odbl;
   ret->odblw = odblw;
+  ret->destruct = destruct;
   return ret;
 }

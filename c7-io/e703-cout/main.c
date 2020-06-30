@@ -10,4 +10,5 @@ int main(void) {
     }
   }
   s->oint(s, i)->ostr(s, " little Indian boys.\n");
+  s->destruct(s);
 }
