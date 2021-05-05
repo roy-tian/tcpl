@@ -44,7 +44,6 @@ printClearly(const char * binary) {
     }
     pBinary++;
   }
-  putchar('\b');
   putchar('\n');
 }
 

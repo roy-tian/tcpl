@@ -60,7 +60,6 @@ printClearly(const char * binary) {
     }
     pbinary++;
   }
-  putchar('\b');
   putchar('\n');
 }
 
