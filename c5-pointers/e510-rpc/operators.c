@@ -46,7 +46,7 @@ static double times (double lhs, double rhs) { return lhs * rhs; }
 static double divide(double lhs, double rhs) { return lhs / rhs; }
 
 static void pairDelete(RoyPair * pair) {
-  roy_string_delete(pair->key);
+  roy_string_delete(pair->key, NULL);
   free(pair);
 }
 
