@@ -44,8 +44,8 @@ nextRandom(int min,
     return max;
   }
   int ret = max + 1;
-  while (ret > max) {
-    ret = rand() / ( (RAND_MAX + 1U) / max ) + min;
+  while (ret < min || ret > max) {
+    ret = rand() / ((RAND_MAX + 1U) / (max - min + 1)) + min;
   }
   return ret;
 }
