@@ -5,7 +5,7 @@
 enum { BUFFER_SIZE = 128 };
 
 /* Makes a sequence from 'front' to 'back'.
-   e.g. front=a, back=g, sequence=abcefg */
+   e.g. front=a, back=g, sequence=abcdefg */
 char *
 sequence(char * dest,
          int    front,
