@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-const double CELSIUS_LOWER = 36.5;      // lower limit of tempr table in cels.
+const double CELSIUS_LOWER = 36.5;      // lower limit of temperature table in cels.
 const double CELSIUS_UPPER = 38.5;      // upper limit
-const double STEP = 0.1;                // #define vesus const vesus enum ?
+const double STEP = 0.1;                // #define versus const versus enum ?
 
 double celsiusToFahrenheit(double celsius) {
   return celsius * 1.8 + 32.0;
